@@ -24,6 +24,8 @@
 	"type": "module",
 	"dependencies": {
 		"@types/d3": "^7.4.0",
-		"d3": "^7.6.1"
+		"d3": "^7.6.1",
+		"d3-geomap": "^3.3.0",
+		"topojson-client": "^3.1.0"
 	}
 }
