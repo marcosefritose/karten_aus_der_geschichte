@@ -3,22 +3,10 @@
     import { Runtime, Inspector } from '@observablehq/runtime';
 	import notebook from '@d3/zoom-to-bounding-box';
     import * as topojson from "topojson-client";
-    // import people from '$lib/data/states-albers-10m.json';
-
-    // export let data;
-    // const { episodes } = data;
-
-    const fetchEpisodes = async () => {
-        const res = await fetch(`http://127.0.0.1:5000/episodes/`)
-        const data = await res.json()
-        return data
-    }
-
-    const { episodes } = fetchEpisodes();
-
-    
     import * as d3 from 'd3';
-    // import * as topojson from "topojson-client";
+
+    export let data;
+    let episodes = [];
 
     // import { select } from 'd3-selection';
     // import { geomap } from 'd3-geomap';
@@ -40,6 +28,9 @@
     let animationRef;
 
 	onMount(() => {
+        episodes = data.episodes;
+        console.log(episodes);
+
 		const runtime = new Runtime();
 		runtime.module(notebook, (name) => {
 			
@@ -54,11 +45,11 @@
 <main class="">
     <div class="grid  w-screen h-screen p-8 bg-gray-50 place-items-center">
         <h1 class="text-center text-2xl">Karten aus der Geschichte</h1>
-        <div class="w-full relative">
+        <div class="w-full h-full relative overflow-hidden">
             <div bind:this={animationRef}></div>
             <div id="list" class="flex items-center absolute right-0 top-0 w-1/4 h-full">
                 <div class="bg-gray-200 opacity-80 overflow-y-scroll h-3/4 m-5 p-3 scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400">
-                    {#each episodes as episode}
+                    {#each episodes as episode (episode.id)}
                     <div class="flex gap-2 border py-1">
                         <img src="{episode.image}" class="w-16 h-16 rounded-sm border border-gray-400" alt="">
                         <div class="flex-row">
