@@ -4,11 +4,16 @@ import json
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 
@@ -20,6 +25,7 @@ class Episode(db.Model):
     title = db.Column(db.String(100))
     summary = db.Column(db.String(1000))
     link = db.Column(db.String(164))
+    image = db.Column(db.String(1000))
     published = db.Column(db.DateTime())
     locations = db.relationship('Location', backref='episode', lazy=False)
     
@@ -34,20 +40,21 @@ class Location(db.Model):
     latitude = db.Column(db.String(164))
 
 # Only run first start
-db.drop_all()
-db.create_all()
+# db.drop_all()
+# db.create_all()
+print('done')
 
 
-def import_locations_from_csv(db):
-    with open('ep_loc.csv', mode='r') as file:
-        csv_file = csv.reader(file)
-        next(csv_file, None)
-        for entry in csv_file:
-            ep = Episode(id=entry[0])
-            db.session.add(ep)
-            #for (name, long, lat) in (entry[1].):
-            #     db.sessio.add(Location(name=name, longitute=long, latitude=lat))
-            db.session.commit()
+# def import_locations_from_csv(db):
+#     with open('ep_loc.csv', mode='r') as file:
+#         csv_file = csv.reader(file)
+#         next(csv_file, None)
+#         for entry in csv_file:
+#             ep = Episode(id=entry[0])
+#             db.session.add(ep)
+#             #for (name, long, lat) in (entry[1].):
+#             #     db.sessio.add(Location(name=name, longitute=long, latitude=lat))
+#             db.session.commit()
 
 # import_locations_from_csv(db)
 # print(Episode.query.all())
@@ -69,6 +76,7 @@ resource_fields = {
     'title': fields.String,
     'summary': fields.String,
     'link': fields.String,
+    'image': fields.String,
     'published': fields.String,
     'locations': fields.List(fields.Nested(location_fields))
 }
@@ -93,7 +101,6 @@ class EpisodeResource(Resource):
     
 class Importer(Resource):
     def get(self):
-        import_locations_from_csv()
         return True, 200
 
 
