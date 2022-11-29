@@ -10,5 +10,7 @@ module.exports = {
     },
   },
   safelist: ['stroke-gag-primary', 'fill-gag-primary'],
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

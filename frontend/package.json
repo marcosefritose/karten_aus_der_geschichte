@@ -10,6 +10,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@rollup/plugin-json": "^5.0.2",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
 		"autoprefixer": "^10.4.13",
@@ -23,9 +24,14 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@d3/zoom-to-bounding-box": "https://api.observablehq.com/@d3/zoom-to-bounding-box@161.tgz?v=3",
+		"@observablehq/runtime": "^4.28.0",
+		"@severo/how-to-embed-a-notebook-in-a-svelte-app": "https://api.observablehq.com/@severo/how-to-embed-a-notebook-in-a-svelte-app.tgz?v=3",
+		"@sveltejs/adapter-static": "^1.0.0-next.48",
 		"@types/d3": "^7.4.0",
 		"d3": "^7.6.1",
 		"d3-geomap": "^3.3.0",
+		"tailwind-scrollbar": "^2.0.1",
 		"topojson-client": "^3.1.0"
 	}
 }
