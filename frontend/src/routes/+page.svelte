@@ -44,7 +44,7 @@
 
 <main class="">
     <div class="grid  w-screen h-screen p-8 bg-gray-50 place-items-center">
-        <h1 class="text-center text-2xl">Karten aus der Geschichte</h1>
+        <h1 class="text-center text-3xl font-bold">Karten aus der Geschichte</h1>
         <div class="w-full h-full relative overflow-hidden">
             <div bind:this={animationRef}></div>
             <div id="list" class="flex items-center absolute right-0 top-0 w-1/4 h-full">
