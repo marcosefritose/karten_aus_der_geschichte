@@ -30,6 +30,7 @@
 		"@sveltejs/adapter-static": "^1.0.0-next.48",
 		"@types/d3": "^7.4.0",
 		"d3": "^7.6.1",
+		"d3-geo": "^3.0.1",
 		"d3-geomap": "^3.3.0",
 		"tailwind-scrollbar": "^2.0.1",
 		"topojson-client": "^3.1.0"
