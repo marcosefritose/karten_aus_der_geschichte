@@ -19,6 +19,9 @@
 		} else {
 			selected = id;
 		}
+
+		let listEntry = document.getElementById(id);
+		listEntry.scrollIntoView()
     }
 
 	onMount(() => {
@@ -42,35 +45,33 @@
 </script>
 
 <main class="">
-	<div class="flex-col w-screen h-screen bg-gray-50 place-items-center overflow-hidden">
-		<h1 class="text-center text-3xl font-bold py-3">Karten aus der Geschichte</h1>
-		<div class="w-full h-full relative overflow-hidden">
+	<div class="flex-col w-screen h-screen bg-gray-50 place-items-center overflow-clip">
+		<h1 class="flex-auto text-center text-3xl font-bold py-3">Karten aus der Geschichte</h1>
+		<div class="flex-auto w-full h-full overflow-hidden">
 			<!-- World Map -->
-			<div class="w-screen h-screen overflow-hidden">
-				<svg class="w-full h-full" viewBox="0 0 1000 550" preserveAspectRatio="xMidYMin slice">
-					{#each dataset as data}
-						<path class="fill-gray-300 stroke-1" d={path(data)} />
-					{/each}
-					{#each markers as {id, longitude, latitude}}
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<line
-							on:click={selectEpisode(id)}
-							class="{selected === id ? 'stroke-5 stroke-gag-primary' : 'stroke-2 stroke-gray-600'} hover:stroke-4" stroke-linecap="round"
-                            x1="{projection([longitude, latitude])[0]}"
-                            x2="{projection([longitude, latitude])[0]+0.1}"
-                            y1="{projection([longitude, latitude])[1]}"
-                            y2="{projection([longitude, latitude])[1]+0.1}" 
-						/>
-					{/each}
-				</svg>
-			</div>
+			<svg class="w-full h-full" viewBox="0 0 1000 550" preserveAspectRatio="xMidYMin slice">
+				{#each dataset as data}
+					<path class="fill-gray-300 stroke-1" d={path(data)} />
+				{/each}
+				{#each markers as {id, longitude, latitude}}
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<line
+						on:click={selectEpisode(id)}
+						class="{selected === id ? 'stroke-5 stroke-gag-primary' : 'stroke-2 stroke-gray-600'} hover:stroke-4" stroke-linecap="round"
+						x1="{projection([longitude, latitude])[0]}"
+						x2="{projection([longitude, latitude])[0]+0.1}"
+						y1="{projection([longitude, latitude])[1]}"
+						y2="{projection([longitude, latitude])[1]+0.1}" 
+					/>
+				{/each}
+			</svg>
 			<!-- Episode List -->
 			<div id="list" class="flex items-center absolute right-0 bottom-5 lg:top-0 w-full lg:w-1/3 xl:w-1/4 h-1/2 lg:h-full">
 				<div
 					class="bg-gray-200 opacity-80 overflow-y-scroll h-5/6 m-3 p-3  scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400"
 				>
 					{#each episodes as episode (episode.id)}
-						<div class="flex gap-2 border py-1">
+						<div id="{episode.id}"class="flex gap-2 border py-1">
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<img src={imgUrl} class="w-16 h-16 rounded-sm border border-gray-400 hover:cursor-pointer" alt="Thumbnail Picture Episode {episode.id}" on:click={selectEpisode(episode.id)} />
 							<div class="flex-row">
