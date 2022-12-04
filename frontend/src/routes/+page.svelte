@@ -10,7 +10,6 @@
 	let dataset = [];
 	let markers = [];
 	let selected;
-
 	let bindHandleZoom, bindInitZoom;
 
 	// Static url until images are served from flask server
@@ -32,11 +31,13 @@
 			let geoFeature = getGeoFeatureForEpisode(id, coordinates);
 			clicked(geoFeature)
 		}
-		
+
 		let listEntry = document.getElementById(id);
-		listEntry.scrollIntoView({
-			behavior: 'smooth'
-		});
+
+		setTimeout(() => {
+			listEntry.scrollIntoView({
+				behavior:'smooth'
+		})}, 1);
 	}
 
 	$: zoomX = zoom().scaleExtent([1, 5]).on('zoom', handleZoom);
