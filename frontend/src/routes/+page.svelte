@@ -1,7 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 	import { json, geoPath, zoom, zoomIdentity, pointer, select, geoNaturalEarth1, geoMercator } from 'd3';
-	import { identity, object_without_properties } from 'svelte/internal';
 
 	const projection = geoNaturalEarth1();
 	const path = geoPath(projection);
@@ -138,17 +137,17 @@
 			</svg>
 			<!-- Logo -->
 			<div
-				class="h-14 lg:h-20 absolute top-0 flex bg-slate-400 bg-opacity-80 border-dashed border-gag-primary border-b border-r rounded-br-md"
+				class="w-32 lg:w-40 absolute top-0 flex bg-slate-400 bg-opacity-80 border-dashed border-gag-primary border-b border-r rounded-br-md"
 			>
 				<img src="/gag_logo.png" class="object-contain" alt="" />
 			</div>
 			<!-- Episode List -->
 			<div
 				id="list"
-				class="flex items-center absolute right-0 bottom-0 lg:top-0 w-full lg:w-1/3 xl:w-1/4 h-1/2 lg:h-full"
+				class="flex items-center absolute right-0 bottom-0 lg:top-0 w-full lg:w-1/3 xl:w-1/4 h-2/5 lg:h-full"
 			>
 				<div
-					class="bg-gray-200 opacity-80 overflow-y-scroll h-5/6 m-3 p-3  scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400"
+					class="bg-gray-200 opacity-80 overflow-y-scroll h-full md:h-5/6 my-3 p-3  scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400"
 				>
 					{#each episodes as episode (episode.id)}
 						<div id={episode.id} class="flex gap-2 border py-1">
