@@ -1,6 +1,15 @@
 <script>
 	import { onMount } from 'svelte';
-	import { json, geoPath, zoom, zoomIdentity, pointer, select, geoNaturalEarth1, geoMercator } from 'd3';
+	import {
+		json,
+		geoPath,
+		zoom,
+		zoomIdentity,
+		select,
+		geoNaturalEarth1,
+		geoMercator
+	} from 'd3';
+	import { polygon, rewind } from '@turf/turf';
 
 	const projection = geoNaturalEarth1();
 	const path = geoPath(projection);
@@ -10,7 +19,6 @@
 	let markers = [];
 	let selected;
 	let bindHandleZoom, bindInitZoom;
-
 	// Static url until images are served from flask server
 	let imgUrl =
 		'https://images.podigee-cdn.net/0x,sw_d9izO9QfY97alR2f13b7IrOVeXM5gFZOjetk-5sTg=/https://cdn.podigee.com/uploads/u32412/b610d282-8f99-4604-a16f-28ada94ab76a.jpg';
@@ -22,24 +30,25 @@
 			selected = id;
 		}
 
-		let coordinates = markers.filter(loc => {
+		let coordinates = markers.filter((loc) => {
 			return loc.id === id;
-		})
+		});
 
-		if(coordinates.length !== 0) {
+		if (coordinates.length !== 0) {
 			let geoFeature = getGeoFeatureForEpisode(id, coordinates);
-			clicked(geoFeature)
+			clicked(geoFeature);
 		}
 
 		let listEntry = document.getElementById(id);
 
 		setTimeout(() => {
 			listEntry.scrollIntoView({
-				behavior:'smooth'
-		})}, 1);
+				behavior: 'smooth'
+			});
+		}, 1);
 	}
 
-	$: zoomX = zoom().scaleExtent([1, 5]).on('zoom', handleZoom);
+	$: zoomX = zoom().scaleExtent([1, 4]).on('zoom', handleZoom);
 
 	function handleZoom(e) {
 		select(bindHandleZoom).attr('transform', e.transform);
@@ -52,33 +61,35 @@
 	function clicked(d) {
 		const [[x0, y0], [x1, y1]] = path.bounds(d);
 
-		select(bindHandleZoom).transition()
+		select(bindInitZoom)
+			.transition()
 			.duration(750)
 			.call(
 				zoomX.transform,
 				zoomIdentity
 					.translate(1000 / 2, 500 / 2)
-					.scale(Math.min(3, 0.9 / Math.max((x1 - x0) / 1720, (y1 - y0) / 1267)))
+					.scale(Math.min(4, 0.5 / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
 					.translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
 			);
 	}
 
 	function getGeoFeatureForEpisode(id, coordinates) {
-		coordinates = coordinates.map(coord => {
+		coordinates.push(coordinates[0]);
+		coordinates = coordinates.map((coord) => {
 			return [parseFloat(coord.longitude), parseFloat(coord.latitude)];
 		});
 
-		if(coordinates.length === 1) {
-			coordinates = [coordinates[0], coordinates[0]]
+		// Set end equal to start coordinate and fill until atleast 4 coords present
+		coordinates.push(coordinates[0]);
+		while (coordinates.length < 4) {
+			coordinates.push(coordinates[0]);
 		}
-		return {
-			type: 'Feature',
-			geometry: {
-				type: "Polygon",
-				coordinates: [coordinates]
-			},
-			id: id
-		}
+
+		// Create geojson Feature and order the coordinates clockwise
+		let polygonFeatureRaw = polygon([coordinates]);
+		let polygonFeature = rewind(polygonFeatureRaw, { reverse: true });
+
+		return polygonFeature;
 	}
 
 	onMount(() => {
@@ -113,11 +124,7 @@
 				<g class="countries" bind:this={bindHandleZoom}>
 					{#each dataset as data}
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<path
-							id={data.id}
-							class="fill-gray-300 stroke-1"
-							d={path(data)}
-						/>
+						<path id={data.id} class="fill-gray-300 stroke-1" d={path(data)} />
 					{/each}
 					{#each markers as { id, longitude, latitude }}
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
