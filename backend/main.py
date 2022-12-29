@@ -23,7 +23,7 @@ print(type(db))
 class Episode(db.Model):
     id = db.Column(db.String(10), primary_key=True)
     title = db.Column(db.String(100))
-    summary = db.Column(db.String(1000))
+    summary = db.Column(db.String(10000))
     link = db.Column(db.String(164))
     image = db.Column(db.String(1000))
     published = db.Column(db.DateTime())
@@ -42,7 +42,7 @@ class Location(db.Model):
 # Only run first start
 # db.drop_all()
 # db.create_all()
-print('done')
+# print('done')
 
 
 # def import_locations_from_csv(db):
@@ -108,4 +108,4 @@ api.add_resource(EpisodeListResource, "/episodes/")
 api.add_resource(EpisodeResource, "/episode/<string:episode_id>")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
