@@ -2,3 +2,4 @@ feedparser
 spacy
 geopy
 pandas
+numpy

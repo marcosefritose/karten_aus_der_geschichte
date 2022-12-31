@@ -42,6 +42,21 @@ services:
       - ./frontend/:/test-app/
       ports:
       - 5173:5173
+  postgres_backend:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: gag
+      POSTGRES_PASSWORD: gag
+      POSTGRES_DB: gag
+    volumes:
+      - postgres-be-db-volume:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 30s
+      retries: 5
+    restart: always
   postgres:
     image: postgres:13
     environment:
@@ -54,7 +69,7 @@ services:
       - 5432:5432
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
+      interval: 30s
       retries: 5
     restart: always
 
@@ -195,3 +210,4 @@ services:
 
 volumes:
   postgres-db-volume:
+  postgres-be-db-volume:
