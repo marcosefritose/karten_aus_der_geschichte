@@ -176,7 +176,7 @@
 								<div class="w-full">
 									<span
 										class="mb-1 inline-block text-small font-semibold hover:cursor-pointer"
-										on:click={selectEpisode(episode.id)}>{episode.title.split(': ')[1]}</span
+										on:click={selectEpisode(episode.id)}>{episode.title}</span
 									><br />
 								</div>
 							</div>
