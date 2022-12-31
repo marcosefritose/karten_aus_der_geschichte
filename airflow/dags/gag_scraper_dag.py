@@ -183,6 +183,7 @@ with DAG(
                 valid BOOL DEFAULT true);
             """, """
             CREATE TABLE IF NOT EXISTS episodes_locations(
+                id SERIAL PRIMARY KEY,
                 episode_id VARCHAR REFERENCES episodes_target(id) 
                     ON UPDATE CASCADE ON DELETE CASCADE,
                 location_name VARCHAR REFERENCES locations(name) 

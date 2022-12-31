@@ -10,61 +10,44 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://gag:gag@postgres_backend:5432/gag"
 
 db = SQLAlchemy(app)
 
 
-print(type(db))
+EpisodeLocation = db.Table('episodes_locations',
+                   db.Column('episode_id', db.String(1000), db.ForeignKey('episodes_target.id')),
+                   db.Column('location_name', db.String(1000), db.ForeignKey('locations.name'))
+)
 
-
-class Episode(db.Model):
+class Episodes(db.Model):
+    __tablename__ = 'episodes_target'
     id = db.Column(db.String(10), primary_key=True)
     title = db.Column(db.String(100))
+    subtitle = db.Column(db.String(1000))
     summary = db.Column(db.String(10000))
-    link = db.Column(db.String(164))
+    link = db.Column(db.String(1000))
     image = db.Column(db.String(1000))
     published = db.Column(db.DateTime())
-    locations = db.relationship('Location', backref='episode', lazy=False)
-    
+    locations = db.relationship(
+        'Locations', secondary=EpisodeLocation, backref='Episodes')
+
     def __repr__(self):
         return f"Episode {self.id}: {self.title}, Locations: {', '.join([l.name for l in self.locations])}"
 
-class Location(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    episode_id = db.Column(db.String(10), db.ForeignKey('episode.id'))
-    name = db.Column(db.String(164))
+class Locations(db.Model):
+    __tablename__ = 'locations'
+    name = db.Column(db.String(164), primary_key=True)
     longitude = db.Column(db.String(164))
     latitude = db.Column(db.String(164))
+    requested = db.Column(db.Boolean())
+    valid = db.Column(db.Boolean())
+    episodes = db.relationship(
+        'Episodes', secondary=EpisodeLocation, backref='Locations')
 
-# Only run first start
-# db.drop_all()
-# db.create_all()
-# print('done')
-
-
-# def import_locations_from_csv(db):
-#     with open('ep_loc.csv', mode='r') as file:
-#         csv_file = csv.reader(file)
-#         next(csv_file, None)
-#         for entry in csv_file:
-#             ep = Episode(id=entry[0])
-#             db.session.add(ep)
-#             #for (name, long, lat) in (entry[1].):
-#             #     db.sessio.add(Location(name=name, longitute=long, latitude=lat))
-#             db.session.commit()
-
-# import_locations_from_csv(db)
-# print(Episode.query.all())
 episode_put_args = reqparse.RequestParser()
 episode_put_args.add_argument("title", type=str, help="Name of the episode")
 episode_put_args.add_argument("location_name", type=str, help="Name of the location")
-
-# episodes = {
-#     1: {'title': 'GAG123 Schöne Gschite ausm Paulaner', 'location_name': 'Paris', 'location_long': 23.34345, 'location_lang': 12.2112, },
-#     2: {'title': 'GAG312 qwedqwd', 'location_name': 'Timbukdu', 'location_long': 23.12313, 'location_lang': 12.2112, }}
 
 location_fields = {
     'name': fields.String,
@@ -84,24 +67,15 @@ resource_fields = {
 class EpisodeListResource(Resource):
     @marshal_with(resource_fields)
     def get(self):
-        result = Episode.query.all()
+        result = Episodes.query.all()
         return result
     
 class EpisodeResource(Resource):
     @marshal_with(resource_fields)
     def get(self, episode_id):
         #result = Episode.query.get(episode_id)
-        result = Episode.query.filter(Episode.id == episode_id).first()
+        result = Episodes.query.filter(Episodes.id == episode_id).first()
         return result
-    
-    # def put(self, episode_id):
-    #     args = episode_put_args.parse_args()
-    #     episodes[episode_id] = args 
-    #     return episodes[episode_id], 201
-    
-class Importer(Resource):
-    def get(self):
-        return True, 200
 
 
 api.add_resource(EpisodeListResource, "/episodes/")
