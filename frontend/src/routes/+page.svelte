@@ -10,18 +10,48 @@
 		geoMercator
 	} from 'd3';
 	import { polygon, rewind } from '@turf/turf';
+	import LocationPopup from '../components/LocationPopup.svelte';
 
+	// D3 Porjection, Path & Zoom variables
 	const projection = geoNaturalEarth1();
 	const path = geoPath(projection);
-	export let data;
-	let episodes = [];
-	let dataset = [];
-	let markers = [];
-	let selected;
 	let bindHandleZoom, bindInitZoom;
+	
+	// Episodes & Location Data
+	export let data;
+	let dataset = [];
+	let episodes = [];
+	let markers = [];
+	
+	// Map interactivity
+	let selected;
+	let popupLocationId;
+	let popupLocationCoords;
+	let showPopup = false;
+	let locations = {};
+
 	// Static url until images are served from flask server
 	let imgUrl =
 		'https://images.podigee-cdn.net/0x,sw_d9izO9QfY97alR2f13b7IrOVeXM5gFZOjetk-5sTg=/https://cdn.podigee.com/uploads/u32412/b610d282-8f99-4604-a16f-28ada94ab76a.jpg';
+	
+	function getGeoFeatureForEpisode(id, coordinates) {
+		coordinates.push(coordinates[0]);
+		coordinates = coordinates.map((coord) => {
+			return [parseFloat(coord.longitude), parseFloat(coord.latitude)];
+		});
+		
+		// Set end equal to start coordinate and fill until atleast 4 coords present
+		coordinates.push(coordinates[0]);
+		while (coordinates.length < 4) {
+			coordinates.push(coordinates[0]);
+		}
+		
+		// Create geojson Feature and order the coordinates clockwise
+		let polygonFeatureRaw = polygon([coordinates]);
+		let polygonFeature = rewind(polygonFeatureRaw, { reverse: true });
+		
+		return polygonFeature;
+	}
 
 	function selectEpisode(id) {
 		if (id === selected) {
@@ -47,15 +77,26 @@
 			});
 		}, 1);
 	}
-
+	
+	function showLocation(event, id) {
+		popupLocationId = id
+		popupLocationCoords = locations[id].getBoundingClientRect()
+		showPopup = true
+	}
+	
+	// Zoom and scroll functionality
 	$: zoomX = zoom().scaleExtent([1, 4]).on('zoom', handleZoom);
+	$: if (bindInitZoom) {
+		select(bindInitZoom).call(zoomX);
+	}
+
 
 	function handleZoom(e) {
 		select(bindHandleZoom).attr('transform', e.transform);
-	}
-
-	$: if (bindInitZoom) {
-		select(bindInitZoom).call(zoomX);
+		if(popupLocationId && showPopup) {
+			popupLocationCoords = locations[popupLocationId].getBoundingClientRect()
+			console.log(popupLocationCoords);
+		}
 	}
 
 	function clicked(d) {
@@ -71,25 +112,6 @@
 					.scale(Math.min(4, 0.5 / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
 					.translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
 			);
-	}
-
-	function getGeoFeatureForEpisode(id, coordinates) {
-		coordinates.push(coordinates[0]);
-		coordinates = coordinates.map((coord) => {
-			return [parseFloat(coord.longitude), parseFloat(coord.latitude)];
-		});
-
-		// Set end equal to start coordinate and fill until atleast 4 coords present
-		coordinates.push(coordinates[0]);
-		while (coordinates.length < 4) {
-			coordinates.push(coordinates[0]);
-		}
-
-		// Create geojson Feature and order the coordinates clockwise
-		let polygonFeatureRaw = polygon([coordinates]);
-		let polygonFeature = rewind(polygonFeatureRaw, { reverse: true });
-
-		return polygonFeature;
 	}
 
 	onMount(() => {
@@ -112,7 +134,7 @@
 
 <main class="">
 	<div class="flex-col w-screen h-screen bg-blue-100 place-items-center overflow-clip">
-		<div class="flex-auto w-full h-full overflow-hidden">
+		<div id="world-map-wrapper" class="relative flex-auto w-full h-full overflow-hidden">
 			<!-- World Map -->
 			<svg
 				id="world-map"
@@ -129,7 +151,10 @@
 					{#each markers as { id, longitude, latitude }}
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<line
+							id={'loc-' + id}
+							bind:this={locations[id]}
 							on:click={selectEpisode(id)}
+							on:mouseenter={(e) => showLocation(e, id)}
 							class="{selected === id
 								? 'stroke-5 stroke-gag-primary'
 								: 'stroke-2 stroke-gray-600'} hover:stroke-4"
@@ -142,6 +167,12 @@
 					{/each}
 				</g>
 			</svg>
+
+			<!-- Location Popup -->
+			{#if showPopup}
+			<LocationPopup bind:coords={popupLocationCoords} />
+			{/if}
+
 			<!-- Logo -->
 			<div
 				class="w-32 lg:w-40 absolute top-0 flex bg-slate-400 bg-opacity-80 border-dashed border-gag-primary border-b border-r rounded-br-md"
