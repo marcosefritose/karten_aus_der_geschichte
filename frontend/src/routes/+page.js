@@ -1,9 +1,12 @@
 export async function load({ fetch, setHeaders }) {
-    const res = await fetch(`http://flask:5000/episodes/`)
-    const data = await res.json()
-
+    const episodesRes = await fetch('http://flask:5000/episodes/')
+    const episodeData = await episodesRes.json()
+    
+    const locationsRes = await fetch('http://flask:5000/locations/')
+    const locationData = await locationsRes.json()
 
     return {
-        episodes: data,
+        episodes: episodeData,
+        locations: locationData,
     }
 }
