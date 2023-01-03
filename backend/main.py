@@ -30,7 +30,7 @@ class Episodes(db.Model):
     image = db.Column(db.String(1000))
     published = db.Column(db.DateTime())
     locations = db.relationship(
-        'Locations', secondary=EpisodeLocation, backref='Episodes')
+        'Locations', secondary=EpisodeLocation, backref='Episodes', lazy='dynamic')
 
     def __repr__(self):
         return f"Episode {self.id}: {self.title}, Locations: {', '.join([l.name for l in self.locations])}"
@@ -43,7 +43,7 @@ class Locations(db.Model):
     requested = db.Column(db.Boolean())
     valid = db.Column(db.Boolean())
     episodes = db.relationship(
-        'Episodes', secondary=EpisodeLocation, backref='Locations')
+        'Episodes', secondary=EpisodeLocation, backref='Locations', lazy='dynamic')
 
 episode_put_args = reqparse.RequestParser()
 episode_put_args.add_argument("title", type=str, help="Name of the episode")
@@ -67,7 +67,7 @@ resource_fields = {
 class EpisodeListResource(Resource):
     @marshal_with(resource_fields)
     def get(self):
-        result = Episodes.query.all()
+        result = Episodes.query.order_by(Episodes.published.desc()).all()
         return result
     
 class EpisodeResource(Resource):
@@ -76,10 +76,17 @@ class EpisodeResource(Resource):
         #result = Episode.query.get(episode_id)
         result = Episodes.query.filter(Episodes.id == episode_id).first()
         return result
+    
+class LocationListResource(Resource):
+    @marshal_with(location_fields)
+    def get(self):
+        result = Locations.query.filter(Locations.latitude != "NaN").all()
+        return result
 
 
 api.add_resource(EpisodeListResource, "/episodes/")
-api.add_resource(EpisodeResource, "/episode/<string:episode_id>")
+api.add_resource(EpisodeResource, "/episodes/<string:episode_id>")
+api.add_resource(LocationListResource, "/locations/")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
