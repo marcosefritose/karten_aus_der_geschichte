@@ -49,29 +49,41 @@ episode_put_args = reqparse.RequestParser()
 episode_put_args.add_argument("title", type=str, help="Name of the episode")
 episode_put_args.add_argument("location_name", type=str, help="Name of the location")
 
-location_fields = {
+episode_basic_fields = {
+    'id': fields.String,
+    'title': fields.String,
+}
+
+location_basic_fields = {
     'name': fields.String,
     'longitude': fields.String,
     'latitude': fields.String,
 }
-resource_fields = {
+
+location_fields = {
+    'name': fields.String,
+    'longitude': fields.String,
+    'latitude': fields.String,
+    'episodes': fields.List(fields.Nested(episode_basic_fields))
+}
+episode_fields = {
     'id': fields.String,
     'title': fields.String,
     'summary': fields.String,
     'link': fields.String,
     'image': fields.String,
     'published': fields.String,
-    'locations': fields.List(fields.Nested(location_fields))
+    'locations': fields.List(fields.Nested(location_basic_fields))
 }
         
 class EpisodeListResource(Resource):
-    @marshal_with(resource_fields)
+    @marshal_with(episode_fields)
     def get(self):
         result = Episodes.query.order_by(Episodes.published.desc()).all()
         return result
     
 class EpisodeResource(Resource):
-    @marshal_with(resource_fields)
+    @marshal_with(episode_fields)
     def get(self, episode_id):
         #result = Episode.query.get(episode_id)
         result = Episodes.query.filter(Episodes.id == episode_id).first()
