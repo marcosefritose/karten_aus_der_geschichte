@@ -3,6 +3,9 @@ module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
+      screens: {
+        '2xl': '1900px'
+      },
       colors: {
         'gag-primary': '#d19000',
         'gag-light': '#ffff7f'
