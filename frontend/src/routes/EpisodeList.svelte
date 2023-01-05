@@ -1,5 +1,5 @@
 <script>
-    export let episodes;
+    import { episodes } from './store';
     export let selected;
     export let selectedLocations;
     
@@ -11,7 +11,7 @@
 
     function selectEpisode(episode) {
         if(typeof(episode) == 'string') {
-            episode = episodes.filter((ep) => ep['id'] == episode)[0]
+            episode = $episodes.filter((ep) => ep['id'] == episode)[0]
         }
 
         selected = episode.id;
@@ -35,7 +35,8 @@
         class="bg-gray-200 opacity-80 overflow-y-scroll h-full md:h-5/6 my-3 p-3  scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400 pointer-events-auto"
         on:selectEpisode={() => console.log('qwe')}
     >
-        {#each episodes as episode (episode.id)}
+        {#if $episodes}
+        {#each $episodes as episode (episode.id)}
             <div id={episode.id} class="flex gap-2 border py-1">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <img
@@ -77,5 +78,6 @@
                 </p>
             </div>
         {/each}
+        {/if}
     </div>
 </div>

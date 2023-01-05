@@ -12,8 +12,8 @@
 	} from 'd3';
 
     import LocationPopup from './LocationPopup.svelte';
+	import { locations } from './store';
     
-    export let locations;
     export let selectedLocations;
     let selectedLocationsNames;
 
@@ -42,16 +42,16 @@
 		updateMarkerPositions()
 	}
 
-    function getGeoFeatureForLocations(locations) {
-		locations = locations.filter((loc) => {
+    function getGeoFeatureForLocations(locs) {
+		locs = locs.filter((loc) => {
 			return loc.latitude !== 'NaN'
 		})
 		
-		if(locations.length == 0){
+		if(locs.length == 0){
 			return false
 		}
 
-		let coordinates = locations.map((coord) => [parseFloat(coord.longitude), parseFloat(coord.latitude)]);
+		let coordinates = locs.map((coord) => [parseFloat(coord.longitude), parseFloat(coord.latitude)]);
 
 		// Sort by longitude to prevent unsortable coords for polygon
 		coordinates = coordinates.sort((a, b) => a[0] - b[0])
@@ -90,7 +90,7 @@
 			locationClicked = true;
 		}
 
-		popupLocation = locations.filter((loc) => loc['name'] == locationName)[0]
+		popupLocation = $locations.filter((loc) => loc['name'] == locationName)[0]
 		popupLocationPosition = markerElements[locationName].getBoundingClientRect()
 		showPopup = true
 	}
@@ -170,18 +170,20 @@
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <path id={data.id} class="fill-gray-300 stroke-1" d={path(data)} />
         {/each}
-        {#each locations as location}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <line
-                id={location.name}
-                bind:this={markerElements[location.name]}
-                class="stroke-1"
-                x1={projection([location.longitude, location.latitude])[0]}
-                x2={projection([location.longitude, location.latitude])[0] + 0.1}
-                y1={projection([location.longitude, location.latitude])[1]}
-                y2={projection([location.longitude, location.latitude])[1] + 0.1}
-            />
-        {/each}
+		{#if $locations}
+			 {#each $locations as location}
+				 <!-- svelte-ignore a11y-click-events-have-key-events -->
+				 <line
+					 id={location.name}
+					 bind:this={markerElements[location.name]}
+					 class="stroke-1"
+					 x1={projection([location.longitude, location.latitude])[0]}
+					 x2={projection([location.longitude, location.latitude])[0] + 0.1}
+					 y1={projection([location.longitude, location.latitude])[1]}
+					 y2={projection([location.longitude, location.latitude])[1] + 0.1}
+				 />
+			 {/each}
+		{/if}
 		<!-- {#if geoFeaturePath}
 			<path class="fill-red stroke-3" d={geoFeaturePath}></path>
 		{/if} -->
@@ -211,5 +213,5 @@
 
 <!-- Location Popup -->
 {#if showPopup}
-    <LocationPopup on:selectEpisode={forward} bind:location={popupLocation} bind:coords={popupLocationPosition} bind:showPopup={showPopup} bind:locationClicked={locationClicked} />
+    <LocationPopup on:selectEpisode={forward} bind:location={popupLocation} bind:coords={popupLocationPosition} bind:showPopup bind:locationClicked />
 {/if}

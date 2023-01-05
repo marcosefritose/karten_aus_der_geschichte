@@ -1,22 +1,10 @@
 <script>
-	import { createEventDispatcher, onMount } from 'svelte';
 	import Map from './Map.svelte';
 	import EpisodeList from './EpisodeList.svelte';
-	
-	// Episodes & Location Data
-	export let data;
-	let episodes = [];
-	let locations = [];
 	
 	let selected;
 	let selectedLocations = [];
 
-	onMount(() => {
-		episodes = data.episodes;
-		locations = data.locations;
-	});
-
-	const dispatcher = createEventDispatcher()
     function forward(event) {
 		selected = event.detail.id
     }
@@ -25,7 +13,7 @@
 <main class="">
 	<div id="world-map-wrapper" class="absolute bottom-0 flex-auto  w-screen h-screen overflow-clip pointer-events-auto">
 		<!-- Main World Map -->
-		<Map on:selectEpisode={forward} bind:locations={locations} bind:selectedLocations={selectedLocations}/>
+		<Map on:selectEpisode={forward} bind:selectedLocations/>
 
 		<!-- Logo -->
 		<div
@@ -35,6 +23,6 @@
 		</div>
 
 		<!-- Episode List -->
-		<EpisodeList bind:episodes={episodes} bind:selectedLocations={selectedLocations} bind:selected={selected}/>
+		<EpisodeList bind:selectedLocations bind:selected/>
 	</div>
 </main>

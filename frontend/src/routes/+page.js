@@ -1,3 +1,5 @@
+import { setEpisodes, setLocations } from "./store"
+
 export async function load({ fetch, setHeaders }) {
     const episodesRes = await fetch('http://flask:5000/episodes/')
     const episodeData = await episodesRes.json()
@@ -5,8 +7,6 @@ export async function load({ fetch, setHeaders }) {
     const locationsRes = await fetch('http://flask:5000/locations/')
     const locationData = await locationsRes.json()
 
-    return {
-        episodes: episodeData,
-        locations: locationData,
-    }
+    setEpisodes(episodeData)
+    setLocations(locationData)
 }
