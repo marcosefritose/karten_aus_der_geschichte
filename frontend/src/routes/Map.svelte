@@ -31,6 +31,7 @@
 
     let popupLocation;
 	let popupLocationPosition;
+	let locationClicked = false;
 	let showPopup = false;
 
 	// Get screen size and update positions for new screen size
@@ -38,7 +39,6 @@
     let innerHeight = 0
     
     $: if(innerHeight || innerWidth) {
-		console.log('change size');
 		updateMarkerPositions()
 	}
 
@@ -61,13 +61,10 @@
 		while (coordinates.length < 4) {
 			coordinates.push(coordinates[0]);
 		}
-
-		console.log(coordinates);
 		
 		// Create geojson Feature and order the coordinates clockwise
 		let polygonFeatureRaw = polygon([coordinates]);
 		let polygonFeature = rewind(polygonFeatureRaw, { reverse: true, mutate: true });
-		console.log(polygonFeature);
 		return polygonFeature;
 	}
 
@@ -87,7 +84,13 @@
 		updateMarkerPositions()
 	}
 
-	function showLocationPopup(locationName) {
+	function showLocationPopup(event, locationName) {
+		if(event.type == 'click') {
+			selectedLocationsNames = [locationName];
+			locationClicked = true;
+			console.log(selectedLocationsNames);
+		}
+
 		popupLocation = locations.filter((loc) => loc['name'] == locationName)[0]
 		popupLocationPosition = markerElements[locationName].getBoundingClientRect()
 		showPopup = true
@@ -114,7 +117,7 @@
 		select(bindHandleZoom).attr('transform', e.transform);
 		updateMarkerPositions()
 		if(popupLocation && showPopup) {
-			popupLocationPosition = markerElements[popupLocation].getBoundingClientRect()
+			popupLocationPosition = markerElements[popupLocation.name].getBoundingClientRect()
 		}
 	}
 
@@ -183,14 +186,19 @@
 
 <div id="marker-wrapper" class="overflow-hidden">
 {#each markerPositions as {name, x, y}}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div 
 			class="absolute rounded-full
 					{selectedLocationsNames.includes(name)
-						? 'bg-gag-primary  w-4 h-4 animate-pulse'
-						: 'bg-gray-600  w-2 h-2 hover:scale-150 hover:bg-gag-primary'}"
+						? 'bg-gag-primary w-4 h-4 animate-pulse-slow'
+						: 'bg-gray-600 w-2 h-2 hover:scale-150 hover:bg-gag-primary'}"
 			style="left: {x-2}px; top: {y-2}px"
-			on:mouseenter={(e) => showLocationPopup(name)}
-			on:mouseleave={() => showPopup = false}
+			on:click={(e) => showLocationPopup(e, name)}
+			on:mouseenter|once={(e) => locationClicked ? null : showLocationPopup(e, name)}
+			on:mouseleave={(e) => {
+				locationClicked ? null : showPopup = false
+				e.target.addEventListener('mouseenter', (e) => locationClicked ? null : showLocationPopup(e, name), {once: true})
+			}}
 		>
 			<!-- Possivle slot for location SVG's -->
 		</div>
@@ -199,5 +207,5 @@
 
 <!-- Location Popup -->
 {#if showPopup}
-    <LocationPopup bind:location={popupLocation} bind:coords={popupLocationPosition} />
+    <LocationPopup bind:location={popupLocation} bind:coords={popupLocationPosition} bind:showPopup={showPopup} bind:locationClicked={locationClicked} />
 {/if}
