@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import Map from './Map.svelte';
 	import EpisodeList from './EpisodeList.svelte';
 	
@@ -15,12 +15,17 @@
 		episodes = data.episodes;
 		locations = data.locations;
 	});
+
+	const dispatcher = createEventDispatcher()
+    function forward(event) {
+		selected = event.detail.id
+    }
 </script>
 
 <main class="">
 	<div id="world-map-wrapper" class="absolute bottom-0 flex-auto  w-screen h-screen overflow-clip pointer-events-auto">
 		<!-- Main World Map -->
-		<Map bind:locations={locations} bind:selectedLocations={selectedLocations}/>
+		<Map on:selectEpisode={forward} bind:locations={locations} bind:selectedLocations={selectedLocations}/>
 
 		<!-- Logo -->
 		<div

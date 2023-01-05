@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import { polygon, rewind } from '@turf/turf';
     import {
 		json,
@@ -88,7 +88,6 @@
 		if(event.type == 'click') {
 			selectedLocationsNames = [locationName];
 			locationClicked = true;
-			console.log(selectedLocationsNames);
 		}
 
 		popupLocation = locations.filter((loc) => loc['name'] == locationName)[0]
@@ -148,6 +147,11 @@
 			mapFeatureData = data.features;
 		});
 	});
+
+	const dispatcher = createEventDispatcher()
+    function forward(event) {
+        dispatcher('selectEpisode', event.detail)
+    }
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -207,5 +211,5 @@
 
 <!-- Location Popup -->
 {#if showPopup}
-    <LocationPopup bind:location={popupLocation} bind:coords={popupLocationPosition} bind:showPopup={showPopup} bind:locationClicked={locationClicked} />
+    <LocationPopup on:selectEpisode={forward} bind:location={popupLocation} bind:coords={popupLocationPosition} bind:showPopup={showPopup} bind:locationClicked={locationClicked} />
 {/if}

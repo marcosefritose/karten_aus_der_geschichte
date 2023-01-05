@@ -7,14 +7,15 @@
 	let imgUrl =
 		'https://images.podigee-cdn.net/0x,sw_d9izO9QfY97alR2f13b7IrOVeXM5gFZOjetk-5sTg=/https://cdn.podigee.com/uploads/u32412/b610d282-8f99-4604-a16f-28ada94ab76a.jpg';
 
+    $: if(selected) selectEpisode(selected)
+
     function selectEpisode(episode) {
-		if (episode.id === selected) {
-			selected = null;
-			selectedLocations = [];
-		} else {
-			selected = episode.id;
-			selectedLocations = [...episode.locations];
-		}
+        if(typeof(episode) == 'string') {
+            episode = episodes.filter((ep) => ep['id'] == episode)[0]
+        }
+
+        selected = episode.id;
+        selectedLocations = [...episode.locations];
 		
 		let listEntry = document.getElementById(episode.id);
 		setTimeout(() => {
@@ -22,6 +23,7 @@
 				behavior: 'smooth'
 			});
 		}, 1);
+        console.log(selected);
 	}
 </script>
 
@@ -31,6 +33,7 @@
     >
     <div
         class="bg-gray-200 opacity-80 overflow-y-scroll h-full md:h-5/6 my-3 p-3  scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400 pointer-events-auto"
+        on:selectEpisode={() => console.log('qwe')}
     >
         {#each episodes as episode (episode.id)}
             <div id={episode.id} class="flex gap-2 border py-1">
