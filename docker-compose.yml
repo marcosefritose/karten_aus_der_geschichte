@@ -24,8 +24,6 @@ x-airflow-common:
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
-    # redis:
-    #   condition: service_healthy
     postgres:
       condition: service_healthy
 
@@ -45,9 +43,9 @@ services:
   postgres_backend:
     image: postgres:13
     environment:
-      POSTGRES_USER: gag
-      POSTGRES_PASSWORD: gag
-      POSTGRES_DB: gag
+      POSTGRES_USER: ${POSTGRES_BE_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_BE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_BE_DB}
     volumes:
       - postgres-be-db-volume:/var/lib/postgresql/data
     ports:
@@ -60,9 +58,9 @@ services:
   postgres:
     image: postgres:13
     environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
+      POSTGRES_USER: ${POSTGRES_AIRFLOW_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_AIRFLOW_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_AIRFLOW_DB}
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
     ports:

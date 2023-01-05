@@ -11,12 +11,12 @@ from airflow.hooks.postgres_hook import PostgresHook
 default_args = {
     'owner': 'marcose',
     'retries': 5,
-    'retry_delay': timedelta(minutes=5)
+    'retry_delay': timedelta(minutes=5),
 }
 
 def last_scraped_episode_date(ti):
     postgres_sql = PostgresHook(
-        postgres_conn_id='postgres_be', schema='gag')
+        postgres_conn_id='postgres_be', schema='kag')
     conn = postgres_sql.get_conn()
     cursor = conn.cursor()
     cursor.execute("""
@@ -47,7 +47,7 @@ def scrape_feed(ti):
     episode_list = list(df.itertuples(index=False, name=None))
     
     postgres_sql = PostgresHook(
-        postgres_conn_id='postgres_be', schema='gag')
+        postgres_conn_id='postgres_be', schema='kag')
     postgres_sql.insert_rows('episodes_raw', episode_list,
                                 replace=True, replace_index="id",
                                 target_fields=['id', 'title', 'subtitle', 'summary', 'published', 'link', 'image'])
@@ -57,7 +57,7 @@ def clean_push_episodes():
     import re
     
     postgres_sql = PostgresHook(
-        postgres_conn_id='postgres_be', schema='gag')
+        postgres_conn_id='postgres_be', schema='kag')
     df = postgres_sql.get_pandas_df("SELECT * FROM episodes_raw")
     
     df['id'] = df['title'].str.split(': ').str[0]
@@ -81,7 +81,7 @@ def extract_and_link_locations():
     import spacy
     
     postgres_sql = PostgresHook(
-        postgres_conn_id='postgres_be', schema='gag')
+        postgres_conn_id='postgres_be', schema='kag')
     episode_df = postgres_sql.get_pandas_df("SELECT id, summary, title, subtitle FROM episodes_target")
 
     episode_df['text'] = episode_df['title'] + ' ' + episode_df['subtitle'] + ' ' + episode_df['summary'] 
@@ -122,7 +122,7 @@ def get_coordinates_for_locations():
     from geopy.extra.rate_limiter import RateLimiter
     
     postgres_sql = PostgresHook(
-        postgres_conn_id='postgres_be', schema='gag')
+        postgres_conn_id='postgres_be', schema='kag')
     locations_df = postgres_sql.get_pandas_df(
         "SELECT name FROM locations WHERE requested IS false")
 
@@ -148,9 +148,10 @@ def get_coordinates_for_locations():
         
     
 with DAG(
-    dag_id='gag_scraper_dag_v1',
-    start_date=datetime(2022, 12, 29),
-    schedule_interval='@daily'
+    dag_id='kag_scraper_dag_v1',
+    start_date=datetime(2023, 1, 5),
+    schedule_interval='@daily',
+    catchup=False
 ) as dag:
     # 0. Create Tables if not exist
     create_tables = PostgresOperator(
