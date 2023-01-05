@@ -16,12 +16,12 @@ module.exports = {
         '5': '5px',
       },
       animation: {
-        'pulse-slow': 'pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
       },
       keyframes: {
         pulse: {
-          '0%, 100%' : {opacity: 1, transform: 'scale(1.75)'},
-          '50%': { opacity: .6, transform: 'scale(1.5)' }
+          '0%, 100%' : {opacity: 1, transform: 'scale(2.5)'},
+          '50%': { opacity: .6, transform: 'scale(1.75)' }
         }
       }
     },

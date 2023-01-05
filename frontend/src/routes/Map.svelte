@@ -12,9 +12,8 @@
 	} from 'd3';
 
     import LocationPopup from './LocationPopup.svelte';
-	import { locations } from './store';
+	import { locations, selectedLocations, setSelectedLocations } from './store';
     
-    export let selectedLocations;
     let selectedLocationsNames;
 
     let mapFeatureData = [];
@@ -47,9 +46,7 @@
 			return loc.latitude !== 'NaN'
 		})
 		
-		if(locs.length == 0){
-			return false
-		}
+		if(locs.length == 0) return false
 
 		let coordinates = locs.map((coord) => [parseFloat(coord.longitude), parseFloat(coord.latitude)]);
 
@@ -69,30 +66,31 @@
 	}
 
     // Detect selection changes and adjust map
-    $: if(selectedLocations) {
-        selectedLocationsNames = selectedLocations.map((loc) => loc.name)
+    selectedLocations.subscribe((selectedLocs) => {
+        selectedLocationsNames = selectedLocs.map((loc) => loc.name)
 
-        let geoFeature = getGeoFeatureForLocations(selectedLocations)
+        let geoFeature = getGeoFeatureForLocations(selectedLocs)
 		
         if(geoFeature) {
 			// geoFeaturePath = path(geoFeature)
 			clicked(geoFeature);
         }
-    }
+    })
 	
 	$: if (markerElements) {
 		updateMarkerPositions()
 	}
 
 	function showLocationPopup(event, locationName) {
-		if(event.type == 'click') {
-			selectedLocationsNames = [locationName];
-			locationClicked = true;
-		}
-
 		popupLocation = $locations.filter((loc) => loc['name'] == locationName)[0]
 		popupLocationPosition = markerElements[locationName].getBoundingClientRect()
 		showPopup = true
+
+		if(event.type == 'click') {
+			setSelectedLocations([popupLocation])
+			locationClicked = true;
+		}
+
 	}
 	
 	function updateMarkerPositions() {
@@ -107,7 +105,7 @@
 	}
 	
 	// Zoom and scroll functionality
-	$: zoomX = zoom().scaleExtent([1, 7]).on('zoom', handleZoom);
+	$: zoomX = zoom().scaleExtent([1, 8]).on('zoom', handleZoom);
 	$: if (bindInitZoom) {
 		select(bindInitZoom).call(zoomX);
 	}
@@ -132,11 +130,9 @@
 				zoomIdentity
 					.translate(1000 / 2, 500 / 2)
 					// ToDo: Zoom factor depending on screen size!
-					.scale(Math.min(4, 0.5 / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
+					.scale(Math.min(6, 0.8 / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
 					.translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
 			);
-
-		// updateMarkerPositions()
 	}
 
     onMount(() => {
@@ -147,15 +143,9 @@
 			mapFeatureData = data.features;
 		});
 	});
-
-	const dispatcher = createEventDispatcher()
-    function forward(event) {
-        dispatcher('selectEpisode', event.detail)
-    }
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
-
 
 <!-- World Map -->
 <svg
@@ -196,8 +186,8 @@
 		<div 
 			class="absolute rounded-full
 					{selectedLocationsNames.includes(name)
-						? 'bg-gag-primary w-4 h-4 animate-pulse-slow'
-						: 'bg-gray-600 w-2 h-2 hover:scale-150 hover:bg-gag-primary'}"
+						? 'bg-gag-primary w-2 h-2 z-10 animate-pulse-slow'
+						: 'bg-gray-600 w-2 h-2 hover:scale-150 hover:bg-gag-primary border-gray-300 border-[0.1px]'}"
 			style="left: {x-2}px; top: {y-2}px"
 			on:click={(e) => showLocationPopup(e, name)}
 			on:mouseenter|once={(e) => locationClicked ? null : showLocationPopup(e, name)}
@@ -206,12 +196,12 @@
 				e.target.addEventListener('mouseenter', (e) => locationClicked ? null : showLocationPopup(e, name), {once: true})
 			}}
 		>
-			<!-- Possivle slot for location SVG's -->
+			<!-- Possible slot for location SVG's -->
 		</div>
 		{/each}
 </div>
 
 <!-- Location Popup -->
 {#if showPopup}
-    <LocationPopup on:selectEpisode={forward} bind:location={popupLocation} bind:coords={popupLocationPosition} bind:showPopup bind:locationClicked />
+    <LocationPopup bind:location={popupLocation} bind:coords={popupLocationPosition} bind:showPopup bind:locationClicked />
 {/if}

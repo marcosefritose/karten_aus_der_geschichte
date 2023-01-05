@@ -1,19 +1,12 @@
 <script>
 	import Map from './Map.svelte';
 	import EpisodeList from './EpisodeList.svelte';
-	
-	let selected;
-	let selectedLocations = [];
-
-    function forward(event) {
-		selected = event.detail.id
-    }
 </script>
 
 <main class="">
 	<div id="world-map-wrapper" class="absolute bottom-0 flex-auto  w-screen h-screen overflow-clip pointer-events-auto">
 		<!-- Main World Map -->
-		<Map on:selectEpisode={forward} bind:selectedLocations/>
+		<Map/>
 
 		<!-- Logo -->
 		<div
@@ -23,6 +16,6 @@
 		</div>
 
 		<!-- Episode List -->
-		<EpisodeList bind:selectedLocations bind:selected/>
+		<EpisodeList/>
 	</div>
 </main>

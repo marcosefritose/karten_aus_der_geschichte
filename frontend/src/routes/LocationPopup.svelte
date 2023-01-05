@@ -1,12 +1,11 @@
 <script>
-	import { createEventDispatcher, onMount } from "svelte";
+	import { onMount } from "svelte";
+    import { setSelectedEpisodeById } from "./store";
 
     export let coords;
     export let location;
     export let showPopup;
     export let locationClicked;
-
-    const dispatcher = createEventDispatcher();
 
     let popup;
     let left = 0;
@@ -34,31 +33,27 @@
 		}
 	}
 
-    function selectEpisode(episode) {
-        dispatcher('selectEpisode', episode)    
-    }
-
     function disablePopup() {
         showPopup = false; 
         locationClicked = false;
     }
 
     function updatePostion(x,y) {
-        if(popup) {
-            left = x - popup.offsetWidth / 2
-            
-            if(left < 0) {
-                left = 0
-            } else if(left > innerWidth) {
-                left = innerWidth - popup.offsetWidth
-            }
+        if(!popup) return false
 
-            if(innerHeight < y + popup.offsetWidth) {
-                top = y - popup.offsetHeight - 15
-            } else {
-                top = y + 15
-            }            
+        left = x - popup.offsetWidth / 2
+        
+        if(left < 0) {
+            left = 0
+        } else if(left > innerWidth) {
+            left = innerWidth - popup.offsetWidth
         }
+
+        if(innerHeight < y + popup.offsetWidth) {
+            top = y - popup.offsetHeight - 15
+        } else {
+            top = y + 15
+        }            
     }
 
     onMount(() => {
@@ -69,7 +64,8 @@
 
 <div 
     bind:this={popup}
-    use:clickOutside on:click_outside={() => disablePopup()}
+    use:clickOutside 
+    on:click_outside={disablePopup}
     class="absolute bg-gray-300 bg-opacity-80 max-w-sm rounded-md border border-gray-800 m-1" 
     style="left: {left}px; top: {top}px"
 >
@@ -77,7 +73,7 @@
     <ul class="py-1 px-2 max-h-48 overflow-y-scroll scrollbar-thin scrollbar-thumb-gag-primary scrollbar-track-gray-400">
         {#each location.episodes as episode, id}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <li class="mb-2 cursor-pointer flex gap-1" on:click={selectEpisode(episode)}>
+            <li class="mb-2 cursor-pointer flex gap-1" on:click={setSelectedEpisodeById(episode.id)}>
                 <span class="bg-white text-gray-800 border border-gray-800 px-2 py-1 rounded-md font-bold text-sm inline-block h-fit">{episode.id}</span>{episode.title}
             </li>
         {/each}
