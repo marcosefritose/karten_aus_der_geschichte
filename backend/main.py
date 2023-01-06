@@ -1,16 +1,26 @@
 import csv
 import json
+import os
 
+from dotenv import load_dotenv
+from pathlib import Path
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
+# env_path = Path('../.env')
+load_dotenv()
+
+db_name = os.getenv('POSTGRES_DB')
+db_username = os.getenv('POSTGRES_USER')
+db_password = os.getenv('POSTGRES_PASSWORD')
+
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://gag:gag@postgres_backend:5432/gag"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_username}:{db_password}@postgres_backend:5432/{db_name}"
 
 db = SQLAlchemy(app)
 
