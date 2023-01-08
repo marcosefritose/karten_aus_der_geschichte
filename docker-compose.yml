@@ -41,9 +41,9 @@ services:
   svelte:
       build: ./frontend
       volumes:
-      - ./frontend/:/test-app/
+        - ./frontend/:/test-app/
       ports:
-      - 5173:5173
+        - 5173:5173
   postgres_backend:
     image: postgres:13
     environment:
@@ -78,9 +78,9 @@ services:
       - 8080:8080
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+      interval: 25s
+      timeout: 25s
+      retries: 4
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
@@ -92,9 +92,9 @@ services:
     command: scheduler
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
-      interval: 10s
-      timeout: 10s
-      retries: 5
+      interval: 25s
+      timeout: 25s
+      retries: 4
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
@@ -106,9 +106,9 @@ services:
     command: triggerer
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
-      interval: 10s
-      timeout: 10s
-      retries: 5
+      interval: 25s
+      timeout: 25s
+      retries: 4
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
