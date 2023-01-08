@@ -87,7 +87,7 @@ def extract_and_link_locations():
     episode_df['text'] = episode_df['title'] + ' ' + episode_df['subtitle'] + ' ' + episode_df['summary'] 
     episode_df = episode_df[['id', 'text']]
     
-    nlp = spacy.load("de_core_news_md")
+    nlp = spacy.load("de_core_news_lg")
     locations = {}
 
     for entry in episode_df.itertuples():

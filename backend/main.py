@@ -17,10 +17,12 @@ db_username = os.getenv('POSTGRES_USER')
 db_password = os.getenv('POSTGRES_PASSWORD')
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_username}:{db_password}@postgres_backend:5432/{db_name}"
+
 api = Api(app)
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_username}:{db_password}@postgres_backend:5432/{db_name}"
 
 db = SQLAlchemy(app)
 
