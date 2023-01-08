@@ -122,6 +122,9 @@
 	function clicked(d) {
 		const [[x0, y0], [x1, y1]] = path.bounds(d);
 
+		let zoomFactor = innerWidth < 600 ? 0.3 : 0.8
+
+		console.log(zoomFactor);
 		select(bindInitZoom)
 			.transition()
 			.duration(750)
@@ -130,7 +133,7 @@
 				zoomIdentity
 					.translate(1000 / 2, 500 / 2)
 					// ToDo: Zoom factor depending on screen size!
-					.scale(Math.min(6, 0.8 / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
+					.scale(Math.min(6, zoomFactor / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
 					.translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
 			);
 	}

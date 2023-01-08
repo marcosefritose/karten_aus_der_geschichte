@@ -67,7 +67,7 @@
     bind:this={popup}
     use:clickOutside 
     on:click_outside={disablePopup}
-    class="absolute bg-gray-300 bg-opacity-80 w-64 sm:w-96 rounded-md border border-gag-primary m-1 z-20" 
+    class="absolute bg-gray-300 bg-opacity-70 w-64 sm:w-96 rounded-md border border-gag-primary m-1 z-20" 
     style="left: {left}px; top: {top}px"
 >
     <p class="text-center text-lg font-semibold py-2">{location.name}</p>

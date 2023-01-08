@@ -19,10 +19,10 @@
 
 <div
     id="list"
-    class="flex items-center absolute right-0 bottom-0 lg:top-0 w-full lg:w-1/3 xl:w-1/4 2xl:w-1/5 h-2/5 lg:h-full pointer-events-none z-20"
+    class="flex items-center absolute right-0 bottom-0 md:top-0 w-full md:w-1/3 xl:w-1/4 2xl:w-1/5 h-2/5 md:h-full pointer-events-none z-20"
     >
     <div
-        class="bg-gray-200 opacity-80 overflow-y-scroll h-full md:h-5/6 my-3 p-3  scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400 pointer-events-auto"
+        class="bg-gray-200 opacity-70 overflow-y-scroll h-full md:h-5/6 my-3 p-3  scrollbar-thin rounded-xl scrollbar-thumb-gag-primary scrollbar-track-gray-400 pointer-events-auto"
     >
         {#if $episodes}
         {#each $episodes as episode (episode.id)}
@@ -60,9 +60,14 @@
                             >
                             {/each}
                         </div>
-                        <span class="py-1 text-xs font-semibold"
-                        >Veröffentlicht am {new Date(episode.published).toLocaleDateString('de-DE')}</span
-                        >
+                        <!-- Date -->
+                        <span class="pt-1 text-xs font-semibold block"
+                        >Veröffentlicht am {new Date(episode.published).toLocaleDateString('de-DE')}</span>
+                        <!-- Link -->
+                        <span class="py-1 text-sm font-semibold block underline underline-offset-2"
+                        ><a href="{episode.link}" target="_blank" rel="noopener noreferrer">Zur Folge</a></span>
+
+                        <!-- Summary -->
                         <p class="text-small">
                             {episode.summary}
                         </p>
