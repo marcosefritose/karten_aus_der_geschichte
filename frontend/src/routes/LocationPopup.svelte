@@ -41,15 +41,16 @@
     function updatePostion(x,y) {
         if(!popup) return false
 
-        left = x - popup.offsetWidth / 2
+        left = x - (popup.offsetWidth / 2)
         
         if(left < 0) {
             left = 0
-        } else if(left > innerWidth) {
+        } else if(left > (innerWidth - popup.offsetWidth)) {
+            console.log('shrink');
             left = innerWidth - popup.offsetWidth
         }
 
-        if(innerHeight < y + popup.offsetWidth) {
+        if(innerHeight / 2 < y + popup.offsetHeight) {
             top = y - popup.offsetHeight - 15
         } else {
             top = y + 15
@@ -66,15 +67,15 @@
     bind:this={popup}
     use:clickOutside 
     on:click_outside={disablePopup}
-    class="absolute bg-gray-300 bg-opacity-80 max-w-sm rounded-md border border-gray-800 m-1" 
+    class="absolute bg-gray-300 bg-opacity-80 w-64 sm:w-96 rounded-md border border-gag-primary m-1 z-20" 
     style="left: {left}px; top: {top}px"
 >
-    <p class="text-center text-lg font-semibold py-1">{location.name}</p>
-    <ul class="py-1 px-2 max-h-48 overflow-y-scroll scrollbar-thin scrollbar-thumb-gag-primary scrollbar-track-gray-400">
+    <p class="text-center text-lg font-semibold py-2">{location.name}</p>
+    <ul class="pb-1 px-2 max-h-48 overflow-y-scroll scrollbar-thin scrollbar-thumb-gag-primary scrollbar-track-gray-400">
         {#each location.episodes as episode, id}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <li class="mb-2 cursor-pointer flex gap-1" on:click={setSelectedEpisodeById(episode.id)}>
-                <span class="bg-white text-gray-800 border border-gray-800 px-2 py-1 rounded-md font-bold text-sm inline-block h-fit">{episode.id}</span>{episode.title}
+                <span class="bg-gag-primary inline-block text-white px-2 py-1 rounded-md font-bold text-xs h-fit">{episode.id}</span>{episode.title}
             </li>
         {/each}
     </ul>

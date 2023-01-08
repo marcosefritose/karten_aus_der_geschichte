@@ -30,7 +30,7 @@
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <img
                     src={imgUrl}
-                    class="w-16 h-16 rounded-sm border border-gray-400 hover:cursor-pointer"
+                    class="w-12 h-12 md:w-16 md:h-16 rounded-sm border border-gray-400 hover:cursor-pointer"
                     alt="Thumbnail Picture Episode {episode.id}"
                     on:click={setSelectedEpisodeById(episode.id)}
                 />
