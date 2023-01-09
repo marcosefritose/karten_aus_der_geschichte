@@ -6,7 +6,7 @@
 </script>
 
 <main class="">
-	<div id="world-map-wrapper" class="absolute bottom-0 flex-auto  w-screen h-screen overflow-clip pointer-events-auto">
+	<div id="world-map-wrapper" class="absolute bottom-0 flex-auto  w-screen overflow-clip pointer-events-auto">
 		<!-- Main World Map -->
 		<Map/>
 
