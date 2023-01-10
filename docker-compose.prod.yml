@@ -84,7 +84,7 @@ services:
       - web-root:/var/www/html
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email kag.marcose.test --agree-tos --no-eff-email --force-renewal -d kag.marcose.test
+    command: certonly --webroot --webroot-path=/var/www/html --email kag.marcose.eu --agree-tos --no-eff-email --force-renewal -d kag.marcose.eu
   postgres_backend:
     image: postgres:13
     environment:
