@@ -4,7 +4,7 @@
 
   export let coords;
   export let location;
-  export let showPopup;
+  export let locationPopupIsShown;
   export let locationClicked;
 
   let popup;
@@ -31,7 +31,7 @@
   }
 
   function disablePopup() {
-    showPopup = false;
+    locationPopupIsShown = false;
     locationClicked = false;
   }
 
@@ -63,18 +63,18 @@
   bind:this={popup}
   use:clickOutside
   on:click_outside={disablePopup}
-  class="absolute z-20 m-1 w-64 rounded-md border border-gag-primary bg-gray-300 bg-opacity-70 sm:w-96"
+  class="border-gag-primary absolute z-20 m-1 w-64 rounded-md border bg-gray-300 bg-opacity-70 sm:w-96"
   style="left: {left}px; top: {top}px"
 >
   <p class="py-2 text-center text-lg font-semibold">{location.name}</p>
   <ul
-    class="max-h-48 overflow-y-scroll px-2 pb-1 scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary"
+    class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary max-h-48 overflow-y-scroll px-2 pb-1"
   >
     {#each location.episodes as episode, id}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <li class="mb-2 flex cursor-pointer gap-1" on:click={setSelectedEpisodeById(episode.id)}>
         <span
-          class="inline-block h-fit rounded-md bg-gag-primary px-2 py-1 text-xs font-bold text-white"
+          class="bg-gag-primary inline-block h-fit rounded-md px-2 py-1 text-xs font-bold text-white"
           >{episode.id}</span
         >{episode.title}
       </li>

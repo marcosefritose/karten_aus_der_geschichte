@@ -1,16 +1,29 @@
 <script>
   import { createEventDispatcher, onMount } from 'svelte';
   import { polygon, rewind } from '@turf/turf';
-  import { json, geoPath, zoom, zoomIdentity, select, geoNaturalEarth1, geoMercator } from 'd3';
+  import {
+    json,
+    geoPath,
+    zoom,
+    zoomIdentity,
+    select,
+    geoNaturalEarth1,
+    interpolateYlOrBr
+  } from 'd3';
 
   import LocationPopup from './LocationPopup.svelte';
   import { locations, selectedLocations, setSelectedLocations } from './store';
+  import AreaPopup from './AreaPopup.svelte';
 
   let selectedLocationsNames;
 
   let mapFeatureData = [];
   let markerElements = {};
   let markerPositions = [];
+
+  let historicMapFeatureData = [];
+  let historicMapFeatureNames = [];
+  let historicMapFeaturePaths;
 
   // ToDo: Used for debuggin polygon geofeature - remove if prod
   // let geoFeaturePath = null;
@@ -22,8 +35,11 @@
 
   let popupLocation;
   let popupLocationPosition;
+  let popupArea;
+  let popupAreaPosition;
   let locationClicked = false;
-  let showPopup = false;
+  let locationPopupIsShown = false;
+  let areaPopupIsShown = false;
 
   // Get screen size and update positions for new screen size
   let innerWidth = 0;
@@ -79,12 +95,18 @@
   function showLocationPopup(event, locationName) {
     popupLocation = $locations.filter((loc) => loc['name'] == locationName)[0];
     popupLocationPosition = markerElements[locationName].getBoundingClientRect();
-    showPopup = true;
+    locationPopupIsShown = true;
 
     if (event.type == 'click') {
       setSelectedLocations([popupLocation]);
       locationClicked = true;
     }
+  }
+
+  function showAreaPopup(event, areaName) {
+    popupArea = areaName;
+    popupAreaPosition = { x: event.clientX, y: event.clientY };
+    areaPopupIsShown = true;
   }
 
   function updateMarkerPositions() {
@@ -107,7 +129,7 @@
   function handleZoom(e) {
     select(bindHandleZoom).attr('transform', e.transform);
     updateMarkerPositions();
-    if (popupLocation && showPopup) {
+    if (popupLocation && locationPopupIsShown) {
       popupLocationPosition = markerElements[popupLocation.name].getBoundingClientRect();
     }
   }
@@ -115,9 +137,9 @@
   function clicked(d) {
     const [[x0, y0], [x1, y1]] = path.bounds(d);
 
+    // TODO: Zoom factor more dynamic?
     let zoomFactor = innerWidth < 600 ? 0.3 : 0.8;
 
-    console.log(zoomFactor);
     select(bindInitZoom)
       .transition()
       .duration(750)
@@ -138,6 +160,25 @@
     ).then((data) => {
       mapFeatureData = data.features;
     });
+
+    json(
+      'https://raw.githubusercontent.com/aourednik/historical-basemaps/2af83f42f75939e238f5a4702d050f9bae1689b6/geojson/world_bc123000.geojson'
+    ).then((data) => {
+      historicMapFeatureData = data.features;
+      historicMapFeatureData = historicMapFeatureData.filter((d) => d.properties.NAME != null);
+      historicMapFeatureNames = [...new Set(historicMapFeatureData.map((d) => d.properties.NAME))];
+
+      setTimeout(() => {
+        for (let areaPath of historicMapFeaturePaths.children) {
+          areaPath.addEventListener('mouseenter', (e) => {
+            showAreaPopup(e, areaPath.getAttribute('data-name'));
+          });
+          areaPath.addEventListener('mouseleave', (e) => {
+            areaPopupIsShown = false;
+          });
+        }
+      }, 20);
+    });
   });
 </script>
 
@@ -152,10 +193,26 @@
   bind:this={bindInitZoom}
 >
   <g class="countries" bind:this={bindHandleZoom}>
-    {#each mapFeatureData as data}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <path id={data.id} class="fill-gray-300 stroke-1" d={path(data)} />
-    {/each}
+    <g class="select-none">
+      {#each mapFeatureData as data}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <path id={data.id} class="select-none fill-gray-300 stroke-1" d={path(data)} />
+      {/each}
+    </g>
+    <g class="historic-areas z-50" bind:this={historicMapFeaturePaths}>
+      {#each historicMapFeatureData as data}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <path
+          data-name={data.properties.NAME}
+          class="historic-path z-50 stroke-1 opacity-30"
+          d={path(data)}
+          fill={interpolateYlOrBr(
+            historicMapFeatureNames.indexOf(data.properties.NAME) / historicMapFeatureNames.length
+          )}
+        />
+      {/each}
+    </g>
+
     {#if $locations}
       {#each $locations as location}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -182,13 +239,13 @@
     <div
       class="absolute rounded-full
 					{selectedLocationsNames.includes(name)
-        ? 'z-10 h-2 w-2 animate-pulse-slow bg-gag-primary'
-        : 'h-2 w-2 border-[0.1px] border-gray-300 bg-gray-600 hover:scale-150 hover:bg-gag-primary'}"
+        ? 'animate-pulse-slow bg-gag-primary z-10 h-2 w-2'
+        : 'hover:bg-gag-primary h-2 w-2 border-[0.1px] border-gray-300 bg-gray-600 hover:scale-150'}"
       style="left: {x - 2}px; top: {y - 2}px"
       on:click={(e) => showLocationPopup(e, name)}
       on:mouseenter|once={(e) => (locationClicked ? null : showLocationPopup(e, name))}
       on:mouseleave={(e) => {
-        locationClicked ? null : (showPopup = false);
+        locationClicked ? null : (locationPopupIsShown = false);
         e.target.addEventListener(
           'mouseenter',
           (e) => (locationClicked ? null : showLocationPopup(e, name)),
@@ -202,11 +259,16 @@
 </div>
 
 <!-- Location Popup -->
-{#if showPopup}
+{#if locationPopupIsShown}
   <LocationPopup
     bind:location={popupLocation}
     bind:coords={popupLocationPosition}
-    bind:showPopup
+    bind:locationPopupIsShown
     bind:locationClicked
   />
+{/if}
+
+<!-- Area Popup -->
+{#if areaPopupIsShown}
+  <AreaPopup bind:area={popupArea} bind:coords={popupAreaPosition} />
 {/if}
