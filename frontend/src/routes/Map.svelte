@@ -12,7 +12,7 @@
   } from 'd3';
 
   import LocationPopup from './LocationPopup.svelte';
-  import { locations, selectedLocations, setSelectedLocations } from './store';
+  import { locations, selectedLocations, setSelectedLocations, popupSelection } from './store';
   import AreaPopup from './AreaPopup.svelte';
 
   let selectedLocationsNames;
@@ -93,6 +93,10 @@
   }
 
   function showLocationPopup(event, locationName) {
+    if ($popupSelection !== 'location') {
+      return false;
+    }
+
     popupLocation = $locations.filter((loc) => loc['name'] == locationName)[0];
     popupLocationPosition = markerElements[locationName].getBoundingClientRect();
     locationPopupIsShown = true;
@@ -104,6 +108,10 @@
   }
 
   function showAreaPopup(event, areaName) {
+    if ($popupSelection !== 'area') {
+      return false;
+    }
+
     popupArea = areaName;
     popupAreaPosition = { x: event.clientX, y: event.clientY };
     areaPopupIsShown = true;
