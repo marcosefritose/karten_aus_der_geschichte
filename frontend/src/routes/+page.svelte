@@ -1,6 +1,6 @@
 <script>
   import Map from './Map.svelte';
-  import EpisodeList from './EpisodeList.svelte';
+  import Content from './Content.svelte';
 
   const confident = import.meta.env.VITE_CONFIDENT;
 </script>
@@ -15,7 +15,7 @@
 
     <!-- Logo -->
     <div
-      class="absolute top-0 flex w-32 rounded-br-md border-b border-r border-dashed border-gag-primary bg-slate-400 bg-opacity-80 lg:w-40"
+      class="border-gag-primary absolute top-0 flex w-32 rounded-br-md border-b border-r border-dashed bg-slate-400 bg-opacity-80 lg:w-40"
     >
       <img src="/gag_logo.png" class="object-contain" alt="" />
     </div>
@@ -32,7 +32,7 @@
       </div>
     {/if}
 
-    <!-- Episode List -->
-    <EpisodeList />
+    <!-- Side/Bottom Bar Content -->
+    <Content />
   </div>
 </main>

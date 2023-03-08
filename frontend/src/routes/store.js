@@ -19,9 +19,7 @@ export function setSelectedEpisodeById(episodeId) {
     let episode = episodesValue.filter((ep) => ep['id'] == episodeId)[0]
 
     selectedEpisode.update(state => episode)
-    console.log(get(selectedLocations));
     selectedLocations.update(state => [...episode.locations]);
-    console.log(get(selectedLocations));
 }
 
 export function setSelectedLocations(newSelectedLocations) {
