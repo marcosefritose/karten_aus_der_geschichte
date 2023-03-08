@@ -169,9 +169,7 @@
       mapFeatureData = data.features;
     });
 
-    json(
-      'https://raw.githubusercontent.com/aourednik/historical-basemaps/2af83f42f75939e238f5a4702d050f9bae1689b6/geojson/world_bc123000.geojson'
-    ).then((data) => {
+    json('historic-maps/world_100.geojson').then((data) => {
       historicMapFeatureData = data.features;
       historicMapFeatureData = historicMapFeatureData.filter((d) => d.properties.NAME != null);
       historicMapFeatureNames = [...new Set(historicMapFeatureData.map((d) => d.properties.NAME))];
