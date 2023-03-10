@@ -1,6 +1,6 @@
 <script>
   import EpisodeList from './EpisodeList.svelte';
-  import { episodes, setSelectedEpisodeById, selectedEpisode, setPopupSelection } from './store';
+  import { setShowHistoricMaps, selectedEpisode, setPopupSelection } from './store';
   import Timeline from './Timeline.svelte';
 
   let popupSelectorChecked = false;
@@ -34,10 +34,11 @@
   <div
     class="pointer-events-auto relative my-3 h-full w-full overflow-clip rounded-xl opacity-80 md:h-5/6"
   >
-    <div class="aboslute select-none border-b border-gray-800 px-3 pt-2">
+    <div class="aboslute select-none border-b border-gray-800 px-3">
       <div class="flex items-center gap-2">
         <img
-          class="h-8 w-8 rounded-t-md border border-b-0 border-gray-800 {selectedContent == 'list'
+          class="h-8 w-8 cursor-pointer rounded-t-md border border-b-0 border-gray-800 {selectedContent ==
+          'list'
             ? 'bg-gag-primary'
             : 'bg-gray-300'}"
           src="list.svg"
@@ -45,7 +46,7 @@
           on:click={() => (selectedContent = 'list')}
         />
         <img
-          class="h-8 w-8 rounded-t-md border border-b-0 border-gray-800 p-1 {selectedContent ==
+          class="h-8 w-8 cursor-pointer rounded-t-md border border-b-0 border-gray-800 p-1 {selectedContent ==
           'timeline'
             ? 'bg-gag-primary'
             : 'bg-gray-300'}"
@@ -55,7 +56,7 @@
         />
         <label
           for="popup-selector"
-          class="border-gag-primary flex cursor-pointer gap-1 rounded-full border bg-gray-300"
+          class="flex cursor-pointer gap-1 self-start rounded-full border border-gray-800 bg-gray-300"
         >
           <input
             type="checkbox"

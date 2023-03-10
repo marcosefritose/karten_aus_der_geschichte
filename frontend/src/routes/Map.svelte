@@ -12,7 +12,14 @@
   } from 'd3';
 
   import LocationPopup from './LocationPopup.svelte';
-  import { locations, selectedLocations, setSelectedLocations, popupSelection } from './store';
+  import {
+    locations,
+    selectedLocations,
+    setSelectedLocations,
+    selectedTime,
+    popupSelection,
+    showHistoricMap
+  } from './store';
   import AreaPopup from './AreaPopup.svelte';
 
   let selectedLocationsNames;
@@ -42,6 +49,7 @@
   let areaPopupIsShown = false;
 
   // Get screen size and update positions for new screen size
+  let mounted = false;
   let innerWidth = 0;
   let innerHeight = 0;
 
@@ -161,15 +169,8 @@
       );
   }
 
-  onMount(() => {
-    // ToDo move geojson to flask server/static files
-    json(
-      'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson'
-    ).then((data) => {
-      mapFeatureData = data.features;
-    });
-
-    json('historic-maps/world_100.geojson').then((data) => {
+  function loadHistoricMap(mapFile, delay = 0) {
+    json(mapFile).then((data) => {
       historicMapFeatureData = data.features;
       historicMapFeatureData = historicMapFeatureData.filter((d) => d.properties.NAME != null);
       historicMapFeatureNames = [...new Set(historicMapFeatureData.map((d) => d.properties.NAME))];
@@ -183,8 +184,23 @@
             areaPopupIsShown = false;
           });
         }
-      }, 20);
+      }, delay);
     });
+  }
+
+  $: if (mounted & $showHistoricMap) {
+    loadHistoricMap($selectedTime.file);
+  }
+
+  onMount(() => {
+    // ToDo move geojson to flask server/static files
+    json(
+      'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson'
+    ).then((data) => {
+      mapFeatureData = data.features;
+    });
+
+    mounted = true;
   });
 </script>
 
@@ -206,17 +222,19 @@
       {/each}
     </g>
     <g class="historic-areas z-50" bind:this={historicMapFeaturePaths}>
-      {#each historicMapFeatureData as data}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <path
-          data-name={data.properties.NAME}
-          class="historic-path z-50 stroke-1 opacity-30"
-          d={path(data)}
-          fill={interpolateYlOrBr(
-            historicMapFeatureNames.indexOf(data.properties.NAME) / historicMapFeatureNames.length
-          )}
-        />
-      {/each}
+      {#if $showHistoricMap}
+        {#each historicMapFeatureData as data}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <path
+            data-name={data.properties.NAME}
+            class="historic-path z-50 stroke-1 opacity-30"
+            d={path(data)}
+            fill={interpolateYlOrBr(
+              historicMapFeatureNames.indexOf(data.properties.NAME) / historicMapFeatureNames.length
+            )}
+          />
+        {/each}
+      {/if}
     </g>
 
     {#if $locations}
