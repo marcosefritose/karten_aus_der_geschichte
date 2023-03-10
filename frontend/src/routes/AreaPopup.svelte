@@ -36,7 +36,7 @@
 
 <div
   bind:this={popup}
-  class="border-gag-primary absolute z-20 m-1 w-64 rounded-md border bg-gray-300 bg-opacity-70 sm:w-96"
+  class="border-gag-primary absolute z-20 m-1 rounded-md border bg-gray-300 bg-opacity-70 px-4"
   style="left: {left}px; top: {top}px"
 >
   <p class="py-2 text-center text-lg font-semibold">{area}</p>
