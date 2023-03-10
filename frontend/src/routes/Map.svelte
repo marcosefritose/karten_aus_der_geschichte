@@ -178,9 +178,14 @@
       setTimeout(() => {
         for (let areaPath of historicMapFeaturePaths.children) {
           areaPath.addEventListener('mouseenter', (e) => {
+            console.log(areaPath);
+            areaPath.classList.remove('opacity-30');
+            areaPath.classList.add('stroke-black', 'opacity-50');
             showAreaPopup(e, areaPath.getAttribute('data-name'));
           });
           areaPath.addEventListener('mouseleave', (e) => {
+            areaPath.classList.add('opacity-30');
+            areaPath.classList.remove('stroke-black', 'opacity-50');
             areaPopupIsShown = false;
           });
         }
