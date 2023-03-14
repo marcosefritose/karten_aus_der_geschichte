@@ -1,3 +1,5 @@
+import requests
+
 from geopy.extra.rate_limiter import RateLimiter
 from datetime import datetime, timedelta
 
@@ -51,6 +53,23 @@ def scrape_feed(ti):
     postgres_sql.insert_rows('episodes_raw', episode_list,
                                 replace=True, replace_index="id",
                                 target_fields=['id', 'title', 'subtitle', 'summary', 'published', 'link', 'image'])
+    
+def create_thumbnail_link(episode_id, image_url):
+    import numpy as np
+    
+    endpoint = 'http://flask:5000/get-episode-image-from-link'
+    info = {
+        'url': image_url,
+        'episode_id': episode_id
+    }
+    
+    response = requests.post(endpoint, data=info)
+
+    if response.status_code == requests.codes.ok:
+        return response.text
+    
+    return np.NaN
+
 
 def clean_push_episodes():
     import numpy as np
@@ -70,6 +89,8 @@ def clean_push_episodes():
     
     df['image'] = df['image'].map(lambda x: re.findall(
         '{"href": "(.+?)"}', x)[0] if x != 'nan' else np.NaN)
+    
+    df['thumbnail'] = df.apply(lambda x: np.NaN if x.image == np.NaN else create_thumbnail_link(x.id, x.image), axis=1)
     
     clean_episode_list = list(df.itertuples(index=False, name=None))
     postgres_sql.insert_rows('episodes_target', clean_episode_list,
@@ -174,6 +195,7 @@ with DAG(
                 summary VARCHAR NOT NULL,
                 link VARCHAR NOT NULL,
                 image VARCHAR,
+                thumbnail VARCHAR,
                 published DATE);
             """, """
             CREATE TABLE IF NOT EXISTS locations (
