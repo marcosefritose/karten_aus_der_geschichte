@@ -1,4 +1,7 @@
 airflow/logs/*
 airflow/dags/__pycache__/*
+
+backend/data/*
+
 .env
 nginx-conf/*

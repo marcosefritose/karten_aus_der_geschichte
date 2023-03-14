@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+import urllib
 
 from pathlib import Path
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
@@ -110,31 +111,25 @@ class LocationListResource(Resource):
     def get(self):
         result = Locations.query.filter(Locations.latitude != "NaN").all()
         return result
- 
-def allowed_file(filename):
-    return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-            
-def create_and_save_thumbnail(filename):
-    with Image.open(app.config['UPLOAD_FOLDER']+'/'+filename) as im:
-                im.thumbnail((128,128))
-                im.save(THUMBNAIL_FOLDER+'/thumb_'+filename, 'JPEG')
-              
-@app.route('/upload-episode-image', methods=['POST'])
-def upload_episode_image():
-    # check if the post request has the file part
-    if 'file' not in request.files:
-        return 'No file part'
-    file = request.files['file']
-    # if user does not select file, browser also
-    # submit an empty part without filename
-    if file.filename == '':
-        return 'No selected file'
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        create_and_save_thumbnail(filename)
-        return url_for('thumbnail', filename=filename)
+
+@app.route('/get-episode-image-from-link', methods=['POST'])
+def upload_episode_image_from_url():
+    url = request.form.get('url')
+    episode_id = request.form.get('episode_id')
+    
+    filename = secure_filename(episode_id + '.jpeg')
+    thumbnail_filename = secure_filename(episode_id + '_thumbnail.jpeg')
+
+    if os.path.exists(os.path.join(app.config['THUMBNAIL_FOLDER'], thumbnail_filename)):
+        return url_for('thumbnail', filename=thumbnail_filename)
+    
+    with urllib.request.urlopen(url) as image_stream:
+        with Image.open(image_stream) as im:
+            im.save(os.path.join(app.config['UPLOAD_FOLDER'], filename), 'JPEG')
+            im.thumbnail((128,128))
+            im.save(os.path.join(app.config['THUMBNAIL_FOLDER'], thumbnail_filename), 'JPEG')
+
+            return url_for('thumbnail', filename=thumbnail_filename)
     
 @app.route('/uploads/images/<filename>')
 def uploaded_image(filename):
