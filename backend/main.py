@@ -2,23 +2,27 @@ import csv
 import json
 import os
 
-from dotenv import load_dotenv
 from pathlib import Path
-from flask import Flask
+from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from PIL import Image
+from werkzeug.utils import secure_filename
 
-# env_path = Path('../.env')
-load_dotenv()
-
-db_name = os.getenv('POSTGRES_DB')
-db_username = os.getenv('POSTGRES_USER')
-db_password = os.getenv('POSTGRES_PASSWORD')
+DB_NAME = os.getenv('POSTGRES_DB')
+DB_USER = os.getenv('POSTGRES_USER')
+DB_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+UPLOAD_FOLDER = '/code/data/uploads'
+THUMBNAIL_FOLDER = '/code/data/thumbnails'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{db_username}:{db_password}@postgres_backend:5432/{db_name}"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{DB_USER}:{DB_PASSWORD}@postgres_backend:5432/{DB_NAME}"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['THUMBNAIL_FOLDER'] = THUMBNAIL_FOLDER
+app.config['SECRET_KEY'] = 'the random string'
 
 api = Api(app)
 CORS(app)
@@ -106,6 +110,41 @@ class LocationListResource(Resource):
     def get(self):
         result = Locations.query.filter(Locations.latitude != "NaN").all()
         return result
+ 
+def allowed_file(filename):
+    return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+            
+def create_and_save_thumbnail(filename):
+    with Image.open(app.config['UPLOAD_FOLDER']+'/'+filename) as im:
+                im.thumbnail((128,128))
+                im.save(THUMBNAIL_FOLDER+'/thumb_'+filename, 'JPEG')
+              
+@app.route('/upload-episode-image', methods=['POST'])
+def upload_episode_image():
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return 'No file part'
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        return 'No selected file'
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        create_and_save_thumbnail(filename)
+        return url_for('thumbnail', filename=filename)
+    
+@app.route('/uploads/images/<filename>')
+def uploaded_image(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+@app.route('/uploads/thumbnails/<filename>')
+def thumbnail(filename):
+    return send_from_directory(app.config['THUMBNAIL_FOLDER'],
+                               filename)
 
 
 api.add_resource(EpisodeListResource, "/episodes/")
