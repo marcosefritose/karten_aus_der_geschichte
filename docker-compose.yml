@@ -1,57 +1,55 @@
-version: '3'
-x-airflow-common:
-  &airflow-common
+version: "3"
+x-airflow-common: &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   build: ./airflow/
   # build: .
-  environment:
-    &airflow-common-env
+  environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     # For backward compatibility, with Airflow <2.3
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    AIRFLOW__CORE__FERNET_KEY: ''
-    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
+    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/logs:/opt/airflow/logs
     - ./airflow/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
-  depends_on:
-    &airflow-common-depends-on
+  depends_on: &airflow-common-depends-on
     postgres:
       condition: service_healthy
 
 services:
   flask:
     environment:
-        POSTGRES_USER: ${POSTGRES_BE_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_BE_PASSWORD}
-        POSTGRES_DB: ${POSTGRES_BE_DB}
+      POSTGRES_USER: ${POSTGRES_BE_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_BE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_BE_DB}
     build: ./backend
     ports:
-        - "5001:5000"
+      - "5001:5000"
     volumes:
-        - ./backend:/code
+      - ./backend:/code
   svelte:
-      build: ./frontend
-      volumes:
-        - ./frontend/src:/home/node/app/src
-        - ./frontend/static:/home/node/app/static
-        - ./frontend/vite.config.js:/home/node/app/vite.config.js
-        - ./frontend/svelte.config.js:/home/node/app/svelte.config.js
-        - ./frontend/tailwind.config.cjs:/home/node/app/tailwind.config.cjs
-        - ./frontend/postcss.config.cjs:/home/node/app/postcss.config.cjs
-      ports:
-        - 5173:5173
-      environment:
-        VITE_CONFIDENT: ${VITE_CONFIDENT:-false}
-      command: npm run dev -- --host
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/home/node/app/src
+      - ./frontend/static:/home/node/app/static
+      - ./frontend/vite.config.js:/home/node/app/vite.config.js
+      - ./frontend/svelte.config.js:/home/node/app/svelte.config.js
+      - ./frontend/tailwind.config.cjs:/home/node/app/tailwind.config.cjs
+      - ./frontend/postcss.config.cjs:/home/node/app/postcss.config.cjs
+    ports:
+      - 5173:5173
+    environment:
+      VITE_CONFIDENT: ${VITE_CONFIDENT:-false}
+      VITE_FLASK_API_URL: ${FLASK_API_URL}
+    command: npm run dev -- --host
   postgres_backend:
     image: postgres:13
     environment:
@@ -99,7 +97,11 @@ services:
     <<: *airflow-common
     command: scheduler
     healthcheck:
-      test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
+      test:
+        [
+          "CMD-SHELL",
+          'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"',
+        ]
       interval: 25s
       timeout: 25s
       retries: 4
@@ -113,7 +115,11 @@ services:
     <<: *airflow-common
     command: triggerer
     healthcheck:
-      test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
+      test:
+        [
+          "CMD-SHELL",
+          'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"',
+        ]
       interval: 25s
       timeout: 25s
       retries: 4
@@ -192,11 +198,11 @@ services:
     # yamllint enable rule:line-length
     environment:
       <<: *airflow-common-env
-      _AIRFLOW_DB_UPGRADE: 'true'
-      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_DB_UPGRADE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true"
       _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
       _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
-      _PIP_ADDITIONAL_REQUIREMENTS: ''
+      _PIP_ADDITIONAL_REQUIREMENTS: ""
     user: "0:0"
     volumes:
       - .:/sources

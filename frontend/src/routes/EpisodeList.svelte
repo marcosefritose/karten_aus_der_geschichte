@@ -1,6 +1,8 @@
 <script>
   import { episodes, setSelectedEpisodeById, selectedEpisode, setPopupSelection } from './store';
 
+  const apiUrl = import.meta.env.VITE_FLASK_API_URL;
+
   let popupSelectorChecked = false;
 
   $: if (popupSelectorChecked) {
@@ -34,7 +36,7 @@
       <div id={episode.id} class="flex gap-2 border py-1">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <img
-          src={imgUrl}
+          src={episode.thumbnail !== 'NaN' ? apiUrl + episode.thumbnail : imgUrl}
           class="h-12 w-12 rounded-sm border border-gray-400 hover:cursor-pointer md:h-16 md:w-16"
           alt="Thumbnail Picture Episode {episode.id}"
           on:click={setSelectedEpisodeById(episode.id)}
