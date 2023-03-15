@@ -45,6 +45,7 @@ class Episodes(db.Model):
     summary = db.Column(db.String(10000))
     link = db.Column(db.String(1000))
     image = db.Column(db.String(1000))
+    thumbnail = db.Column(db.String(1000))
     published = db.Column(db.DateTime())
     locations = db.relationship(
         'Locations', secondary=EpisodeLocation, backref='Episodes', lazy='dynamic')
@@ -89,6 +90,7 @@ episode_fields = {
     'summary': fields.String,
     'link': fields.String,
     'image': fields.String,
+    'thumbnail': fields.String,
     'published': fields.String,
     'locations': fields.List(fields.Nested(location_basic_fields))
 }
