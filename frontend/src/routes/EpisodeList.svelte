@@ -27,60 +27,55 @@
   });
 </script>
 
-<div
-  id="list"
-  class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary h-full overflow-y-scroll bg-gray-200 p-2 pb-10"
->
-  {#if $episodes}
-    {#each $episodes as episode (episode.id)}
-      <div id={episode.id} class="flex gap-2 border py-1">
+{#if $episodes}
+  {#each $episodes as episode (episode.id)}
+    <div id={episode.id} class="flex gap-2 border py-1">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <img
+        src={episode.thumbnail !== 'NaN' ? apiUrl + episode.thumbnail : imgUrl}
+        class="h-12 w-12 rounded-sm border border-gray-400 hover:cursor-pointer md:h-16 md:w-16"
+        alt="Thumbnail Picture Episode {episode.id}"
+        on:click={setSelectedEpisodeById(episode.id)}
+      />
+      <div class="flex-row">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <img
-          src={episode.thumbnail !== 'NaN' ? apiUrl + episode.thumbnail : imgUrl}
-          class="h-12 w-12 rounded-sm border border-gray-400 hover:cursor-pointer md:h-16 md:w-16"
-          alt="Thumbnail Picture Episode {episode.id}"
-          on:click={setSelectedEpisodeById(episode.id)}
-        />
-        <div class="flex-row">
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <span
-            class="bg-gag-primary rounded-md px-2 py-1 text-sm font-bold text-white hover:cursor-pointer"
-            on:click={setSelectedEpisodeById(episode.id)}>{episode.id}</span
-          >
+        <span
+          class="bg-gag-primary rounded-md px-2 py-1 text-sm font-bold text-white hover:cursor-pointer"
+          on:click={setSelectedEpisodeById(episode.id)}>{episode.id}</span
+        >
 
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <div class="w-full">
-            <span
-              class="text-small mb-1 inline-block font-semibold hover:cursor-pointer"
-              on:click={setSelectedEpisodeById(episode.id)}>{episode.title}</span
-            ><br />
-          </div>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="w-full">
+          <span
+            class="text-small mb-1 inline-block font-semibold hover:cursor-pointer"
+            on:click={setSelectedEpisodeById(episode.id)}>{episode.title}</span
+          ><br />
         </div>
       </div>
-      {#if $selectedEpisode}
-        <div class="{$selectedEpisode.id === episode.id ? '' : 'hidden'} px-3">
-          <div class="location-tabs flex flex-wrap gap-2 text-sm">
-            {#each episode.locations as loc}
-              <span class="border-gag-primary text-gag-primary rounded-lg border bg-white py-1 px-2"
-                >{loc.name}</span
-              >
-            {/each}
-          </div>
-          <!-- Date -->
-          <span class="block pt-1 text-xs font-semibold"
-            >Veröffentlicht am {new Date(episode.published).toLocaleDateString('de-DE')}</span
-          >
-          <!-- Link -->
-          <span class="block py-1 text-sm font-semibold underline underline-offset-2"
-            ><a href={episode.link} target="_blank" rel="noopener noreferrer">Zur Folge</a></span
-          >
-
-          <!-- Summary -->
-          <p class="text-small">
-            {episode.summary}
-          </p>
+    </div>
+    {#if $selectedEpisode}
+      <div class="{$selectedEpisode.id === episode.id ? '' : 'hidden'} px-3">
+        <div class="location-tabs flex flex-wrap gap-2 text-sm">
+          {#each episode.locations as loc}
+            <span class="border-gag-primary text-gag-primary rounded-lg border bg-white py-1 px-2"
+              >{loc.name}</span
+            >
+          {/each}
         </div>
-      {/if}
-    {/each}
-  {/if}
-</div>
+        <!-- Date -->
+        <span class="block pt-1 text-xs font-semibold"
+          >Veröffentlicht am {new Date(episode.published).toLocaleDateString('de-DE')}</span
+        >
+        <!-- Link -->
+        <span class="block py-1 text-sm font-semibold underline underline-offset-2"
+          ><a href={episode.link} target="_blank" rel="noopener noreferrer">Zur Folge</a></span
+        >
+
+        <!-- Summary -->
+        <p class="text-small">
+          {episode.summary}
+        </p>
+      </div>
+    {/if}
+  {/each}
+{/if}
