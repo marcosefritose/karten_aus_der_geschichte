@@ -3,9 +3,13 @@ module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
-      // fontFamily: {
-      //   sans: ['Roboto', 'sans'],
-      // },
+      fontFamily: {
+        classicalHumanist: ['Optima', 'Candara', 'Noto Sans', 'source-sans-pro', 'sans-serif'],
+        geometricHumanist: ['Avenir', 'Avenir Next LT Pro', 'Montserrat', 'Corbel', 'URW Gothic', 'source-sans-pro', 'sans-serif'],
+        transitional: ['Charter', 'Bitstream Charter', 'Sitka Text', 'Cambria', 'serif'],
+        oldStyle: ['Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', 'P052', 'serif']
+
+      },
       screens: {
         '2xl': '1900px'
       },
@@ -19,11 +23,11 @@ module.exports = {
         '5': '5px',
       },
       animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
       },
       keyframes: {
         pulse: {
-          '0%, 100%' : {opacity: 1, transform: 'scale(2.5)'},
+          '0%, 100%': { opacity: .9, transform: 'scale(2.5)' },
           '50%': { opacity: .6, transform: 'scale(1.75)' }
         }
       },

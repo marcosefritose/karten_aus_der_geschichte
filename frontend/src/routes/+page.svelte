@@ -5,7 +5,7 @@
   const confident = import.meta.env.VITE_CONFIDENT;
 </script>
 
-<main class="">
+<main class="font-oldStyle">
   <div
     id="world-map-wrapper"
     class="pointer-events-auto absolute bottom-0  w-screen flex-auto overflow-clip"

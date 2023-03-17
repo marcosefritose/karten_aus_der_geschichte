@@ -47,7 +47,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="w-full">
           <span
-            class="text-small mb-1 inline-block font-semibold hover:cursor-pointer"
+            class="text-small my-1 inline-block font-semibold hover:cursor-pointer"
             on:click={setSelectedEpisodeById(episode.id)}>{episode.title}</span
           ><br />
         </div>
