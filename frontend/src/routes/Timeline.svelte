@@ -1,20 +1,20 @@
 <script>
-  import { selectedTime, setSelectedTime } from './store';
+  import { selectedTime, setSelectedTime, setShowHistoricMaps } from './store';
 
   const maps = [
-    { year: -123000, file: 'historic-maps/world_bc123000.geojson' },
-    { year: -10000, file: 'historic-maps/world_bc10000.geojson' },
-    { year: -8000, file: 'historic-maps/world_bc8000.geojson' },
-    { year: -5000, file: 'historic-maps/world_bc5000.geojson' },
-    { year: -4000, file: 'historic-maps/world_bc4000.geojson' },
-    { year: -3000, file: 'historic-maps/world_bc3000.geojson' },
-    { year: -2000, file: 'historic-maps/world_bc2000.geojson' },
-    { year: -1500, file: 'historic-maps/world_bc1500.geojson' },
-    { year: -1000, file: 'historic-maps/world_bc1000.geojson' },
-    { year: -700, file: 'historic-maps/world_bc700.geojson' },
-    { year: -500, file: 'historic-maps/world_bc500.geojson}' },
-    { year: -400, file: 'historic-maps/world_bc400.geojson' },
-    { year: -323, file: 'historic-maps/world_bc323.geojson' },
+    // { year: -123000, file: 'historic-maps/world_bc123000.geojson' },
+    // { year: -10000, file: 'historic-maps/world_bc10000.geojson' },
+    // { year: -8000, file: 'historic-maps/world_bc8000.geojson' },
+    // { year: -5000, file: 'historic-maps/world_bc5000.geojson' },
+    // { year: -4000, file: 'historic-maps/world_bc4000.geojson' },
+    // { year: -3000, file: 'historic-maps/world_bc3000.geojson' },
+    // { year: -2000, file: 'historic-maps/world_bc2000.geojson' },
+    // { year: -1500, file: 'historic-maps/world_bc1500.geojson' },
+    // { year: -1000, file: 'historic-maps/world_bc1000.geojson' },
+    // { year: -700, file: 'historic-maps/world_bc700.geojson' },
+    // { year: -500, file: 'historic-maps/world_bc500.geojson}' },
+    // { year: -400, file: 'historic-maps/world_bc400.geojson' },
+    // { year: -323, file: 'historic-maps/world_bc323.geojson' },
     { year: -300, file: 'historic-maps/world_bc300.geojson' },
     { year: -200, file: 'historic-maps/world_bc200.geojson' },
     { year: -100, file: 'historic-maps/world_bc100.geojson' },
@@ -67,7 +67,10 @@
       {#each maps as map}
         <li
           class="flex items-center {$selectedTime.year == map.year ? 'font-bold' : ''}"
-          on:click={() => setSelectedTime(map)}
+          on:click={() => {
+            setSelectedTime(map);
+            setShowHistoricMaps(true);
+          }}
         >
           <div
             class="{$selectedTime.year == map.year

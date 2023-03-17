@@ -17,7 +17,6 @@
     selectedLocations,
     setSelectedLocations,
     selectedTime,
-    popupSelection,
     showHistoricMap
   } from './store';
   import AreaPopup from './AreaPopup.svelte';
@@ -101,10 +100,6 @@
   }
 
   function showLocationPopup(event, locationName) {
-    if ($popupSelection !== 'location') {
-      return false;
-    }
-
     popupLocation = $locations.filter((loc) => loc['name'] == locationName)[0];
     popupLocationPosition = markerElements[locationName].getBoundingClientRect();
     locationPopupIsShown = true;
@@ -116,10 +111,6 @@
   }
 
   function showAreaPopup(event, areaName) {
-    if ($popupSelection !== 'area') {
-      return false;
-    }
-
     popupArea = areaName;
     popupAreaPosition = { x: event.clientX, y: event.clientY };
     areaPopupIsShown = true;
@@ -239,7 +230,7 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <path
             data-name={data.properties.NAME}
-            class="historic-path z-50 stroke-1 opacity-30"
+            class="historic-path duration-400 z-50 stroke-1 opacity-30 transition"
             d={path(data)}
             fill={interpolateYlOrBr(
               historicMapFeatureNames.indexOf(data.properties.NAME) / historicMapFeatureNames.length

@@ -5,7 +5,6 @@ export const episodes = writable([])
 export const selectedEpisode = writable({})
 export const selectedLocations = writable([])
 export const selectedTime = writable({ year: 100, file: 'historic-maps/world_100.geojson' })
-export const popupSelection = writable('location')
 export const showHistoricMap = writable(false)
 
 export function setLocations(locationsData) {
@@ -26,15 +25,6 @@ export function setSelectedEpisodeById(episodeId) {
 
 export function setSelectedLocations(newSelectedLocations) {
     selectedLocations.update(state => [...newSelectedLocations]);
-}
-
-export function setPopupSelection(selection) {
-    if (selection == 'area') {
-        setShowHistoricMaps(true)
-    } else {
-        setShowHistoricMaps(false)
-    }
-    popupSelection.update(state => selection)
 }
 
 export function setSelectedTime(newTime) {

@@ -2,7 +2,7 @@
   import EpisodeList from './EpisodeList.svelte';
   import Locations from './Locations.svelte';
   import Search from './Search.svelte';
-  import { setShowHistoricMaps, selectedEpisode, setPopupSelection } from './store';
+  import { setShowHistoricMaps, selectedEpisode, showHistoricMap } from './store';
   import Timeline from './Timeline.svelte';
 
   let popupSelectorChecked = false;
@@ -12,12 +12,6 @@
   let contentBodyHeight = 0;
   let contentBodyWidth = 0;
   let windowWidth;
-
-  $: if (popupSelectorChecked) {
-    setPopupSelection('area');
-  } else {
-    setPopupSelection('location');
-  }
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -31,7 +25,7 @@
         ? `transform: translateY(${contentBodyHeight}px)`
         : `transform: translateX(${contentBodyWidth}px)`
       : ''}
-    class="pointer-events-auto my-3 flex h-full w-full flex-col opacity-80 transition md:h-5/6"
+    class="pointer-events-none my-3 flex h-full w-full flex-col opacity-80 transition md:h-5/6"
   >
     <div class="relative select-none px-3">
       <div class="flex justify-between">
@@ -40,14 +34,14 @@
           class="visible cursor-pointer rounded-t-md border border-b-0 border-gray-800 bg-gray-400"
         >
           <img
-            class="h-8 w-8 "
+            class="pointer-events-auto h-8 w-8"
             style={hideContent ? 'transform: rotate(180deg)' : ''}
             src="icons/double-arrow-down.svg"
             alt="Double Arrow Icon"
             on:click={() => (hideContent = !hideContent)}
           />
         </div>
-        <div class="flex items-center justify-end gap-2">
+        <div class="pointer-events-auto flex items-center justify-end gap-2">
           <label
             for="popup-selector"
             class="flex cursor-pointer gap-1 self-start rounded-full border border-gray-800 bg-gray-300"
@@ -56,7 +50,7 @@
               type="checkbox"
               id="popup-selector"
               class="peer sr-only"
-              bind:checked={popupSelectorChecked}
+              bind:checked={$showHistoricMap}
             />
             <span class="bg-gag-primary flex h-7 w-7 rounded-full p-1 peer-checked:bg-gray-300">
               <img src="icons/location-pin.svg" alt="Episode List Icon" />
@@ -113,7 +107,7 @@
       bind:clientHeight={contentBodyHeight}
       bind:clientWidth={contentBodyWidth}
       id="content-body"
-      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary overflow-y-scroll border-t border-gray-800 bg-gray-200 p-2"
+      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary pointer-events-auto overflow-y-scroll border-t border-gray-800 bg-gray-200 p-2"
     >
       {#if selectedContent == 'list'}
         <EpisodeList />
