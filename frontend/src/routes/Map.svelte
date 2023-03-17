@@ -91,7 +91,7 @@
     let geoFeature = getGeoFeatureForLocations(selectedLocs);
 
     if (geoFeature) {
-      // geoFeaturePath = path(geoFeature)
+      // geoFeaturePath = path(geoFeature);
       clicked(geoFeature);
     }
   });
@@ -137,7 +137,7 @@
   }
 
   // Zoom and scroll functionality
-  $: zoomX = zoom().scaleExtent([1, 8]).on('zoom', handleZoom);
+  $: zoomX = zoom().scaleExtent([0.3, 10]).on('zoom', handleZoom);
   $: if (bindInitZoom) {
     select(bindInitZoom).call(zoomX);
   }
@@ -151,10 +151,19 @@
   }
 
   function clicked(d) {
-    const [[x0, y0], [x1, y1]] = path.bounds(d);
+    let [[x0, y0], [x1, y1]] = path.bounds(d);
 
-    // TODO: Zoom factor more dynamic?
-    let zoomFactor = innerWidth < 600 ? 0.3 : 0.8;
+    // Change zoomfactor dynamically with window width
+    let zoomFactor = innerWidth / 1800;
+
+    // Always push zoom section up for mobile design
+    if (innerWidth < 768) {
+      y1 = y1 + 0.5 * (y1 - y0);
+    } // Move zoom section to left & reduce zoomfactor so location is not hidden
+    else if (x1 - x0 > 500 || (x1 != x0 && (x1 - x0) / (y1 - y0) > 1.2)) {
+      x1 = x1 + 0.35 * (x1 - x0);
+      zoomFactor = zoomFactor * Math.max(0.5, 1 - 0.1 * ((x1 - x0) / (y1 - y0)));
+    }
 
     select(bindInitZoom)
       .transition()
@@ -163,7 +172,6 @@
         zoomX.transform,
         zoomIdentity
           .translate(1000 / 2, 500 / 2)
-          // ToDo: Zoom factor depending on screen size!
           .scale(Math.min(6, zoomFactor / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
           .translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
       );
@@ -178,7 +186,6 @@
       setTimeout(() => {
         for (let areaPath of historicMapFeaturePaths.children) {
           areaPath.addEventListener('mouseenter', (e) => {
-            console.log(areaPath);
             areaPath.classList.remove('opacity-30');
             areaPath.classList.add('stroke-black', 'opacity-50');
             showAreaPopup(e, areaPath.getAttribute('data-name'));
@@ -257,8 +264,8 @@
       {/each}
     {/if}
     <!-- {#if geoFeaturePath}
-			<path class="fill-red stroke-3" d={geoFeaturePath}></path>
-		{/if} -->
+      <path class="fill-red stroke-3" d={geoFeaturePath} />
+    {/if} -->
   </g>
 </svg>
 
