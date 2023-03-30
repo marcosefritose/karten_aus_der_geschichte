@@ -6,6 +6,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 db = SQLAlchemy()
 
+
 class Episodes(db.Model):
     __tablename__ = 'episodes_target'
 
@@ -37,6 +38,7 @@ class Coordinates(db.Model):
     location_name = db.Column(db.String(164), db.ForeignKey('locations.name'))
     longitude = db.Column(db.String(164), primary_key=True)
     latitude = db.Column(db.String(164))
+    active = db.Column(db.Boolean())
     locations = db.relationship('Locations', backref='Coordinates')
 
 

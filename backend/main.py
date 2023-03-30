@@ -7,7 +7,7 @@ from flask_cors import CORS
 from PIL import Image
 from werkzeug.utils import secure_filename
 
-from models import db, Episodes, Locations
+from models import db, Episodes, Locations, Coordinates
 
 DB_NAME = os.getenv('POSTGRES_DB')
 DB_USER = os.getenv('POSTGRES_USER')
@@ -41,6 +41,7 @@ episode_basic_fields = {
 coordinate_fields = {
     'longitude': fields.String,
     'latitude': fields.String,
+    'active': fields.Boolean
 }
 
 location_basic_fields = {
@@ -63,6 +64,8 @@ episode_fields = {
     'image': fields.String,
     'thumbnail': fields.String,
     'published': fields.String,
+    'story_time_start': fields.String,
+    'story_time_end': fields.String,
     'locations': fields.List(fields.Nested(location_basic_fields))
 }
 
@@ -70,7 +73,7 @@ episode_fields = {
 class EpisodeListResource(Resource):
     @ marshal_with(episode_fields)
     def get(self):
-        result = Episodes.query.filter(Episodes.story_time_start.isnot(None)).order_by(
+        result = Episodes.query.order_by(
             Episodes.published.desc()).all()
         return result
 
@@ -86,7 +89,9 @@ class EpisodeResource(Resource):
 class LocationListResource(Resource):
     @ marshal_with(location_fields)
     def get(self):
-        result = Locations.query.filter(Locations.latitude != "NaN").all()
+        result = Locations.query.join(Coordinates).filter(
+            Coordinates.active == True and (Coordinates.longitude.isnot(None)
+                                            or Coordinates.latitude.isnot(None))).all()
         return result
 
 
