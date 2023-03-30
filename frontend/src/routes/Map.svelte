@@ -58,14 +58,14 @@
 
   function getGeoFeatureForLocations(locs) {
     locs = locs.filter((loc) => {
-      return loc.latitude !== 'NaN';
+      return loc.coordinates.length != 0 && loc.coordinates[0].longitude != null;
     });
 
     if (locs.length == 0) return false;
 
-    let coordinates = locs.map((coord) => [
-      parseFloat(coord.longitude),
-      parseFloat(coord.latitude)
+    let coordinates = locs.map((loc) => [
+      parseFloat(loc.coordinates[0].longitude),
+      parseFloat(loc.coordinates[0].latitude)
     ]);
 
     // Sort by longitude to prevent unsortable coords for polygon
@@ -242,16 +242,30 @@
 
     {#if $locations}
       {#each $locations as location}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <line
-          id={location.name}
-          bind:this={markerElements[location.name]}
-          class="stroke-1"
-          x1={projection([location.longitude, location.latitude])[0]}
-          x2={projection([location.longitude, location.latitude])[0] + 0.1}
-          y1={projection([location.longitude, location.latitude])[1]}
-          y2={projection([location.longitude, location.latitude])[1] + 0.1}
-        />
+        {#if location.coordinates[0].latitude && location.coordinates[0].longitude}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <line
+            id={location.name}
+            bind:this={markerElements[location.name]}
+            class="stroke-1"
+            x1={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[0]}
+            x2={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[0] + 0.1}
+            y1={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[1]}
+            y2={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[1] + 0.1}
+          />
+        {/if}
       {/each}
     {/if}
     <!-- {#if geoFeaturePath}

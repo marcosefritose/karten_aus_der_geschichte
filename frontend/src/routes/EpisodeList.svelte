@@ -59,13 +59,8 @@
           {/each}
           <!-- Time Badge -->
           <span class="rounded-lg border border-gray-600 bg-white py-1 px-2 text-gray-600">
-            {Math.floor(2022 - Math.random() * 600) +
-              ' - ' +
-              Math.floor(2022 - Math.random() * 600)}
+            {episode.story_time_start + ' - ' + episode.story_time_end}
           </span>
-          <!-- <span class="rounded-lg border border-gray-600 bg-white py-1 px-2 text-gray-600">
-            {episode.year_start + ' - ' + episode.year_end}
-          </span> -->
         </div>
 
         <!-- Date -->
