@@ -1,5 +1,5 @@
 <script>
-  import { selectedTime, setSelectedTime, setShowHistoricMaps, maps } from './store';
+  import { selectedTime, setSelectedTime, setShowHistoricMaps, maps } from '../routes/store';
 </script>
 
 <div class="flex h-full flex-col bg-gray-200">

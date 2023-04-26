@@ -1,5 +1,5 @@
 <script>
-  import { episodes, setSelectedEpisodeById, selectedEpisode } from './store';
+  import { episodes, setSelectedEpisodeById, selectedEpisode } from '../routes/store';
   import { onMount } from 'svelte';
 
   const apiUrl = import.meta.env.VITE_FLASK_API_URL;

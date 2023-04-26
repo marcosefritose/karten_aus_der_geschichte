@@ -11,15 +11,15 @@
     interpolateYlOrBr
   } from 'd3';
 
-  import LocationPopup from './LocationPopup.svelte';
+  import LocationPopup from '../components/LocationPopup.svelte';
   import {
     locations,
     selectedLocations,
     setSelectedLocations,
     selectedTime,
     showHistoricMap
-  } from './store';
-  import AreaPopup from './AreaPopup.svelte';
+  } from '../routes/store';
+  import AreaPopup from '../components/AreaPopup.svelte';
 
   let selectedLocationsNames;
 

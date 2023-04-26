@@ -1,9 +1,9 @@
 <script>
-  import EpisodeList from './EpisodeList.svelte';
-  import Locations from './Locations.svelte';
-  import Search from './Search.svelte';
-  import { setShowHistoricMaps, selectedEpisode, showHistoricMap } from './store';
-  import Timeline from './Timeline.svelte';
+  import EpisodeList from '../components/EpisodeList.svelte';
+  import Locations from '../components/Locations.svelte';
+  import Search from '../components/Search.svelte';
+  import { setShowHistoricMaps, selectedEpisode, showHistoricMap } from '../routes/store';
+  import Timeline from '../components/Timeline.svelte';
 
   let popupSelectorChecked = false;
   let selectedContent = 'list';

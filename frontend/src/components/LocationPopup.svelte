@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { setSelectedEpisodeById } from './store';
+  import { setSelectedEpisodeById } from '../routes/store';
 
   export let coords;
   export let location;
