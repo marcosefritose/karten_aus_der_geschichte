@@ -15,7 +15,9 @@ module.exports = {
       },
       colors: {
         'gag-primary': '#d19000',
-        'gag-light': '#ffff7f'
+        'gag-secondary': '#ffff7f',
+        'gag-light': '#FFEFD1',
+        'gag-white': '#FCF4F4',
       },
       strokeWidth: {
         '3': '3px',
