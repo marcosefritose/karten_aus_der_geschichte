@@ -1,10 +1,8 @@
 <script>
-  import { onMount } from 'svelte';
-  import { locations } from '../routes/store';
+  import { setLocations, locations } from '../../store';
 
-  onMount(() => {
-    console.log($locations[12]);
-  });
+  export let data;
+  setLocations(data.locations);
 </script>
 
 <div class="p-10">
@@ -13,7 +11,7 @@
   <div class="bg-gag-light mt-3 flex flex-col flex-wrap rounded-lg">
     {#each $locations as location}
       <div class="flex p-4">
-        <h2 class="text-lg font-bold">
+        <h2 class="text-lg font-semibold">
           {location.name}
         </h2>
         <span class="bg-gag-primary text-gag-white ml-2 rounded-full py-1 px-2 text-sm"
