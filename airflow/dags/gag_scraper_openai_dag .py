@@ -216,8 +216,8 @@ def extract_and_save_entities():
                         {"id": entry.id, "context": topic['description']}]
 
             times[entry.id] = response_dict['time']
-        except Exception as e:
-            print(f"Wrong keyed JSON Format: {e}")
+        except Exception:
+            print("Wrong keyed JSON Format")
             continue
 
     locations_list = locations.keys()
@@ -257,8 +257,8 @@ def extract_and_save_entities():
     for episode_id, time in times.items():
         # values = tuple([episode_id, time['start_year'],
         #                 time['end_year'], time['description']])
-        time_description = time['description'].replace('\'', '`')
-        sql = f"UPDATE episodes_target SET story_time_start = '{time['start_year']}', story_time_end = '{time['end_year']}', story_time_description = '{time_description}' WHERE id = '{episode_id}';"
+
+        sql = f"UPDATE episodes_target SET story_time_start = '{time['start_year']}', story_time_end = '{time['end_year']}', story_time_description = '{time['description']}' WHERE id = '{episode_id}';"
 
         postgres_sql.run(sql)
         # postgres_sql.run('episodes_target', values,

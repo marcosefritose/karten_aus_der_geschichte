@@ -9,7 +9,7 @@
     </a>
     <a href="/dashboard/episodes">
       <div
-        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
+        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url ==
         '/dashboard/episodes'
           ? 'bg-gag-white'
           : 'bg-light'}"
@@ -21,7 +21,7 @@
 
     <a href="/dashboard/locations">
       <div
-        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
+        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url ==
         '/dashboard/locations'
           ? 'bg-gag-white'
           : 'bg-light'}"
@@ -33,7 +33,7 @@
 
     <a href="/dashboard/topics">
       <div
-        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
+        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url ==
         '/dashboard/topics'
           ? 'bg-gag-white'
           : 'bg-light'}"
