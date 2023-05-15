@@ -68,6 +68,7 @@ episode_fields = {
     'image': fields.String,
     'thumbnail': fields.String,
     'published': fields.String,
+    'status': fields.String,
     'story_time_start': fields.String,
     'story_time_end': fields.String,
     'locations': fields.List(fields.Nested(location_basic_fields)),
@@ -132,6 +133,14 @@ def uploaded_image(filename):
 def thumbnail(filename):
     return send_from_directory(app.config['THUMBNAIL_FOLDER'],
                                filename)
+
+
+@ app.route('/episodes/<episode_id>/status', methods=['POST'])
+def update_episode_status(episode_id):
+    episode = Episodes.query.filter(Episodes.id == episode_id).first()
+    episode.status = request.form.get('status')
+    db.session.commit()
+    return 'OK'
 
 
 api.add_resource(EpisodeListResource, "/episodes/")
