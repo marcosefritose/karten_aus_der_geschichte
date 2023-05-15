@@ -2,7 +2,7 @@ import os
 import urllib
 
 from flask import Flask, request,  url_for, send_from_directory
-from flask_restful import Api, Resource, reqparse, fields, marshal_with
+from flask_restful import Api, Resource, fields, marshal_with
 from flask_cors import CORS
 from PIL import Image
 from werkzeug.utils import secure_filename
@@ -28,11 +28,6 @@ CORS(app)
 
 db.init_app(app)
 
-episode_put_args = reqparse.RequestParser()
-episode_put_args.add_argument("title", type=str, help="Name of the episode")
-episode_put_args.add_argument(
-    "location_name", type=str, help="Name of the location")
-
 episode_basic_fields = {
     'id': fields.String,
     'title': fields.String,
@@ -49,6 +44,7 @@ location_basic_fields = {
     'context': fields.String,
     'coordinates': fields.List(fields.Nested(coordinate_fields)),
 }
+
 location_fields = {
     'name': fields.String,
     'coordinates': fields.List(fields.Nested(coordinate_fields)),
@@ -87,8 +83,7 @@ class EpisodeListResource(Resource):
 class EpisodeResource(Resource):
     @ marshal_with(episode_fields)
     def get(self, episode_id):
-        # result = Episode.query.get(episode_id)
-        result = Episodes.query.filter(Episodes.id == episode_id).first()
+        result = Episodes.query.get(episode_id)
         return result
 
 
