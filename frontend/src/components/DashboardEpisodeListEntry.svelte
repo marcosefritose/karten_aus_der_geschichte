@@ -4,7 +4,7 @@
 
 <tr>
   <td colspan="4" class="py-3 px-2">
-    <div class="flex gap-3">
+    <div class="flex w-full gap-3">
       <div class="locations w-1/4">
         <h3 class="font-medium">Schauplätze</h3>
         <ul>
@@ -25,7 +25,7 @@
         <h3 class="font-medium">Beschreibung</h3>
         <p>{episodeData.summary}</p>
       </div>
-      <div class="time w-1/4">
+      <div class="times w-1/4">
         <h3 class="font-medium">Zeitraum</h3>
         <p>
           <span>von: </span>{episodeData.story_time_start}

@@ -5,7 +5,7 @@
   setLocations(data.locations);
 </script>
 
-<div class="p-10">
+<div class="w-full overflow-y-scroll p-10">
   <h1 class="text-3xl">{$locations.length} Orte</h1>
 
   <div class="bg-gag-light mt-3 flex flex-col flex-wrap rounded-lg">

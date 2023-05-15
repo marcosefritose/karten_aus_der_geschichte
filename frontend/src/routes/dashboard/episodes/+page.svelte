@@ -15,7 +15,15 @@
 
     selectedEpisodeId = id;
     selectedEpisodeData = data;
-    console.log(data);
+  }
+
+  function toggleEpisode(episodeId) {
+    if (selectedEpisodeId === episodeId) {
+      selectedEpisodeId = null;
+      selectedEpisodeData = null;
+    } else {
+      loadEpisodeData(episodeId);
+    }
   }
 </script>
 
@@ -26,10 +34,10 @@
     <table>
       <thead class="border-b font-medium">
         <tr>
-          <td class="py-3 px-2">ID</td>
-          <td class="py-3 px-2">Titel</td>
-          <td class="py-3 px-2">Status</td>
-          <td class="py-3 px-2">Aktion</td>
+          <td class="w-1/12 py-3 px-2">ID</td>
+          <td class="w-7/12 py-3 px-2">Titel</td>
+          <td class="w-2/12 py-3 px-2">Status</td>
+          <td class="w-2/12 py-3 px-2">Aktion</td>
         </tr>
       </thead>
       <tbody class="bg-white">
@@ -43,7 +51,7 @@
               <span class="bg-active-light rounded-lg px-2 py-1">Aktiv</span>
             </td>
             <td class="py-3 px-2">
-              <button on:click={() => loadEpisodeData(episode.id)}>
+              <button on:click={() => toggleEpisode(episode.id)}>
                 <img class="h-6 w-6 rounded-t-md" src="../icons/edit.svg" alt="Episode List Icon" />
               </button>
             </td>
