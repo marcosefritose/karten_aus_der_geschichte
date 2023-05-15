@@ -42,7 +42,7 @@ module.exports = {
 
     },
   },
-  safelist: ['stroke-gag-primary', 'fill-gag-primary'],
+  safelist: ['stroke-gag-primary', 'fill-gag-primary', 'text-active', 'text-pending', 'text-hidden', 'bg-active-light', 'bg-pending-light', 'bg-hidden-light'],
   plugins: [
     require('tailwind-scrollbar'),
   ],

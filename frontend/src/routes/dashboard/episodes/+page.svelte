@@ -25,6 +25,19 @@
       loadEpisodeData(episodeId);
     }
   }
+
+  function getStatusForSlug(statusSlug) {
+    switch (statusSlug) {
+      case 'active':
+        return 'Aktiv';
+      case 'pending':
+        return 'Ausstehend';
+      case 'hidden':
+        return 'Versteckt';
+      default:
+        return 'Unbekannt';
+    }
+  }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
@@ -45,10 +58,11 @@
           <tr class="border-b">
             <td class="py-3 px-2">{episode.id}</td>
             <td class="py-3 px-2">{episode.title}</td>
-            <!-- Todo: Add Status to Episode API -->
-            <!-- <td class="py-3 px-2">{episode.status}</td> -->
             <td class="py-3 px-2">
-              <span class="bg-active-light rounded-lg px-2 py-1">Aktiv</span>
+              <span
+                class="{`bg-${episode.status}-light text-${episode.status}`} rounded-lg px-2 py-1"
+                >{getStatusForSlug(episode.status)}</span
+              >
             </td>
             <td class="py-3 px-2">
               <button on:click={() => toggleEpisode(episode.id)}>
