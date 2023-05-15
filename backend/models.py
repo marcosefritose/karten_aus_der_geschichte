@@ -22,6 +22,8 @@ class Episodes(db.Model):
     story_time_end = db.Column(db.Integer())
     locations_association = db.relationship(
         'EpisodesLocation', backref='episodes')
+    topicss_association = db.relationship(
+        'EpisodesTopic', backref='episodes')
 
 
 class Locations(db.Model):
@@ -53,3 +55,24 @@ class EpisodesLocation(db.Model):
 
     episode = db.relationship(Episodes, backref='episodes_locations')
     location = db.relationship(Locations, backref='episodes_locations')
+
+
+class Topics(db.Model):
+    __tablename__ = 'topics'
+    name = db.Column(db.String(164), primary_key=True)
+    episodes = db.relationship(
+        'Episodes', secondary='episodes_topics', backref='topics')
+    context = association_proxy('episodes_topics', 'context')
+
+
+class EpisodesTopic(db.Model):
+    __tablename__ = 'episodes_topics'
+    id = db.Column(db.Integer, primary_key=True)
+    episode_id = db.Column(
+        db.String(1000), db.ForeignKey('episodes_target.id'))
+    topic_name = db.Column(
+        db.String(1000), db.ForeignKey('topics.name'))
+    context = db.Column(db.String(1000))
+
+    episode = db.relationship(Episodes, backref='episodes_topics')
+    topic = db.relationship(Topics, backref='episodes_topics')
