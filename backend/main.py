@@ -41,7 +41,7 @@ coordinate_fields = {
 
 location_basic_fields = {
     'name': fields.String,
-    'context': fields.String,
+    # 'context': fields.String,
     'coordinates': fields.List(fields.Nested(coordinate_fields)),
 }
 
@@ -67,6 +67,8 @@ episode_fields = {
     'status': fields.String,
     'story_time_start': fields.String,
     'story_time_end': fields.String,
+    'loc_names': fields.List(fields.String),
+    'loc_contexts': fields.List(fields.String),
     'locations': fields.List(fields.Nested(location_basic_fields)),
     'topics': fields.List(fields.Nested(topic_basic_fields))
 }

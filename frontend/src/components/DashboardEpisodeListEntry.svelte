@@ -9,7 +9,7 @@
         <h3 class="font-medium">Schauplätze</h3>
         <ul>
           {#each episodeData.locations as location}
-            <li>{location.name}</li>
+            <li>{location.name} - {location.context}</li>
           {/each}
         </ul>
       </div>

@@ -25,7 +25,8 @@ class Episodes(db.Model):
         'EpisodesLocation', backref='episodes')
     topicss_association = db.relationship(
         'EpisodesTopic', backref='episodes')
-
+    loc_contexts = association_proxy('episodes_locations', 'context')
+    loc_names = association_proxy('episodes_locations', 'location_name')
 
 class Locations(db.Model):
     __tablename__ = 'locations'
@@ -34,16 +35,6 @@ class Locations(db.Model):
         'Episodes', secondary='episodes_locations', backref='locations')
     context = association_proxy('episodes_locations', 'context')
     coordinates = db.relationship('Coordinates', backref='Locations')
-
-
-class Coordinates(db.Model):
-    __tablename__ = 'coordinates'
-    location_name = db.Column(db.String(164), db.ForeignKey('locations.name'))
-    longitude = db.Column(db.String(164), primary_key=True)
-    latitude = db.Column(db.String(164))
-    active = db.Column(db.Boolean())
-    locations = db.relationship('Locations', backref='Coordinates')
-
 
 class EpisodesLocation(db.Model):
     __tablename__ = 'episodes_locations'
@@ -56,6 +47,16 @@ class EpisodesLocation(db.Model):
 
     episode = db.relationship(Episodes, backref='episodes_locations')
     location = db.relationship(Locations, backref='episodes_locations')
+
+class Coordinates(db.Model):
+    __tablename__ = 'coordinates'
+    location_name = db.Column(db.String(164), db.ForeignKey('locations.name'))
+    longitude = db.Column(db.String(164), primary_key=True)
+    latitude = db.Column(db.String(164))
+    active = db.Column(db.Boolean())
+    locations = db.relationship('Locations', backref='Coordinates')
+
+
 
 
 class Topics(db.Model):
