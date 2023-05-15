@@ -38,6 +38,19 @@
         return 'Unbekannt';
     }
   }
+
+  function updateEpisodeStatus(episodeId, status) {
+    const formData = new FormData();
+    formData.append('status', status);
+
+    fetch(`http://localhost:5001/episodes/${episodeId}/status`, {
+      method: 'POST',
+      body: formData
+    }).then(() => {
+      const episodeIndex = $episodes.findIndex((episode) => episode.id === episodeId);
+      $episodes[episodeIndex].status = status;
+    });
+  }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
@@ -66,8 +79,37 @@
             </td>
             <td class="py-3 px-2">
               <button on:click={() => toggleEpisode(episode.id)}>
-                <img class="h-6 w-6 rounded-t-md" src="../icons/edit.svg" alt="Episode List Icon" />
+                <img
+                  class="mx-2 h-6 w-6 rounded-t-md"
+                  src="../icons/edit.svg"
+                  alt="Edit Episode Icon"
+                />
               </button>
+              {#if episode.status == 'active'}
+                <button on:click={() => updateEpisodeStatus(episode.id, 'hidden')}>
+                  <img
+                    class="mx-2 h-6 w-6 rounded-t-md"
+                    src="../icons/hide.svg"
+                    alt="Hide Episode Icon"
+                  />
+                </button>
+              {:else if episode.status == 'hidden'}
+                <button on:click={() => updateEpisodeStatus(episode.id, 'active')}>
+                  <img
+                    class="mx-2 h-6 w-6 rounded-t-md"
+                    src="../icons/show.svg"
+                    alt="Hide Episode Icon"
+                  />
+                </button>
+              {:else if episode.status == 'pending'}
+                <button on:click={() => updateEpisodeStatus(episode.id, 'active')}>
+                  <img
+                    class="mx-2 h-6 w-6 rounded-t-md"
+                    src="../icons/activate.svg"
+                    alt="Hide Episode Icon"
+                  />
+                </button>
+              {/if}
             </td>
           </tr>
           {#if selectedEpisodeId == episode.id}
