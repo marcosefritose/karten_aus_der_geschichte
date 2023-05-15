@@ -18,6 +18,12 @@ module.exports = {
         'gag-secondary': '#ffff7f',
         'gag-light': '#FFEFD1',
         'gag-white': '#FCF4F4',
+        'active': '#1BAA04',
+        'active-light': '#C8FFBF',
+        'pending': '#A7AA04',
+        'pending-light': '#F3FFA7',
+        'hidden': '#AA0404',
+        'hidden-light': '#FFBFBF',
       },
       strokeWidth: {
         '3': '3px',

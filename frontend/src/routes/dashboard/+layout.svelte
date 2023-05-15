@@ -2,10 +2,21 @@
   import { page } from '$app/stores';
 </script>
 
-<div class="flex">
+<div class="flex h-screen">
   <nav class="bg-gag-light flex h-screen w-1/6 flex-col gap-2">
     <a href="/dashboard">
       <img src="/gag_logo.png" class="mx-auto w-56 object-contain" alt="" />
+    </a>
+    <a href="/dashboard">
+      <div
+        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
+        '/dashboard'
+          ? 'bg-gag-white'
+          : 'bg-light'}"
+      >
+        <img class="h-8 w-8 rounded-t-md" src="../icons/overview.svg" alt="Episode List Icon" />
+        <span class="px-2">Overview</span>
+      </div>
     </a>
     <a href="/dashboard/episodes">
       <div
