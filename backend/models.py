@@ -61,9 +61,9 @@ class Coordinates(db.Model):
 class Topics(db.Model):
     __tablename__ = 'topics'
     name = db.Column(db.String(164), primary_key=True)
+    status = db.Column(db.String(164))
     episodes = db.relationship(
         'Episodes', secondary='episodes_topics', backref='topics')
-    context = association_proxy('episodes_topics', 'context')
 
 
 class EpisodesTopic(db.Model):

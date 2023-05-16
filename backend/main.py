@@ -7,7 +7,7 @@ from flask_cors import CORS
 from PIL import Image
 from werkzeug.utils import secure_filename
 
-from models import db, Episodes, Locations, Coordinates
+from models import db, Episodes, Locations, Coordinates, Topics
 
 DB_NAME = os.getenv('POSTGRES_DB')
 DB_USER = os.getenv('POSTGRES_USER')
@@ -54,6 +54,12 @@ location_fields = {
 topic_basic_fields = {
     'name': fields.String,
     'context': fields.String
+}
+
+topic_fields = {
+    'name': fields.String,
+    'status': fields.String,
+    'episodes': fields.List(fields.Nested(episode_basic_fields)),
 }
 
 episode_location_fields = {
@@ -112,7 +118,17 @@ class LocationResource(Resource):
     def get(self, location_name):
         result = Locations.query.get(location_name)
         return result
-
+    
+class TopicListResource(Resource):
+    @ marshal_with(topic_fields)
+    def get(self):
+        result = Topics.query.all()
+        return result
+class TopicResource(Resource):
+    @ marshal_with(topic_fields)
+    def get(self, topic_name):
+        result = Topics.query.get(topic_name)
+        return result
 
 @ app.route('/get-episode-image-from-link', methods=['POST'])
 def upload_episode_image_from_url():
@@ -162,11 +178,20 @@ def update_location_status(location_name):
     db.session.commit()
     return 'OK'
 
+@ app.route('/topics/<topic_name>/status', methods=['PATCH'])
+def update_topic_status(topic_name):
+    topic = Topics.query.filter(Topics.name == topic_name).first()
+    topic.status = request.form.get('status')
+    db.session.commit()
+    return 'OK'
+
 
 api.add_resource(EpisodeListResource, "/episodes/")
 api.add_resource(EpisodeResource, "/episodes/<string:episode_id>")
 api.add_resource(LocationListResource, "/locations/")
 api.add_resource(LocationResource, "/locations/<string:location_name>")
+api.add_resource(TopicListResource, "/topics/")
+api.add_resource(TopicResource, "/topics/<string:topic_name>")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
