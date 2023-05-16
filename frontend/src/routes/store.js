@@ -2,6 +2,7 @@ import { writable, get } from 'svelte/store';
 
 export const locations = writable([])
 export const episodes = writable([])
+export const topics = writable([])
 export const selectedEpisode = writable({})
 export const selectedLocations = writable([])
 export const selectedTime = writable({ year: 100, file: 'historic-maps/world_100.geojson' })
@@ -66,6 +67,10 @@ export function setLocations(locationsData) {
 
 export function setEpisodes(episodesData) {
     episodes.update(state => [...episodesData])
+}
+
+export function setTopics(topicsData) {
+    topics.update(state => [...topicsData])
 }
 
 export function setSelectedEpisodeById(episodeId) {
