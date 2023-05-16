@@ -83,24 +83,24 @@
     <table>
       <thead class="border-b font-medium">
         <tr>
-          <td class="w-1/12 py-3 px-2">ID</td>
-          <td class="w-7/12 py-3 px-2">Titel</td>
-          <td class="w-2/12 py-3 px-2">Status</td>
-          <td class="w-2/12 py-3 px-2">Aktion</td>
+          <td class="h-14 w-1/12 py-3 px-2">ID</td>
+          <td class="h-14 w-7/12 py-3 px-2">Titel</td>
+          <td class="h-14 w-2/12 py-3 px-2">Status</td>
+          <td class="h-14 w-2/12 py-3 px-2">Aktion</td>
         </tr>
       </thead>
       <tbody class="bg-white">
         {#each filteredEpisodes as episode}
           <tr class="border-b">
-            <td class="py-3 px-2">{episode.id}</td>
-            <td class="py-3 px-2">{episode.title}</td>
-            <td class="py-3 px-2">
+            <td class="h-14 py-3 px-2">{episode.id}</td>
+            <td class="h-14 py-3 px-2">{episode.title}</td>
+            <td class="h-14 py-3 px-2">
               <span
                 class="{`bg-${episode.status}-light text-${episode.status}`} rounded-lg px-2 py-1"
                 >{getStatusForSlug(episode.status)}</span
               >
             </td>
-            <td class="py-3 px-2">
+            <td class="h-14 py-3 px-2">
               <button on:click={() => toggleEpisode(episode.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"

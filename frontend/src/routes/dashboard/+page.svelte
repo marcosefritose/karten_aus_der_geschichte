@@ -1,1 +1,1 @@
-<h1>Overview</h1>
+<div class="w-full">Overview</div>
