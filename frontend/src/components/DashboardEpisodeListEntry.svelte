@@ -8,16 +8,16 @@
       <div class="locations w-1/4">
         <h3 class="font-medium">Schauplätze</h3>
         <ul>
-          {#each episodeData.locations as location}
-            <li>{location.name} - {location.context}</li>
+          {#each episodeData.locations_association as location}
+            <li>{location.location_name} - {location.context}</li>
           {/each}
         </ul>
       </div>
       <div class="topics w-1/4">
         <h3 class="font-medium">Themen</h3>
         <ul>
-          {#each episodeData.topics as topic}
-            <li>{topic.name}</li>
+          {#each episodeData.topics_association as topic}
+            <li>{topic.topic_name} - {topic.context}</li>
           {/each}
         </ul>
       </div>
