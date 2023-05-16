@@ -7,7 +7,22 @@
   let selectedEpisodeId = null;
   let selectedEpisodeData = null;
 
+  let searchString = '';
+
   setEpisodes(data.episodes);
+
+  let searchEpisodes = $episodes.map((episode) => {
+    return {
+      id: episode.id,
+      title: episode.title,
+      status: episode.status,
+      searchTerm: `${episode.id} ${episode.title} ${episode.summary}`
+    };
+  });
+
+  $: filteredEpisodes = searchEpisodes.filter((episode) => {
+    return episode.searchTerm.toLowerCase().includes(searchString.toLowerCase());
+  });
 
   async function loadEpisodeData(id) {
     const response = await fetch(`http://localhost:5001/episodes/${id}`);
@@ -54,7 +69,15 @@
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
-  <h1 class="text-3xl">{$episodes.length} Episoden</h1>
+  <div class="flex">
+    <h1 class="text-3xl">{$episodes.length} Episoden</h1>
+    <input
+      bind:value={searchString}
+      class="ml-auto rounded-lg bg-white px-2 py-1"
+      type="text"
+      placeholder="Suche"
+    />
+  </div>
 
   <div class="bg-gag-light mt-3 flex flex-col flex-wrap rounded-lg">
     <table>
@@ -67,7 +90,7 @@
         </tr>
       </thead>
       <tbody class="bg-white">
-        {#each $episodes as episode}
+        {#each filteredEpisodes as episode}
           <tr class="border-b">
             <td class="py-3 px-2">{episode.id}</td>
             <td class="py-3 px-2">{episode.title}</td>
