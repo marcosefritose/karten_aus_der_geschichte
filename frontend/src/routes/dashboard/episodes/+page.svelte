@@ -59,7 +59,7 @@
     formData.append('status', status);
 
     fetch(`http://localhost:5001/episodes/${episodeId}/status`, {
-      method: 'POST',
+      method: 'PATCH',
       body: formData
     }).then(() => {
       const episodeIndex = $episodes.findIndex((episode) => episode.id === episodeId);
