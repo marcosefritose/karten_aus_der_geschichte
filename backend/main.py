@@ -105,6 +105,12 @@ class LocationListResource(Resource):
             Coordinates.active == True and (Coordinates.longitude.isnot(None)
                                             or Coordinates.latitude.isnot(None))).all()
         return result
+    
+class LocationResource(Resource):
+    @ marshal_with(location_fields)
+    def get(self, location_name):
+        result = Locations.query.get(location_name)
+        return result
 
 
 @ app.route('/get-episode-image-from-link', methods=['POST'])
@@ -141,7 +147,7 @@ def thumbnail(filename):
                                filename)
 
 
-@ app.route('/episodes/<episode_id>/status', methods=['POST'])
+@ app.route('/episodes/<episode_id>/status', methods=['PATCH'])
 def update_episode_status(episode_id):
     episode = Episodes.query.filter(Episodes.id == episode_id).first()
     episode.status = request.form.get('status')
@@ -152,6 +158,7 @@ def update_episode_status(episode_id):
 api.add_resource(EpisodeListResource, "/episodes/")
 api.add_resource(EpisodeResource, "/episodes/<string:episode_id>")
 api.add_resource(LocationListResource, "/locations/")
+api.add_resource(LocationResource, "/locations/<string:location_name>")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
