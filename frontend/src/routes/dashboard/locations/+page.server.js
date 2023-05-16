@@ -1,5 +1,7 @@
 export async function load({ fetch, setHeaders }) {
-    const locationsRes = await fetch('http://flask:5000/locations/')
+    const externalApiUrl = import.meta.env.VITE_FLASK_API_URL;
+
+    const locationsRes = await fetch(`${externalApiUrl}/locations/`)
     const locationData = await locationsRes.json()
 
     return {
