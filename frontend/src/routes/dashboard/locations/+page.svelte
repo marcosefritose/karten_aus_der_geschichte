@@ -65,7 +65,7 @@
     <h1 class="text-3xl">{$locations.length} Orte</h1>
     <input
       bind:value={searchString}
-      class="ml-auto rounded-lg bg-white px-2 py-1"
+      class="focus:ring-gag-primary ml-auto rounded-lg bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-opacity-50"
       type="text"
       placeholder="Suche"
     />

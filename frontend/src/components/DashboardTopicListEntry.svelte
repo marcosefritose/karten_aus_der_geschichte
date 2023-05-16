@@ -2,7 +2,7 @@
   export let topicData;
 </script>
 
-<tr>
+<tr class="border-b">
   <td colspan="4" class="py-3 px-2">
     <div class="flex w-full gap-3">
       <div>
