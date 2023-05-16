@@ -6,8 +6,6 @@ export async function handleFetch({ request, fetch }) {
             request.url.replace(externalApiUrl, 'http://flask:5000'),
             request
         );
-
-        console.log('Server replaced URL');
     }
 
     return fetch(request);

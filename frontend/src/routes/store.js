@@ -74,12 +74,9 @@ export function setTopics(topicsData) {
 }
 
 export function setSelectedEpisodeById(episodeId) {
-    console.log(episodeId);
     let episodesValue = get(episodes)
-    console.log(episodesValue);
     let episode = episodesValue.filter((ep) => ep['id'] == episodeId)[0]
 
-    console.log(episode);
     if (episode.story_time_start != undefined) {
         let filteredMaps = maps.filter((m) => m.year < episode.story_time_start);
         let sortedMaps = filteredMaps.sort((a, b) => b.year - a.year);

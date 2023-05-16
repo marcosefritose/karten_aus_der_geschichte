@@ -43,7 +43,6 @@
     if (left < 0) {
       left = 0;
     } else if (left > innerWidth - popup.offsetWidth) {
-      console.log('shrink');
       left = innerWidth - popup.offsetWidth;
     }
 
