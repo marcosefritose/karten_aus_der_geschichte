@@ -23,10 +23,8 @@ class Episodes(db.Model):
     story_time_end = db.Column(db.Integer())
     locations_association = db.relationship(
         'EpisodesLocation', backref='episodes')
-    topicss_association = db.relationship(
+    topics_association = db.relationship(
         'EpisodesTopic', backref='episodes')
-    loc_contexts = association_proxy('episodes_locations', 'context')
-    loc_names = association_proxy('episodes_locations', 'location_name')
 
 class Locations(db.Model):
     __tablename__ = 'locations'

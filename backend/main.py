@@ -55,6 +55,16 @@ topic_basic_fields = {
     'context': fields.String
 }
 
+episode_location_fields = {
+    'location_name': fields.String,
+    'context': fields.String
+}
+
+episode_topic_fields = {
+    'topic_name': fields.String,
+    'context': fields.String
+}
+
 
 episode_fields = {
     'id': fields.String,
@@ -67,10 +77,9 @@ episode_fields = {
     'status': fields.String,
     'story_time_start': fields.String,
     'story_time_end': fields.String,
-    'loc_names': fields.List(fields.String),
-    'loc_contexts': fields.List(fields.String),
+    'locations_association': fields.Nested(episode_location_fields),
     'locations': fields.List(fields.Nested(location_basic_fields)),
-    'topics': fields.List(fields.Nested(topic_basic_fields))
+    'topics_association': fields.List(fields.Nested(episode_topic_fields))
 }
 
 
