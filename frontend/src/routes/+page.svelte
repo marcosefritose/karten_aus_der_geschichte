@@ -29,6 +29,7 @@
           rel="noopener noreferrer"
           class="underline underline-offset-2">marcose</a
         >.
+        <a href="/dashboard">Dashboard</a>
       </div>
     {/if}
 
