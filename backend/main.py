@@ -48,7 +48,8 @@ location_basic_fields = {
 location_fields = {
     'name': fields.String,
     'coordinates': fields.List(fields.Nested(coordinate_fields)),
-    'episodes': fields.List(fields.Nested(episode_basic_fields))
+    'episodes': fields.List(fields.Nested(episode_basic_fields)),
+    'status': fields.String,
 }
 topic_basic_fields = {
     'name': fields.String,
@@ -151,6 +152,13 @@ def thumbnail(filename):
 def update_episode_status(episode_id):
     episode = Episodes.query.filter(Episodes.id == episode_id).first()
     episode.status = request.form.get('status')
+    db.session.commit()
+    return 'OK'
+
+@ app.route('/locations/<location_name>/status', methods=['PATCH'])
+def update_location_status(location_name):
+    location = Locations.query.filter(Locations.name == location_name).first()
+    location.status = request.form.get('status')
     db.session.commit()
     return 'OK'
 

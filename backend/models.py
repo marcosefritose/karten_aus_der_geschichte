@@ -18,7 +18,7 @@ class Episodes(db.Model):
     image = db.Column(db.String(1000))
     thumbnail = db.Column(db.String(1000))
     published = db.Column(db.DateTime())
-    status = db.Column(db.String(100))
+    status = db.Column(db.String(164))
     story_time_start = db.Column(db.Integer())
     story_time_end = db.Column(db.Integer())
     locations_association = db.relationship(
@@ -29,6 +29,7 @@ class Episodes(db.Model):
 class Locations(db.Model):
     __tablename__ = 'locations'
     name = db.Column(db.String(164), primary_key=True)
+    status = db.Column(db.String(164))
     episodes = db.relationship(
         'Episodes', secondary='episodes_locations', backref='locations')
     context = association_proxy('episodes_locations', 'context')
