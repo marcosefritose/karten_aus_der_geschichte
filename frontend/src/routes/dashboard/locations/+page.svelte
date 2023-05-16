@@ -50,7 +50,7 @@
     const formData = new FormData();
     formData.append('status', status);
 
-    fetch(`http://localhost:5001/locations/${locationName}`, {
+    fetch(`http://localhost:5001/locations/${locationName}/status`, {
       method: 'PATCH',
       body: formData
     }).then(() => {
