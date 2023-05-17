@@ -41,7 +41,7 @@ coordinate_fields = {
 
 location_basic_fields = {
     'name': fields.String,
-    # 'context': fields.String,
+    'status': fields.String,
     'coordinates': fields.List(fields.Nested(coordinate_fields)),
 }
 
@@ -108,9 +108,12 @@ class EpisodeResource(Resource):
 class LocationListResource(Resource):
     @ marshal_with(location_fields)
     def get(self):
-        result = Locations.query.join(Coordinates).filter(
-            Coordinates.active == True and (Coordinates.longitude.isnot(None)
-                                            or Coordinates.latitude.isnot(None))).all()
+        if request.args.get('hasCoordinate') == 'true':
+            result = Locations.query.join(Coordinates).filter(
+                Coordinates.active == True and (Coordinates.longitude.isnot(None)
+                                                or Coordinates.latitude.isnot(None))).all()
+        else:
+            result = Locations.query.all()
         return result
     
 class LocationResource(Resource):
