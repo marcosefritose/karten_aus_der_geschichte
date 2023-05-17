@@ -53,9 +53,11 @@
         <!-- Location Badges -->
         <div class="location-tabs flex flex-wrap gap-2 text-sm">
           {#each episode.locations as loc}
-            <span class="border-gag-primary text-gag-primary rounded-lg border bg-white py-1 px-2"
-              >{loc.name}</span
-            >
+            {#if loc.status == 'active'}
+              <span class="border-gag-primary text-gag-primary rounded-lg border bg-white py-1 px-2"
+                >{loc.name}</span
+              >
+            {/if}
           {/each}
           <!-- Time Badge -->
           <span class="rounded-lg border border-gray-600 bg-white py-1 px-2 text-gray-600">
