@@ -29,23 +29,27 @@ CORS(app)
 db.init_app(app)
 
 episode_basic_fields = {
-    'id': fields.String,
+    'id': fields.Integer,
+    'key': fields.String,
     'title': fields.String,
 }
 
 coordinate_fields = {
+    'id': fields.Integer,
     'longitude': fields.String,
     'latitude': fields.String,
-    'active': fields.Boolean
+    'status': fields.String
 }
 
 location_basic_fields = {
+    'id': fields.Integer,
     'name': fields.String,
     'status': fields.String,
     'coordinates': fields.List(fields.Nested(coordinate_fields)),
 }
 
 location_fields = {
+    'id': fields.Integer,
     'name': fields.String,
     'coordinates': fields.List(fields.Nested(coordinate_fields)),
     'episodes': fields.List(fields.Nested(episode_basic_fields)),
@@ -64,17 +68,20 @@ topic_fields = {
 
 episode_location_fields = {
     'location_name': fields.String,
+    'status': fields.String,
     'context': fields.String
 }
 
 episode_topic_fields = {
     'topic_name': fields.String,
+    'status': fields.String,
     'context': fields.String
 }
 
 
 episode_fields = {
-    'id': fields.String,
+    'id': fields.Integer,
+    'key': fields.String,
     'title': fields.String,
     'summary': fields.String,
     'link': fields.String,
@@ -84,6 +91,7 @@ episode_fields = {
     'status': fields.String,
     'story_time_start': fields.String,
     'story_time_end': fields.String,
+    'story_time_description': fields.String,
     'locations_association': fields.Nested(episode_location_fields),
     'locations': fields.List(fields.Nested(location_basic_fields)),
     'topics_association': fields.List(fields.Nested(episode_topic_fields))
@@ -110,28 +118,34 @@ class LocationListResource(Resource):
     def get(self):
         if request.args.get('hasCoordinate') == 'true':
             result = Locations.query.join(Coordinates).filter(
-                Coordinates.active == True and (Coordinates.longitude.isnot(None)
-                                                or Coordinates.latitude.isnot(None))).all()
+                Coordinates.status == 'active' and (Coordinates.longitude.isnot(None)
+                                                    or Coordinates.latitude.isnot(None))).all()
         else:
-            result = Locations.query.all()
+            result = Locations.query.order_by(
+                Locations.name.asc()).all()
         return result
-    
+
+
 class LocationResource(Resource):
     @ marshal_with(location_fields)
-    def get(self, location_name):
-        result = Locations.query.get(location_name)
+    def get(self, location_id):
+        result = Locations.query.get(location_id)
         return result
-    
+
+
 class TopicListResource(Resource):
     @ marshal_with(topic_fields)
     def get(self):
         result = Topics.query.all()
         return result
+
+
 class TopicResource(Resource):
     @ marshal_with(topic_fields)
-    def get(self, topic_name):
-        result = Topics.query.get(topic_name)
+    def get(self, topic_id):
+        result = Topics.query.get(topic_id)
         return result
+
 
 @ app.route('/get-episode-image-from-link', methods=['POST'])
 def upload_episode_image_from_url():
@@ -174,16 +188,18 @@ def update_episode_status(episode_id):
     db.session.commit()
     return 'OK'
 
-@ app.route('/locations/<location_name>/status', methods=['PATCH'])
-def update_location_status(location_name):
-    location = Locations.query.filter(Locations.name == location_name).first()
+
+@ app.route('/locations/<location_id>/status', methods=['PATCH'])
+def update_location_status(location_id):
+    location = Locations.query.filter(Locations.id == location_id).first()
     location.status = request.form.get('status')
     db.session.commit()
     return 'OK'
 
-@ app.route('/topics/<topic_name>/status', methods=['PATCH'])
-def update_topic_status(topic_name):
-    topic = Topics.query.filter(Topics.name == topic_name).first()
+
+@ app.route('/topics/<topic_id>/status', methods=['PATCH'])
+def update_topic_status(topic_id):
+    topic = Topics.query.filter(Topics.id == topic_id).first()
     topic.status = request.form.get('status')
     db.session.commit()
     return 'OK'
@@ -192,9 +208,9 @@ def update_topic_status(topic_name):
 api.add_resource(EpisodeListResource, "/episodes/")
 api.add_resource(EpisodeResource, "/episodes/<string:episode_id>")
 api.add_resource(LocationListResource, "/locations/")
-api.add_resource(LocationResource, "/locations/<string:location_name>")
+api.add_resource(LocationResource, "/locations/<string:location_id>")
 api.add_resource(TopicListResource, "/topics/")
-api.add_resource(TopicResource, "/topics/<string:topic_name>")
+api.add_resource(TopicResource, "/topics/<string:topic_id>")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
