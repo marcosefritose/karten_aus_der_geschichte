@@ -67,7 +67,7 @@ topic_fields = {
 }
 
 episode_location_fields = {
-    'location_name': fields.String,
+    'location': fields.Nested(location_basic_fields),
     'status': fields.String,
     'context': fields.String
 }

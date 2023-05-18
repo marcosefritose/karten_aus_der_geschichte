@@ -93,7 +93,7 @@ class EpisodesTopic(db.Model):
     context = db.Column(db.String(1000))
 
     episode_id = db.Column(db.Integer, db.ForeignKey('episodes_target.id'))
-    topic_id = db.Column(db.Integer, db.ForeignKey('topics.name'))
+    topic_id = db.Column(db.Integer, db.ForeignKey('topics.id'))
 
     episode = db.relationship(Episodes, backref='episodes_topics')
     topic = db.relationship(Topics, backref='episodes_topics')
