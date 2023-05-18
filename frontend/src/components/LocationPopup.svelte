@@ -74,7 +74,7 @@
       <li class="mb-2 flex cursor-pointer gap-1" on:click={setSelectedEpisodeById(episode.id)}>
         <span
           class="bg-gag-primary inline-block h-fit rounded-md px-2 py-1 text-xs font-bold text-white"
-          >{episode.id}</span
+          >{episode.key}</span
         >{episode.title}
       </li>
     {/each}

@@ -14,9 +14,10 @@
   let searchEpisodes = $episodes.map((episode) => {
     return {
       id: episode.id,
+      key: episode.key,
       title: episode.title,
       status: episode.status,
-      searchTerm: `${episode.id} ${episode.title} ${episode.summary}`
+      searchTerm: `${episode.key} ${episode.title} ${episode.summary}`
     };
   });
 
@@ -57,20 +58,19 @@
   function updateEpisodeStatus(episodeId, status) {
     const formData = new FormData();
     formData.append('status', status);
-
     fetch(`http://localhost:5001/episodes/${episodeId}/status`, {
       method: 'PATCH',
       body: formData
     }).then(() => {
-      const episodeIndex = $episodes.findIndex((episode) => episode.id === episodeId);
-      $episodes[episodeIndex].status = status;
+      const episodeIndex = filteredEpisodes.findIndex((episode) => episode.id === episodeId);
+      filteredEpisodes[episodeIndex].status = status;
     });
   }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
   <div class="flex">
-    <h1 class="text-3xl">{$episodes.length} Episoden</h1>
+    <h1 class="text-3xl">{filteredEpisodes.length} Episoden</h1>
     <input
       bind:value={searchString}
       class="focus:ring-gag-primary ml-auto rounded-lg bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-opacity-50"
@@ -92,7 +92,7 @@
       <tbody class="bg-white">
         {#each filteredEpisodes as episode}
           <tr class="border-b">
-            <td class="h-14 py-3 px-2">{episode.id}</td>
+            <td class="h-14 py-3 px-2">{episode.key}</td>
             <td class="h-14 py-3 px-2">{episode.title}</td>
             <td class="h-14 py-3 px-2">
               <span

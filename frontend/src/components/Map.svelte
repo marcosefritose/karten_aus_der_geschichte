@@ -242,7 +242,7 @@
 
     {#if $locations}
       {#each $locations as location}
-        {#if location.coordinates[0].latitude && location.coordinates[0].longitude}
+        {#if location.status == 'active' && location.coordinates[0].latitude && location.coordinates[0].longitude}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <line
             id={location.name}

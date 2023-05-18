@@ -26,43 +26,43 @@
     }
   }
 
-  let selectedLocationName = null;
+  let selectedLocationId = null;
   let selectedLocationData = null;
 
-  async function loadLocationData(locationName) {
-    const response = await fetch(`http://localhost:5001/locations/${locationName}`);
+  async function loadLocationData(locationId) {
+    const response = await fetch(`http://localhost:5001/locations/${locationId}`);
     const data = await response.json();
 
-    selectedLocationName = locationName;
+    selectedLocationId = locationId;
     selectedLocationData = data;
   }
 
-  function toggleLocation(locationName) {
-    if (selectedLocationName === locationName) {
-      selectedLocationName = null;
+  function toggleLocation(locationId) {
+    if (selectedLocationId === locationId) {
+      selectedLocationId = null;
       selectedLocationData = null;
     } else {
-      loadLocationData(locationName);
+      loadLocationData(locationId);
     }
   }
 
-  function updateLocationStatus(locationName, status) {
+  function updateLocationStatus(locationId, status) {
     const formData = new FormData();
     formData.append('status', status);
 
-    fetch(`http://localhost:5001/locations/${locationName}/status`, {
+    fetch(`http://localhost:5001/locations/${locationId}/status`, {
       method: 'PATCH',
       body: formData
     }).then(() => {
-      const locationIndex = $locations.findIndex((location) => location.name === locationName);
-      $locations[locationIndex].status = status;
+      const locationIndex = filteredLocations.findIndex((location) => location.id === locationId);
+      filteredLocations[locationIndex].status = status;
     });
   }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
   <div class="flex">
-    <h1 class="text-3xl">{$locations.length} Orte</h1>
+    <h1 class="text-3xl">{filteredLocations.length} Orte</h1>
     <input
       bind:value={searchString}
       class="focus:ring-gag-primary ml-auto rounded-lg bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-opacity-50"
@@ -93,7 +93,7 @@
               >
             </td>
             <td class="py-3 px-2">
-              <button on:click={() => toggleLocation(location.name)}>
+              <button on:click={() => toggleLocation(location.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
                   src="../icons/edit.svg"
@@ -101,7 +101,7 @@
                 />
               </button>
               {#if location.status == 'active'}
-                <button on:click={() => updateLocationStatus(location.name, 'hidden')}>
+                <button on:click={() => updateLocationStatus(location.id, 'hidden')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/hide.svg"
@@ -109,7 +109,7 @@
                   />
                 </button>
               {:else if location.status == 'hidden'}
-                <button on:click={() => updateLocationStatus(location.name, 'active')}>
+                <button on:click={() => updateLocationStatus(location.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/show.svg"
@@ -117,7 +117,7 @@
                   />
                 </button>
               {:else if location.status == 'pending'}
-                <button on:click={() => updateLocationStatus(location.name, 'active')}>
+                <button on:click={() => updateLocationStatus(location.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/activate.svg"
@@ -127,7 +127,7 @@
               {/if}
             </td>
           </tr>
-          {#if selectedLocationName == location.name}
+          {#if selectedLocationId == location.id}
             <DashboardLocationListEntry locationData={selectedLocationData} />
           {/if}
         {/each}

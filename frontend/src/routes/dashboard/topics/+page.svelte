@@ -26,43 +26,43 @@
     }
   }
 
-  let selectedTopicName = null;
+  let selectedTopicId = null;
   let selectedTopicData = null;
 
-  async function loadTopicData(topicName) {
-    const response = await fetch(`http://localhost:5001/topics/${topicName}`);
+  async function loadTopicData(topicId) {
+    const response = await fetch(`http://localhost:5001/topics/${topicId}`);
     const data = await response.json();
 
-    selectedTopicName = topicName;
+    selectedTopicId = topicId;
     selectedTopicData = data;
   }
 
-  function toggleTopic(topicName) {
-    if (selectedTopicName === topicName) {
-      selectedTopicName = null;
+  function toggleTopic(topicId) {
+    if (selectedTopicId === topicId) {
+      selectedTopicId = null;
       selectedTopicData = null;
     } else {
-      loadTopicData(topicName);
+      loadTopicData(topicId);
     }
   }
 
-  function updateTopicStatus(topicName, status) {
+  function updateTopicStatus(topicId, status) {
     const formData = new FormData();
     formData.append('status', status);
 
-    fetch(`http://localhost:5001/topics/${topicName}/status`, {
+    fetch(`http://localhost:5001/topics/${topicId}/status`, {
       method: 'PATCH',
       body: formData
     }).then(() => {
-      const topicIndex = $topics.findIndex((topic) => topic.name === topicName);
-      $topics[topicIndex].status = status;
+      const topicIndex = filteredTopics.findIndex((topic) => topic.id === topicId);
+      filteredTopics[topicIndex].status = status;
     });
   }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
   <div class="flex">
-    <h1 class="text-3xl">{$topics.length} Themen</h1>
+    <h1 class="text-3xl">{filteredTopics.length} Themen</h1>
     <input
       bind:value={searchString}
       class="focus:ring-gag-primary ml-auto rounded-lg bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-opacity-50"
@@ -93,7 +93,7 @@
               >
             </td>
             <td class="py-3 px-2">
-              <button on:click={() => toggleTopic(topic.name)}>
+              <button on:click={() => toggleTopic(topic.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
                   src="../icons/edit.svg"
@@ -101,7 +101,7 @@
                 />
               </button>
               {#if topic.status == 'active'}
-                <button on:click={() => updateTopicStatus(topic.name, 'hidden')}>
+                <button on:click={() => updateTopicStatus(topic.id, 'hidden')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/hide.svg"
@@ -109,7 +109,7 @@
                   />
                 </button>
               {:else if topic.status == 'hidden'}
-                <button on:click={() => updateTopicStatus(topic.name, 'active')}>
+                <button on:click={() => updateTopicStatus(topic.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/show.svg"
@@ -117,7 +117,7 @@
                   />
                 </button>
               {:else if topic.status == 'pending'}
-                <button on:click={() => updateTopicStatus(topic.name, 'active')}>
+                <button on:click={() => updateTopicStatus(topic.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/activate.svg"
@@ -127,7 +127,7 @@
               {/if}
             </td>
           </tr>
-          {#if selectedTopicName == topic.name}
+          {#if selectedTopicId == topic.id}
             <DashboardTopicListEntry topicData={selectedTopicData} />
           {/if}
         {/each}

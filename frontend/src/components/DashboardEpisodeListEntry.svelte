@@ -1,5 +1,7 @@
 <script>
   export let episodeData;
+
+  console.log(episodeData);
 </script>
 
 <tr class="border-b">
@@ -8,8 +10,8 @@
       <div class="locations w-1/4">
         <h3 class="font-medium">Schauplätze</h3>
         <ul>
-          {#each episodeData.locations_association as location}
-            <li>{location.location_name} - {location.context}</li>
+          {#each episodeData.locations_association as assoc}
+            <li>{assoc.location.name} - {assoc.context}</li>
           {/each}
         </ul>
       </div>

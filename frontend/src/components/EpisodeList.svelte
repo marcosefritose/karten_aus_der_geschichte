@@ -36,7 +36,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span
           class="bg-gag-primary rounded-md px-2 py-1 text-sm font-bold text-white hover:cursor-pointer"
-          on:click={setSelectedEpisodeById(episode.id)}>{episode.id}</span
+          on:click={setSelectedEpisodeById(episode.id)}>{episode.key}</span
         >
 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
