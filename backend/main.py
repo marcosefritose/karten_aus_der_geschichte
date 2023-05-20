@@ -56,10 +56,12 @@ location_fields = {
     'status': fields.String,
 }
 topic_basic_fields = {
+    'id': fields.Integer,
     'name': fields.String
 }
 
 topic_fields = {
+    'id': fields.Integer,
     'name': fields.String,
     'status': fields.String,
     'episodes': fields.List(fields.Nested(episode_basic_fields)),

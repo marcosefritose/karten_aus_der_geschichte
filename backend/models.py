@@ -78,7 +78,7 @@ class Topics(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(164))
-    name = db.Column(db.String(164), primary_key=True)
+    name = db.Column(db.String(164))
     origin = db.Column(db.String(164))
     created_at = db.Column(db.DateTime())
 
