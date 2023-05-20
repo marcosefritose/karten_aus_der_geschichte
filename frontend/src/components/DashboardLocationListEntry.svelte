@@ -9,7 +9,7 @@
         <h3 class="font-medium">Episoden</h3>
         <ul>
           {#each locationData.episodes as episode}
-            <li>{episode.id} - {episode.title}</li>
+            <li>{episode.key} - {episode.title}</li>
           {/each}
         </ul>
       </div>

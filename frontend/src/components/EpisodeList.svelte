@@ -52,6 +52,10 @@
       <div class="{$selectedEpisode.id === episode.id ? '' : 'hidden'} px-3">
         <!-- Location Badges -->
         <div class="location-tabs flex flex-wrap gap-2 text-sm">
+          <!-- Time Badge -->
+          <span class="rounded-lg border border-gray-600 bg-white py-1 px-2 text-gray-600">
+            {episode.story_time_start + ' - ' + episode.story_time_end}
+          </span>
           {#each episode.locations as loc}
             {#if loc.status == 'active'}
               <span class="border-gag-primary text-gag-primary rounded-lg border bg-white py-1 px-2"
@@ -59,10 +63,13 @@
               >
             {/if}
           {/each}
-          <!-- Time Badge -->
-          <span class="rounded-lg border border-gray-600 bg-white py-1 px-2 text-gray-600">
-            {episode.story_time_start + ' - ' + episode.story_time_end}
-          </span>
+          {#each episode.topics_association as topic}
+            {#if topic.status == 'active'}
+              <span class="rounded-lg border border-slate-500 bg-white py-1 px-2 text-slate-500"
+                >{topic.topic_name}</span
+              >
+            {/if}
+          {/each}
         </div>
 
         <!-- Date -->
