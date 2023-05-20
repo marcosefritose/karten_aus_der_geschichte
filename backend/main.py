@@ -56,8 +56,7 @@ location_fields = {
     'status': fields.String,
 }
 topic_basic_fields = {
-    'name': fields.String,
-    'context': fields.String
+    'name': fields.String
 }
 
 topic_fields = {

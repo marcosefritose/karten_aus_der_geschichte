@@ -97,3 +97,4 @@ class EpisodesTopic(db.Model):
 
     episode = db.relationship(Episodes, backref='episodes_topics')
     topic = db.relationship(Topics, backref='episodes_topics')
+    topic_name = association_proxy('topic', 'name')
