@@ -3,3 +3,10 @@ spacy
 geopy
 pandas
 numpy
+ipykernel
+openai
+python-dotenv
+langchain
+pinecone-client
+sentence-transformers
+pydantic

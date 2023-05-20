@@ -1,11 +1,11 @@
 <script>
-  import Map from './Map.svelte';
-  import Content from './Content.svelte';
+  import Map from '../components/Map.svelte';
+  import Content from '../components/Content.svelte';
 
   const confident = import.meta.env.VITE_CONFIDENT;
 </script>
 
-<main class="">
+<main class="font-classicalHumanist">
   <div
     id="world-map-wrapper"
     class="pointer-events-auto absolute bottom-0  w-screen flex-auto overflow-clip"
@@ -29,6 +29,7 @@
           rel="noopener noreferrer"
           class="underline underline-offset-2">marcose</a
         >.
+        <a href="/dashboard">Dashboard</a>
       </div>
     {/if}
 

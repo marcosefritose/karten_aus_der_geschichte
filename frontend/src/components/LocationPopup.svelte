@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { setSelectedEpisodeById } from './store';
+  import { setSelectedEpisodeById } from '../routes/store';
 
   export let coords;
   export let location;
@@ -43,7 +43,6 @@
     if (left < 0) {
       left = 0;
     } else if (left > innerWidth - popup.offsetWidth) {
-      console.log('shrink');
       left = innerWidth - popup.offsetWidth;
     }
 
@@ -75,7 +74,7 @@
       <li class="mb-2 flex cursor-pointer gap-1" on:click={setSelectedEpisodeById(episode.id)}>
         <span
           class="bg-gag-primary inline-block h-fit rounded-md px-2 py-1 text-xs font-bold text-white"
-          >{episode.id}</span
+          >{episode.key}</span
         >{episode.title}
       </li>
     {/each}

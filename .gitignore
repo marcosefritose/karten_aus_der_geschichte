@@ -1,4 +1,9 @@
+__pycache__/
+.vscode/
+
 airflow/logs/*
-airflow/dags/__pycache__/*
+
+backend/data/*
+
 .env
 nginx-conf/*

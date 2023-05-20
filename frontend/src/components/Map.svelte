@@ -11,16 +11,15 @@
     interpolateYlOrBr
   } from 'd3';
 
-  import LocationPopup from './LocationPopup.svelte';
+  import LocationPopup from '../components/LocationPopup.svelte';
   import {
     locations,
     selectedLocations,
     setSelectedLocations,
     selectedTime,
-    popupSelection,
     showHistoricMap
-  } from './store';
-  import AreaPopup from './AreaPopup.svelte';
+  } from '../routes/store';
+  import AreaPopup from '../components/AreaPopup.svelte';
 
   let selectedLocationsNames;
 
@@ -59,14 +58,14 @@
 
   function getGeoFeatureForLocations(locs) {
     locs = locs.filter((loc) => {
-      return loc.latitude !== 'NaN';
+      return loc.coordinates.length != 0 && loc.coordinates[0].longitude != null;
     });
 
     if (locs.length == 0) return false;
 
-    let coordinates = locs.map((coord) => [
-      parseFloat(coord.longitude),
-      parseFloat(coord.latitude)
+    let coordinates = locs.map((loc) => [
+      parseFloat(loc.coordinates[0].longitude),
+      parseFloat(loc.coordinates[0].latitude)
     ]);
 
     // Sort by longitude to prevent unsortable coords for polygon
@@ -91,7 +90,7 @@
     let geoFeature = getGeoFeatureForLocations(selectedLocs);
 
     if (geoFeature) {
-      // geoFeaturePath = path(geoFeature)
+      // geoFeaturePath = path(geoFeature);
       clicked(geoFeature);
     }
   });
@@ -101,10 +100,6 @@
   }
 
   function showLocationPopup(event, locationName) {
-    if ($popupSelection !== 'location') {
-      return false;
-    }
-
     popupLocation = $locations.filter((loc) => loc['name'] == locationName)[0];
     popupLocationPosition = markerElements[locationName].getBoundingClientRect();
     locationPopupIsShown = true;
@@ -116,10 +111,6 @@
   }
 
   function showAreaPopup(event, areaName) {
-    if ($popupSelection !== 'area') {
-      return false;
-    }
-
     popupArea = areaName;
     popupAreaPosition = { x: event.clientX, y: event.clientY };
     areaPopupIsShown = true;
@@ -137,7 +128,7 @@
   }
 
   // Zoom and scroll functionality
-  $: zoomX = zoom().scaleExtent([1, 8]).on('zoom', handleZoom);
+  $: zoomX = zoom().scaleExtent([0.3, 10]).on('zoom', handleZoom);
   $: if (bindInitZoom) {
     select(bindInitZoom).call(zoomX);
   }
@@ -151,10 +142,19 @@
   }
 
   function clicked(d) {
-    const [[x0, y0], [x1, y1]] = path.bounds(d);
+    let [[x0, y0], [x1, y1]] = path.bounds(d);
 
-    // TODO: Zoom factor more dynamic?
-    let zoomFactor = innerWidth < 600 ? 0.3 : 0.8;
+    // Change zoomfactor dynamically with window width
+    let zoomFactor = innerWidth / 1800;
+
+    // Always push zoom section up for mobile design
+    if (innerWidth < 768) {
+      y1 = y1 + 0.5 * (y1 - y0);
+    } // Move zoom section to left & reduce zoomfactor so location is not hidden
+    else if (x1 - x0 > 500 || (x1 != x0 && (x1 - x0) / (y1 - y0) > 1.2)) {
+      x1 = x1 + 0.35 * (x1 - x0);
+      zoomFactor = zoomFactor * Math.max(0.5, 1 - 0.1 * ((x1 - x0) / (y1 - y0)));
+    }
 
     select(bindInitZoom)
       .transition()
@@ -163,7 +163,6 @@
         zoomX.transform,
         zoomIdentity
           .translate(1000 / 2, 500 / 2)
-          // ToDo: Zoom factor depending on screen size!
           .scale(Math.min(6, zoomFactor / Math.max((x1 - x0) / 1000, (y1 - y0) / 500)))
           .translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
       );
@@ -178,7 +177,6 @@
       setTimeout(() => {
         for (let areaPath of historicMapFeaturePaths.children) {
           areaPath.addEventListener('mouseenter', (e) => {
-            console.log(areaPath);
             areaPath.classList.remove('opacity-30');
             areaPath.classList.add('stroke-black', 'opacity-50');
             showAreaPopup(e, areaPath.getAttribute('data-name'));
@@ -232,7 +230,7 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <path
             data-name={data.properties.NAME}
-            class="historic-path z-50 stroke-1 opacity-30"
+            class="historic-path duration-400 z-50 stroke-1 opacity-30 transition"
             d={path(data)}
             fill={interpolateYlOrBr(
               historicMapFeatureNames.indexOf(data.properties.NAME) / historicMapFeatureNames.length
@@ -244,21 +242,35 @@
 
     {#if $locations}
       {#each $locations as location}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <line
-          id={location.name}
-          bind:this={markerElements[location.name]}
-          class="stroke-1"
-          x1={projection([location.longitude, location.latitude])[0]}
-          x2={projection([location.longitude, location.latitude])[0] + 0.1}
-          y1={projection([location.longitude, location.latitude])[1]}
-          y2={projection([location.longitude, location.latitude])[1] + 0.1}
-        />
+        {#if location.status == 'active' && location.coordinates[0].latitude && location.coordinates[0].longitude}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <line
+            id={location.name}
+            bind:this={markerElements[location.name]}
+            class="stroke-1"
+            x1={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[0]}
+            x2={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[0] + 0.1}
+            y1={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[1]}
+            y2={projection([
+              location.coordinates[0].longitude,
+              location.coordinates[0].latitude
+            ])[1] + 0.1}
+          />
+        {/if}
       {/each}
     {/if}
     <!-- {#if geoFeaturePath}
-			<path class="fill-red stroke-3" d={geoFeaturePath}></path>
-		{/if} -->
+      <path class="fill-red stroke-3" d={geoFeaturePath} />
+    {/if} -->
   </g>
 </svg>
 
