@@ -22,6 +22,7 @@ def clean_push_episodes(ti):
     df['title'] = df['title'].str.split(': ').str[1]
 
     df['summary'] = df['summary'].str.split('//Aus unserer Werbung').str[0]
+    df['summary'] = df['summary'].str.split('**AUS UNSERER WERBUNG**').str[0]
     df['summary'] = df['summary'].str.split('//AUS UNSERER WERBUNG').str[0]
     df['summary'] = df['summary'].str.split(
         'Du möchtest mehr über unsere Werbepartner erfahren?').str[0]
