@@ -7,7 +7,7 @@ from langchain.prompts import HumanMessagePromptTemplate, SystemMessagePromptTem
 from langchain.output_parsers import PydanticOutputParser
 from langchain.output_parsers import OutputFixingParser
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 from tqdm import tqdm
 
@@ -44,9 +44,15 @@ class Coordinate(BaseModel):
 
 class Location(BaseModel):
     name: str = Field(..., example="Berlin")
-    context: str = Field(..., example="Hauptstadt von Deutschland")
+    context: Optional[str] = Field(..., example="Hauptstadt von Deutschland")
     coordinates: Optional[Coordinate] = Field(..., example={
         "lat": 52.520008, "long": 13.404954})
+
+    @validator('coordinates', pre=True)
+    def empty_dict_to_none(cls, v):
+        if v == {}:
+            return None
+        return v
 
 
 class Time(BaseModel):
@@ -157,8 +163,9 @@ def gpt_extract():
                 ON CONFLICT (episode_id, location_id) DO UPDATE SET context = %(context)s
                 """, parameters={"episode_id": entry.id, "name": location.name, "context": location.context, "origin": "gpt-3.5-turbo"})
             if location.coordinates is not None:
-                postgres_sql.run("""
-                    INSERT INTO coordinates (location_id, latitude, longitude, status, origin)
-                    VALUES ((SELECT id FROM locations WHERE name = %(name)s), %(latitude)s, %(longitude)s, %(status)s, %(origin)s)
-                    ON CONFLICT (location_id, latitude, longitude) DO NOTHING
-                    """, parameters={"name": location.name, "latitude": location.coordinates.lat, "longitude": location.coordinates.long, "status": "active", "origin": "gpt-3.5-turbo"})
+                if location.coordinates.lat is not None and location.coordinates.long is not None:
+                    postgres_sql.run("""
+                        INSERT INTO coordinates (location_id, latitude, longitude, status, origin)
+                        VALUES ((SELECT id FROM locations WHERE name = %(name)s), %(latitude)s, %(longitude)s, %(status)s, %(origin)s)
+                        ON CONFLICT (location_id, latitude, longitude) DO NOTHING
+                        """, parameters={"name": location.name, "latitude": location.coordinates.lat, "longitude": location.coordinates.long, "status": "active", "origin": "gpt-3.5-turbo"})
