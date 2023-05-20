@@ -1,4 +1,6 @@
 
+-- Create database
+
 CREATE TABLE IF NOT EXISTS episodes_raw (
     id SERIAL PRIMARY KEY,
     key VARCHAR NOT NULL,
@@ -12,8 +14,8 @@ CREATE TABLE IF NOT EXISTS episodes_raw (
 
 CREATE TABLE IF NOT EXISTS episodes_target (
     id SERIAL PRIMARY KEY,
-    key VARCHAR NOT NULL,
-    status VARCHAR DEFAULT 'pending',
+    key VARCHAR NOT NULL UNIQUE,
+    status VARCHAR DEFAULT 'preprocessed',
     title VARCHAR NOT NULL,
     subtitle VARCHAR,
     summary VARCHAR NOT NULL,
@@ -29,7 +31,7 @@ CREATE TABLE IF NOT EXISTS episodes_target (
 CREATE TABLE IF NOT EXISTS locations (
     id SERIAL PRIMARY KEY,
     status VARCHAR DEFAULT 'active',
-    name VARCHAR NOT NULL,
+    name VARCHAR NOT NULL UNIQUE,
     continent VARCHAR,
     country VARCHAR,
     origin VARCHAR,
@@ -45,6 +47,10 @@ CREATE TABLE IF NOT EXISTS coordinates (
         ON UPDATE CASCADE ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
+ALTER TABLE coordinates DROP CONSTRAINT IF EXISTS unique_location_coordinates;
+ALTER TABLE coordinates ADD CONSTRAINT unique_location_coordinates UNIQUE (location_id, longitude, latitude);
+
+
 CREATE TABLE IF NOT EXISTS episodes_locations(
     id SERIAL PRIMARY KEY,
     status VARCHAR DEFAULT 'active',
@@ -55,10 +61,13 @@ CREATE TABLE IF NOT EXISTS episodes_locations(
         ON UPDATE CASCADE ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
+ALTER TABLE episodes_locations DROP CONSTRAINT IF EXISTS unique_episode_location_combination;
+ALTER TABLE episodes_locations ADD CONSTRAINT unique_episode_location_combination UNIQUE (episode_id, location_id);
+
 CREATE TABLE IF NOT EXISTS topics(
     id SERIAL PRIMARY KEY,
     status VARCHAR DEFAULT 'active',
-    name VARCHAR NOT NULL,
+    name VARCHAR NOT NULL UNIQUE,
     origin VARCHAR,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
@@ -71,3 +80,6 @@ CREATE TABLE IF NOT EXISTS episodes_topics(
     topic_id INT REFERENCES topics(id)
         ON UPDATE CASCADE ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
+ALTER TABLE episodes_topics DROP CONSTRAINT IF EXISTS unique_episode_topic_combination;
+ALTER TABLE episodes_topics ADD CONSTRAINT unique_episode_topic_combination UNIQUE (episode_id, topic_id);

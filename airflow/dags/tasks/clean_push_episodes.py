@@ -5,10 +5,16 @@ import requests
 from airflow.hooks.postgres_hook import PostgresHook
 
 
-def clean_push_episodes():
+def clean_push_episodes(ti):
     postgres_sql = PostgresHook(
         postgres_conn_id='postgres_be', schema='kag')
+
     df = postgres_sql.get_pandas_df("SELECT * FROM episodes_raw")
+
+    last_scraped_episode_date = ti.xcom_pull(
+        task_ids='get_last_scraped_episode', key='last_scraped_date')
+    if last_scraped_episode_date:
+        df = df[df.published > last_scraped_episode_date]
 
     df['key'] = df['title'].str.split(': ').str[0]
 
@@ -35,7 +41,7 @@ def clean_push_episodes():
 
     clean_episode_list = list(df.itertuples(index=False, name=None))
     postgres_sql.insert_rows('episodes_target', clean_episode_list,
-                             replace=True, replace_index="id",
+                             replace=True, replace_index="key",
                              target_fields=list(df.columns))
 
 

@@ -1,14 +1,16 @@
 from airflow.hooks.postgres_hook import PostgresHook
 
+
 def get_coordinates_for_locations():
     from geopy.geocoders import Nominatim
     from geopy.extra.rate_limiter import RateLimiter
 
     postgres_sql = PostgresHook(
         postgres_conn_id='postgres_be', schema='kag')
-    # Todo: Add check if geocoding was already done
+
+    # Get all locations where no coordinaes that were found by spacy are available
     locations_df = postgres_sql.get_pandas_df(
-        "SELECT id, name FROM locations")
+        "SELECT id, name FROM locations WHERE id NOT IN (SELECT location_id FROM coordinates WHERE origin = 'Nominatim')")
 
     geolocator = Nominatim(user_agent="karten_aus_der_geschichte")
     geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
