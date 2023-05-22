@@ -115,6 +115,8 @@ services:
       interval: 30s
       retries: 5
     restart: always
+    networks:
+      - app-network
 
   airflow-webserver:
     <<: *airflow-common
