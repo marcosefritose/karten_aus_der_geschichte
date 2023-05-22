@@ -22,7 +22,6 @@ def clean_push_episodes(ti):
     df['title'] = df['title'].str.split(': ').str[1]
 
     df['summary'] = df['summary'].str.split('//Aus unserer Werbung').str[0]
-    df['summary'] = df['summary'].str.split('**AUS UNSERER WERBUNG**').str[0]
     df['summary'] = df['summary'].str.split('//AUS UNSERER WERBUNG').str[0]
     df['summary'] = df['summary'].str.split(
         'Du möchtest mehr über unsere Werbepartner erfahren?').str[0]
@@ -37,8 +36,7 @@ def clean_push_episodes(ti):
     df['image'] = df['image'].map(lambda x: re.findall(
         '{"href": "(.+?)"}', x)[0] if x != 'nan' else np.NaN)
 
-    df['thumbnail'] = df.apply(lambda x: np.NaN if x.image ==
-                               np.NaN else create_thumbnail_link(x.id, x.image), axis=1)
+    df['thumbnail'] = df.apply(create_thumbnail_link, axis=1)
 
     clean_episode_list = list(df.itertuples(index=False, name=None))
     postgres_sql.insert_rows('episodes_target', clean_episode_list,
@@ -46,12 +44,19 @@ def clean_push_episodes(ti):
                              target_fields=list(df.columns))
 
 
-def create_thumbnail_link(episode_id, image_url):
+def create_thumbnail_link(row):
     endpoint = 'http://flask:5000/get-episode-image-from-link'
+
+    episode_id = row.id
+    image_url = row.image
+
     info = {
         'url': image_url,
         'episode_id': episode_id
     }
+
+    if image_url == np.NaN or image_url == None or image_url == 'nan':
+        return np.NaN
 
     response = requests.post(endpoint, data=info)
 

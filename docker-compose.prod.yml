@@ -131,6 +131,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - app-network
 
   airflow-scheduler:
     <<: *airflow-common
@@ -149,6 +151,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - app-network
 
   airflow-triggerer:
     <<: *airflow-common
@@ -167,6 +171,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - app-network
 
   airflow-init:
     <<: *airflow-common
