@@ -2,6 +2,8 @@
   import { setLocations, locations } from '../../store';
   import DashboardLocationListEntry from '../../../components/DashboardLocationListEntry.svelte';
 
+  const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
+
   export let data;
 
   setLocations(data.locations);
@@ -30,7 +32,7 @@
   let selectedLocationData = null;
 
   async function loadLocationData(locationId) {
-    const response = await fetch(`http://localhost:5001/locations/${locationId}`);
+    const response = await fetch(`${VITE_FLASK_API_URL}/locations/${locationId}`);
     const data = await response.json();
 
     selectedLocationId = locationId;
@@ -50,7 +52,7 @@
     const formData = new FormData();
     formData.append('status', status);
 
-    fetch(`http://localhost:5001/locations/${locationId}/status`, {
+    fetch(`${VITE_FLASK_API_URL}/locations/${locationId}/status`, {
       method: 'PATCH',
       body: formData
     }).then(() => {

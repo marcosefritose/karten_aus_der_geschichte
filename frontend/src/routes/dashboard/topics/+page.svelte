@@ -2,6 +2,8 @@
   import { setTopics, topics } from '../../store';
   import DashboardTopicListEntry from '../../../components/DashboardTopicListEntry.svelte';
 
+  const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
+
   export let data;
 
   setTopics(data.topics);
@@ -30,7 +32,7 @@
   let selectedTopicData = null;
 
   async function loadTopicData(topicId) {
-    const response = await fetch(`http://localhost:5001/topics/${topicId}`);
+    const response = await fetch(`${VITE_FLASK_API_URL}/topics/${topicId}`);
     const data = await response.json();
 
     selectedTopicId = topicId;
@@ -50,7 +52,7 @@
     const formData = new FormData();
     formData.append('status', status);
 
-    fetch(`http://localhost:5001/topics/${topicId}/status`, {
+    fetch(`${VITE_FLASK_API_URL}/topics/${topicId}/status`, {
       method: 'PATCH',
       body: formData
     }).then(() => {

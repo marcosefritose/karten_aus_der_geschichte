@@ -2,6 +2,8 @@
   import DashboardEpisodeListEntry from '../../../components/DashboardEpisodeListEntry.svelte';
   import { setEpisodes, episodes } from '../../store';
 
+  const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
+
   export let data;
 
   let selectedEpisodeId = null;
@@ -26,7 +28,7 @@
   });
 
   async function loadEpisodeData(id) {
-    const response = await fetch(`http://localhost:5001/episodes/${id}`);
+    const response = await fetch(`${VITE_FLASK_API_URL}/episodes/${id}`);
     const data = await response.json();
 
     selectedEpisodeId = id;
@@ -58,7 +60,7 @@
   function updateEpisodeStatus(episodeId, status) {
     const formData = new FormData();
     formData.append('status', status);
-    fetch(`http://localhost:5001/episodes/${episodeId}/status`, {
+    fetch(`${VITE_FLASK_API_URL}/episodes/${episodeId}/status`, {
       method: 'PATCH',
       body: formData
     }).then(() => {
