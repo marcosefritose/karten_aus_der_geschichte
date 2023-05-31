@@ -7,7 +7,7 @@ from flask_cors import CORS
 from PIL import Image
 from werkzeug.utils import secure_filename
 
-from models import db, Episodes, Locations, Coordinates, Topics
+from models import db, Episodes, Locations, Coordinates, Topics, EpisodesTopic, EpisodesLocation
 
 DB_NAME = os.getenv('POSTGRES_DB')
 DB_USER = os.getenv('POSTGRES_USER')
@@ -133,6 +133,17 @@ class LocationResource(Resource):
         result = Locations.query.get(location_id)
         return result
 
+    def delete(self, location_id):
+        location = Locations.query.get(location_id)
+        associations = EpisodesLocation.query.filter_by(
+            location_id=location_id).all()
+
+        db.session.delete(location)
+        for association in associations:
+            db.session.delete(association)
+        db.session.commit()
+        return '', 204
+
 
 class TopicListResource(Resource):
     @ marshal_with(topic_fields)
@@ -146,6 +157,16 @@ class TopicResource(Resource):
     def get(self, topic_id):
         result = Topics.query.get(topic_id)
         return result
+
+    def delete(self, topic_id):
+        topic = Topics.query.get(topic_id)
+        associations = EpisodesTopic.query.filter_by(topic_id=topic_id).all()
+
+        db.session.delete(topic)
+        for association in associations:
+            db.session.delete(association)
+        db.session.commit()
+        return '', 204
 
 
 @ app.route('/get-episode-image-from-link', methods=['POST'])
@@ -202,6 +223,53 @@ def update_location_status(location_id):
 def update_topic_status(topic_id):
     topic = Topics.query.filter(Topics.id == topic_id).first()
     topic.status = request.form.get('status')
+    db.session.commit()
+    return 'OK'
+
+
+@ app.route('/topics/<old_topic_id>/merge/<new_topic_id>', methods=['PATCH'])
+def merge_topic(old_topic_id, new_topic_id):
+    old_topic = Topics.query.filter(Topics.id == old_topic_id).first()
+
+    old_topic_associations = EpisodesTopic.query.filter(
+        EpisodesTopic.topic_id == old_topic_id).all()
+    for association in old_topic_associations:
+        association.topic_id = new_topic_id
+
+    db.session.commit()
+    db.session.delete(old_topic)
+    db.session.commit()
+    return 'OK'
+
+
+@ app.route('/locations/<old_location_id>/merge/<new_location_id>', methods=['PATCH'])
+def merge_location(old_location_id, new_location_id):
+    old_location = Locations.query.filter(
+        Locations.id == old_location_id).first()
+
+    old_location_associations = EpisodesLocation.query.filter(
+        EpisodesLocation.location_id == old_location_id).all()
+    new_location_associations = EpisodesLocation.query.filter(
+        EpisodesLocation.location_id == new_location_id).all()
+    old_location_coordinates = Coordinates.query.filter(
+        Coordinates.location_id == old_location_id).all()
+    new_topic_coordinates = Coordinates.query.filter(
+        Coordinates.location_id == new_location_id).all()
+
+    for association in old_location_associations:
+        if not any(a.episode_id == association.episode_id for a in new_location_associations):
+            association.location_id = new_location_id
+        else:
+            db.session.delete(association)
+    for coordinate in old_location_coordinates:
+        # change location_id if coodinate values are not already present in new location coordinates
+        if not any(c.longitude == coordinate.longitude and c.latitude == coordinate.latitude for c in new_topic_coordinates):
+            coordinate.location_id = new_location_id
+        else:
+            db.session.delete(coordinate)
+
+    db.session.commit()
+    db.session.delete(old_location)
     db.session.commit()
     return 'OK'
 

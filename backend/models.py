@@ -78,7 +78,7 @@ class Topics(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(164))
-    name = db.Column(db.String(164))
+    name = db.Column(db.String(164), unique=True)
     origin = db.Column(db.String(164))
     created_at = db.Column(db.DateTime())
 
@@ -95,6 +95,8 @@ class EpisodesTopic(db.Model):
     episode_id = db.Column(db.Integer, db.ForeignKey('episodes_target.id'))
     topic_id = db.Column(db.Integer, db.ForeignKey('topics.id'))
 
-    episode = db.relationship(Episodes, backref='episodes_topics')
-    topic = db.relationship(Topics, backref='episodes_topics')
+    episode = db.relationship(
+        Episodes, backref='episodes_topics')
+    topic = db.relationship(
+        Topics, backref='episodes_topics', cascade="")
     topic_name = association_proxy('topic', 'name')
