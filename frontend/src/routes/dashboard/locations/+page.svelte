@@ -60,6 +60,16 @@
       filteredLocations[locationIndex].status = status;
     });
   }
+
+  function deleteLocation(locationId) {
+    fetch(`${VITE_FLASK_API_URL}/locations/${locationId}`, {
+      method: 'DELETE'
+    }).then(() => {
+      const locationIndex = filteredLocations.findIndex((location) => location.id === locationId);
+      filteredLocations.splice(locationIndex, 1);
+      filteredLocations = [...filteredLocations];
+    });
+  }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
@@ -102,6 +112,13 @@
                   alt="Edit Location Icon"
                 />
               </button>
+              <button on:click={() => deleteLocation(location.id)}>
+                <img
+                  class="mx-2 h-6 w-6 rounded-t-md"
+                  src="../icons/delete.svg"
+                  alt="Delete Location Icon"
+                />
+              </button>
               {#if location.status == 'active'}
                 <button on:click={() => updateLocationStatus(location.id, 'hidden')}>
                   <img
@@ -127,8 +144,8 @@
                   />
                 </button>
               {/if}
-            </td>
-          </tr>
+            </td></tr
+          >
           {#if selectedLocationId == location.id}
             <DashboardLocationListEntry locationData={selectedLocationData} />
           {/if}

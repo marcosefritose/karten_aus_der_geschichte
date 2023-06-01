@@ -1,8 +1,6 @@
 <script>
   import { setTopics, topics } from '../../store';
   import DashboardTopicListEntry from '../../../components/DashboardTopicListEntry.svelte';
-  import AreaPopup from '../../../components/AreaPopup.svelte';
-  import { filter } from 'd3';
 
   const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
 
