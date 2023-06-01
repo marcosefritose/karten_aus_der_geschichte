@@ -10,6 +10,8 @@
 
   let searchString = '';
   let filteredTopics = $topics;
+  let mergeNewTopicId = null;
+  let mergeDialog = null;
 
   $: filteredTopics = $topics.filter((topic) => {
     return topic.name.toLowerCase().includes(searchString.toLowerCase());
@@ -70,9 +72,62 @@
       filteredTopics = [...filteredTopics];
     });
   }
+
+  function showMergeForm(topicId) {
+    selectedTopicId = topicId;
+    selectedTopicData = filteredTopics.find((topic) => topic.id === topicId);
+
+    mergeDialog.showModal();
+  }
+
+  function mergeTopic(topicId, newTopicId) {
+    if (!newTopicId) {
+      alert('Bitte wähle ein Thema aus');
+      return;
+    }
+
+    fetch(`${VITE_FLASK_API_URL}/topics/${topicId}/merge/${newTopicId}`, {
+      method: 'PATCH'
+    }).then(() => {
+      const topicIndex = filteredTopics.findIndex((topic) => topic.id === topicId);
+      filteredTopics.splice(topicIndex, 1);
+      filteredTopics = [...filteredTopics];
+    });
+  }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
+  <dialog bind:this={mergeDialog}>
+    {#if selectedTopicData}
+      <form class="flex flex-col px-2" on:submit={mergeTopic(selectedTopicId, mergeNewTopicId)}>
+        <h3 class="py-4">Merge {selectedTopicData.name}</h3>
+        <label for="newTopic">Neues Thema:</label>
+        <select
+          name="newTopic"
+          id="newTopic"
+          bind:value={mergeNewTopicId}
+          class="border border-gray-200 p-2"
+        >
+          {#each $topics as topic}
+            {#if topic.id !== selectedTopicId}
+              <option value={topic.id}>{topic.name}</option>
+            {/if}
+          {/each}
+        </select>
+        <div class="flex justify-end">
+          <button
+            class=" text-gag-primary mt-4 rounded-lg px-4 py-2"
+            on:click={() => mergeDialog.close()}
+            type="button">Abbrechen</button
+          >
+          <button class="bg-gag-primary mt-4 rounded-lg px-4 py-2 text-white" type="submit"
+            >Merge</button
+          >
+        </div>
+      </form>
+    {/if}
+  </dialog>
+
   <div class="flex">
     <h1 class="text-3xl">{filteredTopics.length} Themen</h1>
     <input
@@ -117,6 +172,13 @@
                   class="mx-2 h-6 w-6 rounded-t-md"
                   src="../icons/delete.svg"
                   alt="Delete Topic Icon"
+                />
+              </button>
+              <button on:click={() => showMergeForm(topic.id)}>
+                <img
+                  class="mx-2 h-6 w-6 rounded-t-md"
+                  src="../icons/merge.svg"
+                  alt="Merge Topic Icon"
                 />
               </button>
               {#if topic.status == 'active'}
