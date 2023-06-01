@@ -247,8 +247,13 @@ def merge_topic(old_topic_id, new_topic_id):
 
     old_topic_associations = EpisodesTopic.query.filter(
         EpisodesTopic.topic_id == old_topic_id).all()
+    new_topic_associations = EpisodesTopic.query.filter(
+        EpisodesTopic.topic_id == new_topic_id).all()
     for association in old_topic_associations:
-        association.topic_id = new_topic_id
+        if not any(a.episode_id == association.episode_id for a in new_topic_associations):
+            association.topic_id = new_topic_id
+        else:
+            db.session.delete(association)
 
     db.session.commit()
     db.session.delete(old_topic)
