@@ -1,6 +1,8 @@
 <script>
   import { setTopics, topics } from '../../store';
   import DashboardTopicListEntry from '../../../components/DashboardTopicListEntry.svelte';
+  import AreaPopup from '../../../components/AreaPopup.svelte';
+  import { filter } from 'd3';
 
   const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
 
@@ -60,6 +62,16 @@
       filteredTopics[topicIndex].status = status;
     });
   }
+
+  function deleteTopic(topicId) {
+    fetch(`${VITE_FLASK_API_URL}/topics/${topicId}`, {
+      method: 'DELETE'
+    }).then(() => {
+      const topicIndex = filteredTopics.findIndex((topic) => topic.id === topicId);
+      filteredTopics.splice(topicIndex, 1);
+      filteredTopics = [...filteredTopics];
+    });
+  }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
@@ -102,6 +114,13 @@
                   alt="Edit Topic Icon"
                 />
               </button>
+              <button on:click={() => deleteTopic(topic.id)}>
+                <img
+                  class="mx-2 h-6 w-6 rounded-t-md"
+                  src="../icons/delete.svg"
+                  alt="Delete Topic Icon"
+                />
+              </button>
               {#if topic.status == 'active'}
                 <button on:click={() => updateTopicStatus(topic.id, 'hidden')}>
                   <img
@@ -115,7 +134,7 @@
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/show.svg"
-                    alt="Hide Topic Icon"
+                    alt="Show Topic Icon"
                   />
                 </button>
               {:else if topic.status == 'pending'}
@@ -123,7 +142,7 @@
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
                     src="../icons/activate.svg"
-                    alt="Hide Topic Icon"
+                    alt="Activate Topic Icon"
                   />
                 </button>
               {/if}

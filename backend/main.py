@@ -133,6 +133,13 @@ class LocationResource(Resource):
         result = Locations.query.get(location_id)
         return result
 
+    def post(self, location_id):
+        location_name = request.form.get('name')
+        location = Locations(name=location_name, status='active')
+        db.session.add(location)
+        db.session.commit()
+        return location.id
+
     def delete(self, location_id):
         location = Locations.query.get(location_id)
         associations = EpisodesLocation.query.filter_by(
@@ -157,6 +164,13 @@ class TopicResource(Resource):
     def get(self, topic_id):
         result = Topics.query.get(topic_id)
         return result
+
+    def post(self, topic_id):
+        topic_name = request.form.get('name')
+        topic = Topics(name=topic_name, status='active')
+        db.session.add(topic)
+        db.session.commit()
+        return topic.id
 
     def delete(self, topic_id):
         topic = Topics.query.get(topic_id)
