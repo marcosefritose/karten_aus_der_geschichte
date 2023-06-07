@@ -27,7 +27,7 @@ with DAG(
     schedule_interval='@daily',
     catchup=False,
     default_args=default_args,
-    params={'premium': False}
+    params={'premium': True}
 ) as dag:
     @task.branch(task_id='branch_task')
     def branch_func(**kwargs):
