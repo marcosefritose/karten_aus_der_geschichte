@@ -196,10 +196,7 @@
   }
 
   onMount(() => {
-    // ToDo move geojson to flask server/static files
-    json(
-      'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson'
-    ).then((data) => {
+    json('worldmap.geojson').then((data) => {
       mapFeatureData = data.features;
     });
 
