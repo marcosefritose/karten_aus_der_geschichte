@@ -4,10 +4,6 @@
 
   const apiUrl = import.meta.env.VITE_FLASK_API_URL;
 
-  // ToDo: Static url until images are served from flask server
-  let imgUrl =
-    'https://images.podigee-cdn.net/0x,sw_d9izO9QfY97alR2f13b7IrOVeXM5gFZOjetk-5sTg=/https://cdn.podigee.com/uploads/u32412/b610d282-8f99-4604-a16f-28ada94ab76a.jpg';
-
   onMount(() => {
     selectedEpisode.subscribe((episode) => {
       if (Object.keys(episode).length === 0) return null;
@@ -27,7 +23,7 @@
     <div id={episode.id} class="flex gap-2 border py-1">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <img
-        src={episode.thumbnail !== 'NaN' ? apiUrl + episode.thumbnail : imgUrl}
+        src={episode.thumbnail !== 'NaN' ? apiUrl + episode.thumbnail : 'default_thumbnail.jpeg'}
         class="h-12 w-12 rounded-sm border border-gray-400 hover:cursor-pointer md:h-16 md:w-16"
         alt="Thumbnail Picture Episode {episode.id}"
         on:click={setSelectedEpisodeById(episode.id)}
