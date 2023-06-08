@@ -25,38 +25,50 @@
         ? `transform: translateY(${contentBodyHeight}px)`
         : `transform: translateX(${contentBodyWidth}px)`
       : ''}
-    class="flex h-full w-full flex-col opacity-80 transition md:h-5/6 md:flex-row"
+    class="flex h-full w-full flex-col opacity-90 transition md:h-5/6 md:flex-row"
   >
     <div
-      class="pointer-events-auto flex h-8 w-fit flex-row justify-start gap-3 bg-zinc-400 md:h-fit md:w-8 md:flex-col"
+      class="pointer-events-auto flex h-8 w-fit flex-row justify-start bg-zinc-400 md:h-fit md:w-8 md:flex-col"
     >
-      <div>
+      <div
+        class="cursor-pointer px-2 md:px-0 md:py-2  {selectedContent == 'list'
+          ? 'bg-zinc-200'
+          : 'bg-zinc-400'}"
+      >
         <img
-          class="h-8 w-8 cursor-pointer {selectedContent == 'list' ? 'bg-zinc-200' : 'bg-zinc-400'}"
+          class="h-8 w-8"
           src="icons/list.svg"
           alt="Episode List Icon"
           on:click={() => (selectedContent = 'list')}
           on:keydown={() => (selectedContent = 'list')}
         />
       </div>
-      <img
-        class="h-8 w-8 cursor-pointer p-1 {selectedContent == 'timeline'
+      <div
+        class="cursor-pointer px-2 md:px-0 md:py-2 {selectedContent == 'timeline'
           ? 'bg-zinc-200'
           : 'bg-zinc-400'}"
-        src="icons/time-past.svg"
-        alt="Episode List Icon"
-        on:click={() => (selectedContent = 'timeline')}
-        on:keydown={() => (selectedContent = 'timeline')}
-      />
-      <img
-        class="h-8 w-8 cursor-pointer p-1 {selectedContent == 'locations'
+      >
+        <img
+          class="h-8 w-8 p-1"
+          src="icons/time-past.svg"
+          alt="Episode List Icon"
+          on:click={() => (selectedContent = 'timeline')}
+          on:keydown={() => (selectedContent = 'timeline')}
+        />
+      </div>
+      <div
+        class="cursor-pointer px-2 md:px-0 md:py-2 {selectedContent == 'locations'
           ? 'bg-zinc-200'
           : 'bg-zinc-400'}"
-        src="icons/pinpoint.svg"
-        alt="Location Pinpoint Icon"
-        on:click={() => (selectedContent = 'locations')}
-        on:keydown={() => (selectedContent = 'locations')}
-      />
+      >
+        <img
+          class="h-8 w-8 p-1"
+          src="icons/pinpoint.svg"
+          alt="Location Pinpoint Icon"
+          on:click={() => (selectedContent = 'locations')}
+          on:keydown={() => (selectedContent = 'locations')}
+        />
+      </div>
       <label for="popup-selector" class="cursor-pointer border-x md:border-x-0 md:border-y">
         <input
           type="checkbox"
@@ -69,21 +81,18 @@
           <span class="text-center text-xs font-bold">{$selectedTime.year}</span>
         </div>
       </label>
-
-      <div
-        class="h-8 w-8 cursor-pointer bg-gray-400"
-        style={windowWidth > 768 ? `transform: rotate(-90deg);` : ''}
-      >
-        <img
-          class="h-8 w-8"
-          style={hideContent ? 'transform: rotate(180deg)' : ''}
-          src="icons/double-arrow-down.svg"
-          alt="Double Arrow Icon"
-          on:click={() => {
-            hideContent = !hideContent;
-            console.log(contentBodyWidth);
-          }}
-        />
+      <div class="px-1 md:px-0 md:py-1">
+        <div class="transform cursor-pointer bg-gray-400 md:-rotate-90">
+          <img
+            class="h-8 w-8 {hideContent ? 'rotate-180 transform' : ''}"
+            src="icons/double-arrow-down.svg"
+            alt="Double Arrow Icon"
+            on:click={() => {
+              hideContent = !hideContent;
+              console.log(contentBodyWidth);
+            }}
+          />
+        </div>
       </div>
     </div>
 
@@ -91,7 +100,7 @@
       bind:offsetHeight={contentBodyHeight}
       bind:offsetWidth={contentBodyWidth}
       id="content-body"
-      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary pointer-events-auto w-full overflow-y-scroll bg-zinc-200 p-2"
+      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary pointer-events-auto h-full overflow-y-scroll bg-zinc-200 p-2 md:w-full"
     >
       {#if selectedContent == 'list'}
         <EpisodeList />

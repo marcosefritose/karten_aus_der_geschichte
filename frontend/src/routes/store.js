@@ -9,8 +9,8 @@ export const selectedTime = writable({ year: 100, file: 'historic-maps/world_100
 export const showHistoricMap = writable(false)
 
 export const maps = [
-    { year: -123000, file: 'historic-maps/world_bc123000.geojson' },
-    { year: -10000, file: 'historic-maps/world_bc10000.geojson' },
+    // { year: -123000, file: 'historic-maps/world_bc123000.geojson' },
+    // { year: -10000, file: 'historic-maps/world_bc10000.geojson' },
     { year: -8000, file: 'historic-maps/world_bc8000.geojson' },
     { year: -5000, file: 'historic-maps/world_bc5000.geojson' },
     { year: -4000, file: 'historic-maps/world_bc4000.geojson' },
