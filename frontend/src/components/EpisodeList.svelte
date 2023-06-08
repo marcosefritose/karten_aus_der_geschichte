@@ -47,12 +47,13 @@
     </div>
     {#if $selectedEpisode}
       <div class="{$selectedEpisode.id === episode.id ? '' : 'hidden'} px-3">
-        <!-- Location Badges -->
-        <div class="location-tabs flex flex-wrap gap-2 text-sm">
+        <!-- Time & Location Badges -->
+        <div class="location-tabs flex flex-wrap gap-2 py-1 text-sm">
           <!-- Time Badge -->
           <span class="rounded-lg border border-gray-600 bg-white py-1 px-2 text-gray-600">
             {episode.story_time_start + ' - ' + episode.story_time_end}
           </span>
+          <!-- Location Badges -->
           {#each episode.locations as loc}
             {#if loc.status == 'active'}
               <span class="border-gag-primary text-gag-primary rounded-lg border bg-white py-1 px-2"
@@ -60,6 +61,10 @@
               >
             {/if}
           {/each}
+        </div>
+
+        <!-- Topic Badges -->
+        <div class="topic-tabs flex flex-wrap gap-2 py-1 text-sm">
           {#each episode.topics_association as topic}
             {#if topic.status == 'active'}
               <span class="rounded-lg border border-slate-500 bg-white py-1 px-2 text-slate-500"
@@ -69,6 +74,12 @@
           {/each}
         </div>
 
+        <!-- Summary -->
+        <span class="block pt-1 text-xs font-semibold">Beschreibung</span>
+        <p class="text-small">
+          {episode.summary}
+        </p>
+
         <!-- Date -->
         <span class="block pt-1 text-xs font-semibold"
           >Veröffentlicht am {new Date(episode.published).toLocaleDateString('de-DE')}</span
@@ -77,11 +88,6 @@
         <span class="block py-1 text-sm font-semibold underline underline-offset-2"
           ><a href={episode.link} target="_blank" rel="noopener noreferrer">Zur Folge</a></span
         >
-
-        <!-- Summary -->
-        <p class="text-small">
-          {episode.summary}
-        </p>
       </div>
     {/if}
   {/each}
