@@ -26,6 +26,7 @@
         src={episode.thumbnail !== 'NaN' ? apiUrl + episode.thumbnail : 'default_thumbnail.jpeg'}
         class="h-12 w-12 rounded-sm border border-gray-400 hover:cursor-pointer md:h-16 md:w-16"
         alt="Thumbnail Picture Episode {episode.id}"
+        loading="lazy"
         on:click={setSelectedEpisodeById(episode.id)}
       />
       <div class="flex-row">
