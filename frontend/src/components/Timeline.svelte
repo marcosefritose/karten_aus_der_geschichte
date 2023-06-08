@@ -1,8 +1,10 @@
 <script>
+  import { onMount } from 'svelte';
   import {
     selectedTime,
     setSelectedTime,
     setShowHistoricMaps,
+    setSelectedEpisodeById,
     maps,
     episodes
   } from '../routes/store';
@@ -29,6 +31,19 @@
   });
 
   mapsWithDistance.reverse();
+
+  onMount(() => {
+    selectedTime.subscribe((time) => {
+      if (Object.keys(time).length === 0) return null;
+      let listEntry = document.getElementById(time.year);
+
+      setTimeout(() => {
+        listEntry.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }, 1);
+    });
+  });
 </script>
 
 <div class="flex h-full flex-col bg-gray-200">
@@ -53,30 +68,46 @@
       {#each mapsWithDistance as map}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li
+          id={map.year}
           class="mx-3 flex flex-col border-l-4 {$selectedTime.year == map.year
             ? 'border-gag-primary'
             : 'border-gray-300'}"
           style="padding-bottom: {Math.min(Math.floor(map.distance / 2), 70)}px;"
-          on:click={() => {
-            setSelectedTime(map);
-            setShowHistoricMaps(true);
-          }}
         >
           <div class="flex justify-between {$selectedTime.year == map.year ? 'font-bold' : ''}">
             <div class="flex">
               <span
-                class="{$selectedTime.year == map.year
+                class="cursor-pointer {$selectedTime.year == map.year
                   ? 'bg-gag-primary'
                   : 'bg-gray-300'} inline-block h-5 w-5 -translate-x-3 rounded-full"
+                on:click={() => {
+                  setSelectedTime(map);
+                  setShowHistoricMaps(true);
+                }}
               />
-              <span class="ml-3">{map.year}</span>
+              <span
+                class="ml-3 cursor-pointer"
+                on:click={() => {
+                  setSelectedTime(map);
+                  setShowHistoricMaps(true);
+                }}>{map.year}</span
+              >
             </div>
-            <span>{map.episodes.length} Episoden</span>
+            <span
+              class="cursor-pointer"
+              on:click={() => {
+                setSelectedTime(map);
+                setShowHistoricMaps(true);
+              }}>{map.episodes.length} Episoden</span
+            >
           </div>
           {#if $selectedTime.year == map.year}
             <div class="flex flex-col gap-2 py-2 pl-2">
               {#each map.episodes as episode}
-                <div class="flex items-start gap-1">
+                <div
+                  class="flex items-start gap-1"
+                  on:click={() => setSelectedEpisodeById(episode.id)}
+                >
                   <span
                     class="bg-gag-primary w-fit rounded-md px-2 py-1 text-xs font-bold text-white hover:cursor-pointer"
                     >{episode.key}</span

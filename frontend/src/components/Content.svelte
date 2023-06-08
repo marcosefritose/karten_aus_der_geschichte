@@ -2,7 +2,7 @@
   import EpisodeList from '../components/EpisodeList.svelte';
   import Locations from '../components/Locations.svelte';
   import Search from '../components/Search.svelte';
-  import { selectedTime, showHistoricMap } from '../routes/store';
+  import { selectedTime, showHistoricMap, selectedEpisode } from '../routes/store';
   import Timeline from '../components/Timeline.svelte';
 
   let popupSelectorChecked = false;
@@ -12,6 +12,11 @@
   let contentBodyHeight = 0;
   let contentBodyWidth = 0;
   let windowWidth;
+
+  $: selectedEpisode.subscribe((episode) => {
+    if (Object.keys(episode).length === 0) return null;
+    selectedContent = 'list';
+  });
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
