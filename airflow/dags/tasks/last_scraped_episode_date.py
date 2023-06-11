@@ -14,8 +14,8 @@ def last_scraped_episode_date(ti):
 
     last_date = str(result[0]) if result else None
 
-    # Set last_date to 3 months ago
-    last_date = datetime.now() - timedelta(days=90)
-    last_date = last_date.strftime("%Y-%m-%d")
+    # Set last_date to 3 months ago for dev purposes
+    # last_date = datetime.now() - timedelta(days=90)
+    # last_date = last_date.strftime("%Y-%m-%d")
 
     ti.xcom_push(key="last_scraped_date", value=last_date)
