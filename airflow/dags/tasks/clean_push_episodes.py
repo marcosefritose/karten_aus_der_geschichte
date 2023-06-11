@@ -37,6 +37,7 @@ def clean_push_episodes(ti):
         '{"href": "(.+?)"}', x)[0] if x != 'nan' else np.NaN)
 
     df['thumbnail'] = df.apply(create_thumbnail_link, axis=1)
+    df['status'] = 'preprocessed'
 
     clean_episode_list = list(df.itertuples(index=False, name=None))
     postgres_sql.insert_rows('episodes_target', clean_episode_list,

@@ -8,15 +8,15 @@ def extract_and_link_locations():
         postgres_conn_id='postgres_be', schema='kag')
 
     episode_df = postgres_sql.get_pandas_df(
-        "SELECT id, summary, title, subtitle FROM episodes_target WHERE status = 'preprocessed'")
+        "SELECT id, summary, title, subtitle FROM episodes_target WHERE status = 'preprocessed' AND is_spacy_integrated = false")
 
     episode_df['text'] = episode_df['title'] + ' ' + \
         episode_df['subtitle'] + ' ' + episode_df['summary']
     episode_df = episode_df[['id', 'text']]
 
     nlp = spacy.load("de_core_news_lg")
-
     locations = {}
+
     for entry in episode_df.itertuples():
         text_doc = nlp(entry.text)
 
@@ -51,3 +51,8 @@ def extract_and_link_locations():
         postgres_sql.insert_rows('episodes_locations', episodes_locations_tup,
                                  target_fields=['episode_id', 'location_id'],
                                  replace=True, replace_index=['episode_id', 'location_id'])
+
+    # Set status flag "is_spacy_integrated" of processed episodes to true
+    for ep_id in episode_df['id']:
+        postgres_sql.run(
+            f"UPDATE episodes_target SET is_spacy_integrated = true WHERE id = {ep_id}")

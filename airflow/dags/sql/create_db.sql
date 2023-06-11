@@ -1,6 +1,5 @@
 
 -- Create database
-
 CREATE TABLE IF NOT EXISTS episodes_raw (
     id SERIAL PRIMARY KEY,
     key VARCHAR NOT NULL,
@@ -26,6 +25,8 @@ CREATE TABLE IF NOT EXISTS episodes_target (
     story_time_start INT,
     story_time_end INT,
     story_time_description VARCHAR,
+    is_gpt_integrated BOOLEAN DEFAULT FALSE,
+    is_spacy_integrated BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE IF NOT EXISTS locations (
@@ -35,6 +36,8 @@ CREATE TABLE IF NOT EXISTS locations (
     continent VARCHAR,
     country VARCHAR,
     origin VARCHAR,
+    is_coordinate_integrated BOOLEAN DEFAULT FALSE,
+    is_country_continent_integrated BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE IF NOT EXISTS coordinates (

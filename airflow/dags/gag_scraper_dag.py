@@ -5,6 +5,7 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.decorators import task
 from airflow.utils.trigger_rule import TriggerRule
+from airflow.models.param import Param
 
 
 from tasks.last_scraped_episode_date import last_scraped_episode_date
@@ -12,6 +13,7 @@ from tasks.scrape_feed import scrape_feed
 from tasks.clean_push_episodes import clean_push_episodes
 from tasks.extract_and_link_locations import extract_and_link_locations
 from tasks.get_coordinates_for_locations import get_coordinates_for_locations
+from tasks.get_country_continent_for_locations import get_country_continent_for_locations
 from tasks.gpt_extract import gpt_extract
 
 default_args = {
@@ -22,12 +24,15 @@ default_args = {
 
 
 with DAG(
-    dag_id='kag_scraper_dag_v1',
+    dag_id='kag_scraper_dag_v2',
     start_date=datetime(2023, 5, 16),
     schedule_interval='@daily',
     catchup=False,
     default_args=default_args,
-    params={'premium': True}
+    params={
+        'premium': True,
+        'default_finish_status': Param('active', type='string')
+    }
 ) as dag:
     @task.branch(task_id='branch_task')
     def branch_func(**kwargs):
@@ -84,11 +89,21 @@ with DAG(
         trigger_rule=TriggerRule.NONE_FAILED
     )
 
-    # 7. Mark processed episodes as active
+    # 7. Get continent and country for location string
+    get_country_continent = PythonOperator(
+        task_id="get_country_continent",
+        python_callable=get_country_continent_for_locations,
+        trigger_rule=TriggerRule.NONE_FAILED
+    )
+
+    # 8. Mark processed episodes as active
     mark_episodes_as_pending = PostgresOperator(
         task_id='mark_episodes_as_pending',
         postgres_conn_id='postgres_be',
-        sql="sql/mark_episodes_as_pending.sql"
+        sql="sql/mark_episodes_as_pending.sql",
+        params={
+            'status': dag.params['default_finish_status']
+        }
     )
 
     create_tables >> get_last_scraped_episode_date >> scrape_episodes >> clean_episodes >> branching
@@ -96,4 +111,4 @@ with DAG(
     branching >> gpt_api_extract >> extract_locations >> get_coordinates
     branching >> extract_locations >> get_coordinates
 
-    get_coordinates >> mark_episodes_as_pending
+    get_coordinates >> get_country_continent >> mark_episodes_as_pending

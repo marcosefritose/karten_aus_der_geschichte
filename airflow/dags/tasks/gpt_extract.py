@@ -113,7 +113,7 @@ def gpt_extract():
     episode_df = postgres_sql.get_pandas_df("""
         SELECT id, key, summary, title, subtitle
         FROM episodes_target
-        WHERE status = 'preprocessed'
+        WHERE status = 'preprocessed' AND is_gpt_integrated = false
         """)
 
     episode_df['text'] = episode_df['title'] + '. ' + \
@@ -132,12 +132,6 @@ def gpt_extract():
         time = validated.time
         topics = validated.categories
         locations = validated.locations
-
-        postgres_sql.run("""
-            UPDATE episodes_target
-            SET story_time_start = %(start_year)s, story_time_end = %(end_year)s, story_time_description = %(description)s
-            WHERE id = %(id)s
-            """, parameters={"id": entry.id, "start_year": time.start_year, "end_year": time.end_year, "description": time.description})
 
         for topic in topics:
             postgres_sql.run("""
@@ -169,3 +163,9 @@ def gpt_extract():
                         VALUES ((SELECT id FROM locations WHERE name = %(name)s), %(latitude)s, %(longitude)s, %(status)s, %(origin)s)
                         ON CONFLICT (location_id, latitude, longitude) DO NOTHING
                         """, parameters={"name": location.name, "latitude": location.coordinates.lat, "longitude": location.coordinates.long, "status": "active", "origin": "gpt-3.5-turbo"})
+
+        postgres_sql.run("""
+            UPDATE episodes_target
+            SET story_time_start = %(start_year)s, story_time_end = %(end_year)s, story_time_description = %(description)s, is_gpt_integrated = true
+            WHERE id = %(id)s
+            """, parameters={"id": entry.id, "start_year": time.start_year, "end_year": time.end_year, "description": time.description})
