@@ -12,9 +12,14 @@
   let filteredTopics = $topics;
   let mergeNewTopicId = null;
   let mergeDialog = null;
+  let mergeFilterString = '';
 
   $: filteredTopics = $topics.filter((topic) => {
     return topic.name.toLowerCase().includes(searchString.toLowerCase());
+  });
+
+  $: mergeFilteredTopics = $topics.filter((topic) => {
+    return topic.name.toLowerCase().includes(mergeFilterString.toLowerCase());
   });
 
   function getStatusForSlug(statusSlug) {
@@ -97,23 +102,34 @@
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
-  <dialog bind:this={mergeDialog}>
+  <dialog bind:this={mergeDialog} class="w-full md:w-1/2 xl:w-1/3">
     {#if selectedTopicData}
       <form class="flex flex-col px-2" on:submit={mergeTopic(selectedTopicId, mergeNewTopicId)}>
-        <h3 class="py-4">Merge {selectedTopicData.name}</h3>
-        <label for="newTopic">Neues Thema:</label>
-        <select
-          name="newTopic"
-          id="newTopic"
-          bind:value={mergeNewTopicId}
-          class="border border-gray-200 p-2"
-        >
-          {#each $topics as topic}
+        <h3 class="py-4">Zusammenführen von <b>{selectedTopicData.name}</b> mit:</h3>
+        <input
+          type="text"
+          name="merge-filter"
+          id="merge-filter"
+          class="border-gray my-2 border p-2"
+          placeholder="Filter"
+          bind:value={mergeFilterString}
+        />
+        <div class="h-48 overflow-y-scroll py-2">
+          {#each mergeFilteredTopics as topic}
             {#if topic.id !== selectedTopicId}
-              <option value={topic.id}>{topic.name}</option>
+              <div class="mb-1 flex">
+                <input
+                  type="radio"
+                  name="newTopicId"
+                  id={topic.id}
+                  value={topic.id}
+                  bind:group={mergeNewTopicId}
+                />
+                <label for={topic.id} class="pl-2">{topic.name}</label>
+              </div>
             {/if}
           {/each}
-        </select>
+        </div>
         <div class="flex justify-end">
           <button
             class=" text-gag-primary mt-4 rounded-lg px-4 py-2"
