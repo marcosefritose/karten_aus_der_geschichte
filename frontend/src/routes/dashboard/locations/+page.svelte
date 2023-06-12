@@ -9,10 +9,17 @@
   setLocations(data.locations);
 
   let searchString = '';
-  let filteredLocations = $locations;
+  let filteredLocations = [...$locations];
+  let mergeNewLocationId = null;
+  let mergeDialog = null;
+  let mergeFilterString = '';
 
   $: filteredLocations = $locations.filter((location) => {
     return location.name.toLowerCase().includes(searchString.toLowerCase());
+  });
+
+  $: mergeFilteredLocations = $locations.filter((location) => {
+    return location.name.toLowerCase().includes(mergeFilterString.toLowerCase());
   });
 
   function getStatusForSlug(statusSlug) {
@@ -70,9 +77,75 @@
       filteredLocations = [...filteredLocations];
     });
   }
+
+  function showMergeForm(locationId) {
+    selectedLocationId = locationId;
+    selectedLocationData = filteredLocations.find((location) => location.id === locationId);
+
+    mergeDialog.showModal();
+  }
+
+  function mergeLocation(locationId, newLocationId) {
+    if (!newLocationId) {
+      alert('Bitte wähle ein Thema aus');
+      return;
+    }
+
+    fetch(`${VITE_FLASK_API_URL}/locations/${locationId}/merge/${newLocationId}`, {
+      method: 'PATCH'
+    }).then(() => {
+      const locationIndex = filteredLocations.findIndex((location) => location.id === locationId);
+      filteredLocations.splice(locationIndex, 1);
+      filteredLocations = [...filteredLocations];
+    });
+  }
 </script>
 
 <div class="bg-gag-white w-full overflow-y-scroll p-10">
+  <dialog bind:this={mergeDialog} class="w-full md:w-1/2 xl:w-1/3">
+    {#if selectedLocationData}
+      <form
+        class="flex flex-col px-2"
+        on:submit={mergeLocation(selectedLocationId, mergeNewLocationId)}
+      >
+        <h3 class="py-4">Zusammenführen von <b>{selectedLocationData.name}</b> mit:</h3>
+        <input
+          type="text"
+          name="merge-filter"
+          id="merge-filter"
+          class="border-gray my-2 border p-2"
+          placeholder="Filter"
+          bind:value={mergeFilterString}
+        />
+        <div class="h-48 overflow-y-scroll py-2">
+          {#each mergeFilteredLocations as location}
+            {#if location.id !== selectedLocationId}
+              <div class="mb-1 flex">
+                <input
+                  type="radio"
+                  name="newTopicId"
+                  id={location.id}
+                  value={location.id}
+                  bind:group={mergeNewLocationId}
+                />
+                <label for={location.id} class="pl-2">{location.name}</label>
+              </div>
+            {/if}
+          {/each}
+        </div>
+        <div class="flex justify-end">
+          <button
+            class=" text-gag-primary mt-4 rounded-lg px-4 py-2"
+            on:click={() => mergeDialog.close()}
+            type="button">Abbrechen</button
+          >
+          <button class="bg-gag-primary mt-4 rounded-lg px-4 py-2 text-white" type="submit"
+            >Merge</button
+          >
+        </div>
+      </form>
+    {/if}
+  </dialog>
   <div class="flex">
     <h1 class="text-3xl">{filteredLocations.length} Orte</h1>
     <input
@@ -117,6 +190,13 @@
                   class="mx-2 h-6 w-6 rounded-t-md"
                   src="../icons/delete.svg"
                   alt="Delete Location Icon"
+                />
+              </button>
+              <button on:click={() => showMergeForm(location.id)}>
+                <img
+                  class="mx-2 h-6 w-6 rounded-t-md"
+                  src="../icons/merge.svg"
+                  alt="Merge Location Icon"
                 />
               </button>
               {#if location.status == 'active'}
