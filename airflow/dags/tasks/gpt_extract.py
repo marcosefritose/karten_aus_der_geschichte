@@ -58,8 +58,10 @@ class Location(BaseModel):
 class Time(BaseModel):
     description: str = Field(...,
                              example="Die Geschichte spielt im 19. Jahrhundert.")
-    start_year: Optional[float] = Field(..., example=1800)
-    end_year: Optional[float] = Field(..., example=1900)
+    start_year: Optional[float] = Field(..., example=1800,
+                                        description="Das Jahr, in dem die Geschichte beginnt.")
+    end_year: Optional[float] = Field(..., example=1900,
+                                      description="Das Jahr, in dem die Geschichte endet.")
 
 
 class Category(BaseModel):
@@ -157,7 +159,14 @@ def gpt_extract():
                 ON CONFLICT (episode_id, location_id) DO UPDATE SET context = %(context)s
                 """, parameters={"episode_id": entry.id, "name": location.name, "context": location.context, "origin": "gpt-3.5-turbo"})
             if location.coordinates is not None:
-                if location.coordinates.lat is not None and location.coordinates.long is not None:
+                # Check if coordinate for location already exists
+                coordinate_exists = postgres_sql.get_pandas_df("""
+                    SELECT * FROM coordinates
+                    WHERE location_id = (SELECT id FROM locations WHERE name = %(name)s)
+                    AND origin = %(origin)s
+                    """, parameters={"name": location.name, "origin": "gpt-3.5-turbo"}).shape[0] > 0
+
+                if not coordinate_exists and location.coordinates.lat is not None and location.coordinates.long is not None:
                     postgres_sql.run("""
                         INSERT INTO coordinates (location_id, latitude, longitude, status, origin)
                         VALUES ((SELECT id FROM locations WHERE name = %(name)s), %(latitude)s, %(longitude)s, %(status)s, %(origin)s)

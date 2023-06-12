@@ -17,13 +17,17 @@ def get_coordinates_for_locations():
         AND is_coordinate_integrated = false
     """)
 
-    locations_ids = locations_df['id'].tolist()
     locations_df['has_coordinate'] = locations_df['coordinate_id'].notnull()
+    locations_df = locations_df.drop_duplicates(subset=['name'])
+    locations_ids = locations_df['id'].tolist()
 
     geolocator = Nominatim(user_agent="karten_aus_der_geschichte")
-    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+    geocode = RateLimiter(geolocator.geocode,
+                          min_delay_seconds=1.1, max_retries=5)
 
-    locations_df['coordinates'] = locations_df['name'].apply(geocode)
+    print("Getting coordinates for locations", flush=True)
+    locations_df['coordinates'] = locations_df['name'].apply(
+        geocode)
 
     coordinates_df = locations_df[locations_df['coordinates'].notnull()][[
         'id', 'coordinates', 'has_coordinate']]
@@ -36,6 +40,7 @@ def get_coordinates_for_locations():
         lambda loc: loc.latitude if loc else None)
     coordinates_df['origin'] = 'Nominatim'
 
+    print("Setting status for coordinates", flush=True)
     # Todo: Get default service used for geocoding from config
     selected_integration = 'GPT'
     # Set all coordinates to active if Nominatim is the configure service
@@ -50,9 +55,13 @@ def get_coordinates_for_locations():
                                 'longitude', 'latitude', 'origin']]
     coordinates_values = list(target_df.itertuples(index=False, name=None))
 
+    print(
+        f'Inserting {len(coordinates_values)} coordinates into database', flush=True)
     postgres_sql.insert_rows('coordinates', coordinates_values,
-                             target_fields=list(target_df.columns))
+                             target_fields=list(target_df.columns),
+                             replace=False, replace_index=['location_id', 'longitude', 'latitude'])
 
+    print(f'Updating {len(locations_ids)} locations in database', flush=True)
     # Update status flag "is_coordinate_integrated" for processed locations
     postgres_sql.run(f"""
         UPDATE locations
