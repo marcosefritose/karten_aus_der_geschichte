@@ -35,7 +35,8 @@ def get_country_continent_for_locations():
     continent_mapping_file_path = '/opt/airflow/dags/data/continents.csv'
 
     geolocator = Nominatim(user_agent="kag")
-    reverse_geocode = RateLimiter(geolocator.reverse, min_delay_seconds=1)
+    reverse_geocode = RateLimiter(
+        geolocator.reverse, min_delay_seconds=1.1, max_retries=5)
 
     postgres_sql = PostgresHook(
         postgres_conn_id='postgres_be', schema='kag')
