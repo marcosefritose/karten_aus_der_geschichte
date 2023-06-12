@@ -13,7 +13,7 @@
         listEntry.scrollIntoView({
           behavior: 'smooth'
         });
-      }, 1);
+      }, 10);
     });
   });
 </script>
