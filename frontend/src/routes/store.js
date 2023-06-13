@@ -74,6 +74,11 @@ export function setTopics(topicsData) {
 }
 
 export function setSelectedEpisodeById(episodeId) {
+    if (episodeId == null) {
+        selectedEpisode.update(state => { return {} })
+        return
+    }
+
     let episodesValue = get(episodes)
     let episode = episodesValue.filter((ep) => ep['id'] == episodeId)[0]
 
@@ -88,6 +93,7 @@ export function setSelectedEpisodeById(episodeId) {
 }
 
 export function setSelectedLocations(newSelectedLocations) {
+    console.log(newSelectedLocations);
     selectedLocations.update(state => [...newSelectedLocations]);
 }
 

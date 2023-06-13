@@ -6,7 +6,7 @@
   import Timeline from '../components/Timeline.svelte';
 
   let popupSelectorChecked = false;
-  let selectedContent = 'list';
+  let selectedContent = 'search';
   let hideContent = false;
   let contentWrapper = null;
   let contentBodyHeight = 0;
@@ -35,6 +35,19 @@
     <div
       class="pointer-events-auto flex h-8 w-fit flex-row justify-start bg-zinc-400 md:h-fit md:w-8 md:flex-col"
     >
+      <div
+        class="cursor-pointer px-2 md:px-0 md:py-2 {selectedContent == 'search'
+          ? 'bg-zinc-200'
+          : 'bg-zinc-400'}"
+      >
+        <img
+          class="h-8 w-8"
+          src="icons/search.svg"
+          alt="Search Icon"
+          on:click={() => (selectedContent = 'search')}
+          on:keydown={() => (selectedContent = 'search')}
+        />
+      </div>
       <div
         class="cursor-pointer px-2 md:px-0 md:py-2  {selectedContent == 'list'
           ? 'bg-zinc-200'
