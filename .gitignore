@@ -7,3 +7,6 @@ backend/data/*
 
 .env
 nginx-conf/*
+
+airflow/dags/tasks/test_task.py
+airflow/dags/test_dag.py

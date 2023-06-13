@@ -6,7 +6,7 @@
   import Timeline from '../components/Timeline.svelte';
 
   let popupSelectorChecked = false;
-  let selectedContent = 'search';
+  let selectedContent = 'list';
   let hideContent = false;
   let contentWrapper = null;
   let contentBodyHeight = 0;

@@ -55,12 +55,12 @@
     class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary h-full flex-1 overflow-y-scroll"
   >
     <ol class="pt-1">
-      <li class="mx-3 flex flex-col border-l-4 border-gray-300">
+      <li class="mx-3 flex flex-col border-l-2 border-gray-300">
         <div class="mb-3 flex justify-between border-b border-dashed border-gray-300 pb-1">
           <img
             src="icons/triangle.svg"
             alt="Timeline Top"
-            class="h-5 w-5 -translate-x-3 -translate-y-1"
+            class="h-4 w-4 -translate-x-[9px] -translate-y-1"
           />
           <span>Anzahl Episoden</span>
         </div>
@@ -69,24 +69,28 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li
           id={map.year}
-          class="mx-3 flex flex-col border-l-4 {$selectedTime.year == map.year
+          class="mx-3 flex flex-col border-l-2 {$selectedTime.year == map.year
             ? 'border-gag-primary'
             : 'border-gray-300'}"
           style="padding-bottom: {Math.min(Math.floor(map.distance / 2), 70)}px;"
         >
-          <div class="flex justify-between {$selectedTime.year == map.year ? 'font-bold' : ''}">
-            <div class="flex">
+          <div
+            class="flex items-center justify-between {$selectedTime.year == map.year
+              ? 'font-bold'
+              : 'font-medium'}"
+          >
+            <div class="flex items-center">
               <span
                 class="cursor-pointer {$selectedTime.year == map.year
                   ? 'bg-gag-primary'
-                  : 'bg-gray-300'} inline-block h-5 w-5 -translate-x-3 rounded-full"
+                  : 'bg-gray-300'} inline-block h-3 w-3 -translate-x-[7px] rounded-full"
                 on:click={() => {
                   setSelectedTime(map);
                   setShowHistoricMaps(true);
                 }}
               />
               <span
-                class="ml-3 cursor-pointer"
+                class="ml-3 cursor-pointer text-lg"
                 on:click={() => {
                   setSelectedTime(map);
                   setShowHistoricMaps(true);
