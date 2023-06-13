@@ -21,7 +21,7 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 <div
-  class="pointer-events-none absolute right-0 bottom-0 z-20 flex h-2/5 w-full items-center md:top-0 md:h-full md:w-1/3 xl:w-1/4 2xl:w-1/5"
+  class="pointer-events-none absolute right-0 bottom-0 flex h-2/5 w-full items-center md:top-0 md:h-full md:w-1/3 xl:w-1/4 2xl:w-1/5"
 >
   <div
     bind:this={contentWrapper}
