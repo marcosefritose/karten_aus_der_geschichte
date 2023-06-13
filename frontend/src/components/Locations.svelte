@@ -18,7 +18,7 @@
   });
 </script>
 
-<div class="flex h-full flex-col bg-gray-200">
+<div class="flex h-full flex-col bg-gray-200 pl-2">
   <div class="p-2">
     <p class="text-lg font-bold">Schauplätze</p>
     <p>Hervorgehobene Orte: <span class="font-bold">{selectedLocationsNames.join(', ')}</span></p>

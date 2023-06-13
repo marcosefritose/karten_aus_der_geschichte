@@ -20,7 +20,7 @@
 
 {#if $episodes}
   {#each $episodes as episode (episode.id)}
-    <div id={episode.id} class="flex gap-2 border py-1">
+    <div id={episode.id} class="flex gap-2 border py-1 px-2">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <img
         src={episode.thumbnail !== 'NaN' ? apiUrl + episode.thumbnail : 'default_thumbnail.jpeg'}

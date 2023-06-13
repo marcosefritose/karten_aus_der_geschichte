@@ -105,7 +105,7 @@
       bind:offsetHeight={contentBodyHeight}
       bind:offsetWidth={contentBodyWidth}
       id="content-body"
-      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary pointer-events-auto h-full overflow-y-scroll bg-zinc-200 p-2 md:w-full"
+      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary pointer-events-auto h-full overflow-y-scroll bg-zinc-200  md:w-full"
     >
       {#if selectedContent == 'list'}
         <EpisodeList />
