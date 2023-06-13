@@ -83,18 +83,6 @@
     return polygonFeature;
   }
 
-  // Detect selection changes and adjust map
-  selectedLocations.subscribe((selectedLocs) => {
-    selectedLocationsNames = selectedLocs.map((loc) => loc.name);
-
-    let geoFeature = getGeoFeatureForLocations(selectedLocs);
-
-    if (geoFeature) {
-      // geoFeaturePath = path(geoFeature);
-      clicked(geoFeature);
-    }
-  });
-
   $: if (markerElements) {
     updateMarkerPositions();
   }
@@ -198,6 +186,18 @@
   onMount(() => {
     json('worldmap.geojson').then((data) => {
       mapFeatureData = data.features;
+    });
+
+    // Detect selection changes and adjust map
+    selectedLocations.subscribe((selectedLocs) => {
+      selectedLocationsNames = selectedLocs.map((loc) => loc.name);
+
+      let geoFeature = getGeoFeatureForLocations(selectedLocs);
+
+      if (geoFeature) {
+        // geoFeaturePath = path(geoFeature);
+        clicked(geoFeature);
+      }
     });
 
     mounted = true;
