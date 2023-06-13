@@ -1,7 +1,7 @@
 import os
 import urllib
 
-from flask import Flask, request,  url_for, send_from_directory
+from flask import Flask, request,  url_for, send_from_directory, jsonify
 from flask_restful import Api, Resource, fields, marshal_with
 from flask_cors import CORS
 from PIL import Image
@@ -181,6 +181,29 @@ class TopicResource(Resource):
             db.session.delete(association)
         db.session.commit()
         return '', 204
+
+
+@app.route('/search/<string:search_term>', methods=['GET'])
+def search_content(search_term):
+    search_term = search_term.lower()
+
+    episodes = Episodes.query.filter(
+        Episodes.title.ilike('%' + search_term + '%') |
+        Episodes.subtitle.ilike('%' + search_term + '%') |
+        Episodes.key.ilike('%' + search_term + '%') |
+        Episodes.summary.ilike('%' + search_term + '%')).all()
+    locations = Locations.query.filter(
+        Locations.name.ilike('%' + search_term + '%')).all()
+    topics = Topics.query.filter(
+        Topics.name.ilike('%' + search_term + '%')).all()
+
+    result = {
+        'episodes': [episode.serialize() for episode in episodes],
+        'locations': [location.serialize() for location in locations],
+        'topics': [topic.serialize() for topic in topics]
+    }
+
+    return jsonify(result)
 
 
 @ app.route('/get-episode-image-from-link', methods=['POST'])

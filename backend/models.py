@@ -30,6 +30,18 @@ class Episodes(db.Model):
     topics_association = db.relationship(
         'EpisodesTopic', backref='episodes')
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'key': self.key,
+            'status': self.status,
+            'title': self.title,
+            'subtitle': self.subtitle,
+            'summary': self.summary,
+            'thumbnail': self.thumbnail,
+            'published': self.published
+        }
+
 
 class Locations(db.Model):
     __tablename__ = 'locations'
@@ -45,6 +57,16 @@ class Locations(db.Model):
         'Episodes', secondary='episodes_locations', backref='locations')
     coordinates = db.relationship('Coordinates', backref='Locations')
     context = association_proxy('episodes_locations', 'context')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'status': self.status,
+            'name': self.name,
+            'continent': self.continent,
+            'country': self.country,
+            'coordinates': [c.serialize() for c in self.coordinates]
+        }
 
 
 class EpisodesLocation(db.Model):
@@ -73,6 +95,14 @@ class Coordinates(db.Model):
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
     locations = db.relationship('Locations', backref='Coordinates')
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'status': self.status,
+            'longitude': self.longitude,
+            'latitude': self.latitude
+        }
+
 
 class Topics(db.Model):
     __tablename__ = 'topics'
@@ -84,6 +114,13 @@ class Topics(db.Model):
 
     episodes = db.relationship(
         'Episodes', secondary='episodes_topics', backref='topics')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'status': self.status,
+            'name': self.name
+        }
 
 
 class EpisodesTopic(db.Model):
