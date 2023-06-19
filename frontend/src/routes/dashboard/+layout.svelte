@@ -9,10 +9,10 @@
 
 <div class="flex h-screen">
   <nav class="bg-gag-white flex h-screen w-72 flex-col gap-2">
-    <a href="/dashboard">
+    <a href="/dashboard/episodes">
       <img src="/gag_logo.png" class="h-18 mx-auto w-44 object-contain" alt="" />
     </a>
-    <a href="/dashboard">
+    <!-- <a href="/dashboard">
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
         '/dashboard'
@@ -22,7 +22,7 @@
         <DashboardIcon fill="currentColor" />
         <span class="px-2">Overview</span>
       </div>
-    </a>
+    </a> -->
     <a href="/dashboard/episodes">
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==

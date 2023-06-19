@@ -25,7 +25,7 @@
       <div
         class="absolute right-0 top-0 p-2 text-sm md:left-0 md:bottom-0 md:right-auto md:top-auto"
       >
-        made with <a href="/dashboard">☕</a> by
+        made with <a href="/dashboard/episodes">☕</a> by
         <a
           href="https://me.marcose.eu"
           target="_blank"
