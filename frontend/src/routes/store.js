@@ -7,6 +7,7 @@ export const selectedEpisode = writable({})
 export const selectedLocations = writable([])
 export const selectedTime = writable({ year: 100, file: 'historic-maps/world_100.geojson' })
 export const showHistoricMap = writable(false)
+export const triggerLocationPopup = writable(false)
 
 export const maps = [
     // { year: -123000, file: 'historic-maps/world_bc123000.geojson' },
@@ -92,9 +93,13 @@ export function setSelectedEpisodeById(episodeId) {
     selectedLocations.update(state => [...episode.locations]);
 }
 
-export function setSelectedLocations(newSelectedLocations) {
-    console.log(newSelectedLocations);
+export function setSelectedLocations(newSelectedLocations, triggerPopup = false) {
     selectedLocations.update(state => [...newSelectedLocations]);
+
+    if (triggerPopup) {
+        // console.log("triggering popup");
+        setTriggerLocationPopup(true)
+    }
 }
 
 export function setSelectedTime(newTime) {
@@ -103,4 +108,8 @@ export function setSelectedTime(newTime) {
 
 export function setShowHistoricMaps(show) {
     showHistoricMap.update(state => show)
+}
+
+export function setTriggerLocationPopup(trigger) {
+    triggerLocationPopup.update(state => trigger)
 }

@@ -32,10 +32,7 @@
         <li
           id={location.id}
           class="mx-1 mb-1 flex flex-col"
-          on:click={() => {
-            setSelectedLocations([location]);
-            console.log($selectedLocations);
-          }}
+          on:click={() => setSelectedLocations([location], true)}
         >
           <div class="flex flex-1 justify-between">
             <div class="flex">

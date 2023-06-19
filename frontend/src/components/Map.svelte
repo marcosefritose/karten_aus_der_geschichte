@@ -17,7 +17,9 @@
     selectedLocations,
     setSelectedLocations,
     selectedTime,
-    showHistoricMap
+    showHistoricMap,
+    triggerLocationPopup,
+    setTriggerLocationPopup
   } from '../routes/store';
   import AreaPopup from '../components/AreaPopup.svelte';
 
@@ -56,6 +58,11 @@
     updateMarkerPositions();
   }
 
+  $: if ($triggerLocationPopup) {
+    showLocationPopup('click', selectedLocationsNames[0]);
+    setTriggerLocationPopup(false);
+  }
+
   function getGeoFeatureForLocations(locs) {
     locs = locs.filter((loc) => {
       return loc.coordinates.length != 0 && loc.coordinates[0].longitude != null;
@@ -92,7 +99,7 @@
     popupLocationPosition = markerElements[locationName].getBoundingClientRect();
     locationPopupIsShown = true;
 
-    if (event.type == 'click') {
+    if (event.type == 'click' || event == 'click') {
       setSelectedLocations([popupLocation]);
       locationClicked = true;
     }
