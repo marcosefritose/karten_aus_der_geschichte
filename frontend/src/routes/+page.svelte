@@ -15,7 +15,7 @@
 
     <!-- Logo -->
     <div
-      class="border-gag-primary absolute top-0 flex w-32 rounded-br-md border-b border-r border-dashed bg-slate-400 bg-opacity-80 lg:w-40"
+      class="border-gag-primary absolute top-0 flex w-32  border-b border-r border-dashed bg-slate-400 bg-opacity-80 lg:w-40"
     >
       <img src="/gag_logo.png" class="object-contain" alt="" />
     </div>

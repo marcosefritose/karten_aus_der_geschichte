@@ -27,12 +27,12 @@
 </script>
 
 <div class="flex h-full flex-col">
-  <form method="get" on:submit|preventDefault={() => search()} class="w-full p-2">
+  <form method="get" on:submit|preventDefault={() => search()} class="w-full py-2 px-4">
     <input
       type="text"
       name="search"
       id="search"
-      class="focus:ring-gag-primary h-10 w-full rounded-full border border-gray-300 bg-white px-4 text-lg focus:border-transparent focus:outline-none focus:ring-2"
+      class="focus:ring-gag-primary h-8 w-full rounded-full border border-gray-300 bg-white px-4 focus:border-transparent focus:outline-none focus:ring-2"
       bind:value={searchQuery}
       placeholder="Suche nach Themen, Orten oder Inhalten"
     />
@@ -61,22 +61,12 @@
               setSelectedEpisodeById(null);
             }}
           >
-            {#if selectedLocationsNames.includes(location.name)}
-              <div class="bg-gag-primary mr-1 h-2 w-2 rounded-full" />
-            {/if}
+            <div
+              class="{selectedLocationsNames.includes(location.name)
+                ? 'bg-gag-primary'
+                : 'bg-gray-600'} mr-1 h-2 w-2 rounded-full"
+            />
             {location.name}
-          </li>
-        {/each}
-      </ul>
-    {/if}
-
-    <!-- Topics -->
-    {#if searchResults.topics && searchResults.topics.length > 0}
-      <h2 class="text-lg font-semibold">Themen</h2>
-      <ul class="mb-2">
-        {#each searchResults.topics as topic}
-          <li class="py-1">
-            {topic.name}
           </li>
         {/each}
       </ul>
@@ -97,6 +87,18 @@
               >{episode.key}</span
             >
             {episode.title}
+          </li>
+        {/each}
+      </ul>
+    {/if}
+
+    <!-- Topics -->
+    {#if searchResults.topics && searchResults.topics.length > 0}
+      <h2 class="text-lg font-semibold">Themen</h2>
+      <ul class="mb-2">
+        {#each searchResults.topics as topic}
+          <li class="py-1">
+            {topic.name}
           </li>
         {/each}
       </ul>

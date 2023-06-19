@@ -5,7 +5,6 @@
   import { selectedTime, showHistoricMap, selectedEpisode } from '../routes/store';
   import Timeline from '../components/Timeline.svelte';
 
-  let popupSelectorChecked = false;
   let selectedContent = 'list';
   let hideContent = false;
   let contentWrapper = null;
@@ -21,7 +20,7 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 <div
-  class="pointer-events-none absolute right-0 bottom-0 flex h-2/5 w-full items-center md:top-0 md:h-full md:w-1/3 xl:w-1/4 2xl:w-1/5"
+  class="pointer-events-none absolute right-0 bottom-0 z-20 flex h-2/5 w-full items-center md:top-0 md:h-full md:w-1/3 xl:w-1/4 2xl:w-1/5"
 >
   <div
     bind:this={contentWrapper}
@@ -30,10 +29,10 @@
         ? `transform: translateY(${contentBodyHeight}px)`
         : `transform: translateX(${contentBodyWidth}px)`
       : ''}
-    class="flex h-full w-full flex-col opacity-90 transition md:h-5/6 md:flex-row"
+    class="flex h-full w-full flex-col transition md:h-5/6 md:flex-row"
   >
     <div
-      class="pointer-events-auto flex h-8 w-fit flex-row justify-start bg-zinc-400 md:h-fit md:w-8 md:flex-col"
+      class="pointer-events-auto flex h-8 w-fit flex-row justify-start bg-zinc-400 shadow-lg md:h-fit md:w-8 md:flex-col"
     >
       <div
         class="cursor-pointer px-2 md:px-0 md:py-2 {selectedContent == 'search'
@@ -41,7 +40,7 @@
           : 'bg-zinc-400'}"
       >
         <img
-          class="h-8 w-8"
+          class="h-8 w-8 p-0.5"
           src="icons/search.svg"
           alt="Search Icon"
           on:click={() => (selectedContent = 'search')}
@@ -118,7 +117,7 @@
       bind:offsetHeight={contentBodyHeight}
       bind:offsetWidth={contentBodyWidth}
       id="content-body"
-      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary pointer-events-auto h-full overflow-y-scroll bg-zinc-200  md:w-full"
+      class="scrollbar-thin scrollbar-track-gray-400 scrollbar-thumb-gag-primary pointer-events-auto h-full overflow-y-scroll bg-zinc-200  shadow-lg md:w-full"
     >
       {#if selectedContent == 'list'}
         <EpisodeList />
