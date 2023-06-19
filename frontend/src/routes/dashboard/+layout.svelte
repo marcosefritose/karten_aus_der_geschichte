@@ -1,9 +1,14 @@
 <script>
   import { page } from '$app/stores';
+  import ListIcon from '../../components/icons/ListIcon.svelte';
+  import DashboardIcon from '../../components/icons/DashboardIcon.svelte';
+  import PinpointIcon from '../../components/icons/PinpointIcon.svelte';
+  import TopicIcon from '../../components/icons/TopicIcon.svelte';
+  import SettingsIcon from '../../components/icons/SettingsIcon.svelte';
 </script>
 
 <div class="flex h-screen">
-  <nav class="bg-gag-light flex h-screen w-72 flex-col gap-2">
+  <nav class="bg-gag-white flex h-screen w-72 flex-col gap-2">
     <a href="/dashboard">
       <img src="/gag_logo.png" class="h-18 mx-auto w-44 object-contain" alt="" />
     </a>
@@ -11,10 +16,10 @@
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
         '/dashboard'
-          ? 'bg-gag-white'
-          : 'bg-light'}"
+          ? 'bg-gag-primary text-gag-white'
+          : 'bg-gag-white'}"
       >
-        <img class="h-8 w-8 rounded-t-md" src="../icons/overview.svg" alt="Episode List Icon" />
+        <DashboardIcon fill="currentColor" />
         <span class="px-2">Overview</span>
       </div>
     </a>
@@ -22,10 +27,10 @@
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
         '/dashboard/episodes'
-          ? 'bg-gag-white'
-          : 'bg-light'}"
+          ? 'bg-gag-primary text-gag-white'
+          : 'bg-gag-white'}"
       >
-        <img class="h-8 w-8 rounded-t-md" src="../icons/list.svg" alt="Episode List Icon" />
+        <ListIcon fill="currentColor" />
         <span class="px-2">Episoden</span>
       </div>
     </a>
@@ -34,10 +39,10 @@
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
         '/dashboard/locations'
-          ? 'bg-gag-white'
-          : 'bg-light'}"
+          ? 'bg-gag-primary text-gag-white'
+          : 'bg-gag-white'}"
       >
-        <img class="h-8 w-8 rounded-t-md" src="../icons/location.svg" alt="Location List Icon" />
+        <PinpointIcon fill="currentColor" />
         <span class="px-2">Orte</span>
       </div>
     </a>
@@ -45,10 +50,10 @@
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
         '/dashboard/topics'
-          ? 'bg-gag-white'
-          : 'bg-light'}"
+          ? 'bg-gag-primary text-gag-white'
+          : 'bg-gag-white'}"
       >
-        <img class="h-8 w-8 rounded-t-md" src="../icons/topic.svg" alt="Episode Topics Icon" />
+        <TopicIcon fill="currentColor" />
         <span class="px-2">Themen</span>
       </div>
     </a>
@@ -60,8 +65,14 @@
       </div>
     </a>
     <a href="/dashboard/settings" class="">
-      <div class="mx-4 flex cursor-pointer items-center rounded-lg p-2">
-        <img class="h-8 w-8 rounded-t-md" src="../icons/settings.svg" alt="Map Icon" />
+      <div
+        class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
+        '/dashboard/settings'
+          ? 'bg-gag-primary text-gag-white'
+          : 'bg-gag-white'}"
+      >
+        <SettingsIcon fill="currentColor" />
+
         <span class="px-2">Einstellung</span>
       </div>
     </a>
