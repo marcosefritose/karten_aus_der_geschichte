@@ -10,10 +10,16 @@
   let selectedEpisodeData = null;
 
   let searchString = '';
+  let filterStatus = 'all';
+
+  let totalCount = 0;
+  let pendingCount = 0;
+  let activeCount = 0;
+  let hiddenCount = 0;
 
   setEpisodes(data.episodes);
 
-  let searchEpisodes = $episodes.map((episode) => {
+  $: searchEpisodes = $episodes.map((episode) => {
     return {
       id: episode.id,
       key: episode.key,
@@ -24,7 +30,13 @@
   });
 
   $: filteredEpisodes = searchEpisodes.filter((episode) => {
-    return episode.searchTerm.toLowerCase().includes(searchString.toLowerCase());
+    if (filterStatus === 'all')
+      return episode.searchTerm.toLowerCase().includes(searchString.toLowerCase());
+    else
+      return (
+        episode.searchTerm.toLowerCase().includes(searchString.toLowerCase()) &&
+        episode.status === filterStatus
+      );
   });
 
   async function loadEpisodeData(id) {
@@ -64,34 +76,59 @@
       method: 'PATCH',
       body: formData
     }).then(() => {
-      const episodeIndex = filteredEpisodes.findIndex((episode) => episode.id === episodeId);
-      filteredEpisodes[episodeIndex].status = status;
+      const episodeIndex = $episodes.findIndex((episode) => episode.id === episodeId);
+      $episodes[episodeIndex].status = status;
     });
   }
+
+  $: totalCount = $episodes.length;
+  $: pendingCount = $episodes.filter((episode) => episode.status === 'pending').length;
+  $: activeCount = $episodes.filter((episode) => episode.status === 'active').length;
+  $: hiddenCount = $episodes.filter((episode) => episode.status === 'hidden').length;
 </script>
 
-<div class="bg-gag-white w-full overflow-y-scroll p-10">
-  <div class="flex">
-    <h1 class="text-3xl">{filteredEpisodes.length} Episoden</h1>
-    <input
-      bind:value={searchString}
-      class="focus:ring-gag-primary ml-auto rounded-lg bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-opacity-50"
-      type="text"
-      placeholder="Suche"
-    />
-  </div>
+<div class="bg-gag-light w-full overflow-y-scroll p-10">
+  <h1 class="text-3xl">{$episodes.length} Episoden</h1>
 
-  <div class="bg-gag-light mt-3 flex flex-col flex-wrap rounded-lg">
+  <div class="bg-gag-white mt-3 flex flex-col flex-wrap rounded-lg p-5">
+    <div class="mb-4 flex items-center">
+      <span
+        class="mx-4 cursor-pointer {filterStatus == 'all' ? 'font-bold' : ''}"
+        on:click={() => (filterStatus = 'all')}
+        on:keydown={() => (filterStatus = 'all')}>Alle ({totalCount})</span
+      >
+      <span
+        class="mx-4 cursor-pointer {filterStatus == 'pending' ? 'font-bold' : ''}"
+        on:click={() => (filterStatus = 'pending')}
+        on:keydown={() => (filterStatus = 'pending')}>Ausstehend ({pendingCount})</span
+      >
+      <span
+        class="mx-4 cursor-pointer {filterStatus == 'active' ? 'font-bold' : ''}"
+        on:click={() => (filterStatus = 'active')}
+        on:keydown={() => (filterStatus = 'active')}>Aktiv ({activeCount})</span
+      >
+      <span
+        class="mx-4 cursor-pointer {filterStatus == 'hidden' ? 'font-bold' : ''}"
+        on:click={() => (filterStatus = 'hidden')}
+        on:keydown={() => (filterStatus = 'hidden')}>Deaktiviert ({hiddenCount})</span
+      >
+      <input
+        bind:value={searchString}
+        class="focus:ring-gag-primary ml-auto h-10 w-64 rounded-lg border border-gray-400 px-2 py-1 focus:border-none focus:outline-none focus:ring-2 focus:ring-opacity-50"
+        type="text"
+        placeholder="Suche"
+      />
+    </div>
     <table>
-      <thead class="border-b font-medium">
+      <thead class="bg-gag-light border-b font-medium text-zinc-500">
         <tr>
-          <td class="h-14 w-1/12 py-3 px-2">ID</td>
-          <td class="h-14 w-7/12 py-3 px-2">Titel</td>
-          <td class="h-14 w-2/12 py-3 px-2">Status</td>
-          <td class="h-14 w-2/12 py-3 px-2">Aktion</td>
+          <td class="h-14 w-1/12 px-2 py-5">ID</td>
+          <td class="h-14 w-7/12 px-2 py-5">Titel</td>
+          <td class="h-14 w-2/12 px-2 py-5">Status</td>
+          <td class="h-14 w-2/12 px-2 py-5">Aktion</td>
         </tr>
       </thead>
-      <tbody class="bg-white">
+      <tbody>
         {#each filteredEpisodes as episode}
           <tr class="border-b">
             <td class="h-14 py-3 px-2">{episode.key}</td>

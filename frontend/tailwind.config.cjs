@@ -17,7 +17,7 @@ module.exports = {
         'gag-primary': '#d19000',
         'gag-secondary': '#ffff7f',
         'gag-light': '#FFEFD1',
-        'gag-white': '#FCF4F4',
+        'gag-white': '#FFF9F9',
         'active': '#1BAA04',
         'active-light': '#C8FFBF',
         'pending': '#A7AA04',
