@@ -30,13 +30,9 @@
   });
 
   $: filteredEpisodes = searchEpisodes.filter((episode) => {
-    if (filterStatus === 'all')
-      return episode.searchTerm.toLowerCase().includes(searchString.toLowerCase());
-    else
-      return (
-        episode.searchTerm.toLowerCase().includes(searchString.toLowerCase()) &&
-        episode.status === filterStatus
-      );
+    let searchStringMatch = episode.searchTerm.toLowerCase().includes(searchString.toLowerCase());
+    if (filterStatus === 'all') return searchStringMatch;
+    else return searchStringMatch && episode.status === filterStatus;
   });
 
   async function loadEpisodeData(id) {
