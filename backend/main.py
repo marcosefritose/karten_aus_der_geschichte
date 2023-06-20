@@ -74,6 +74,7 @@ episode_location_fields = {
 }
 
 episode_topic_fields = {
+    'topic_id': fields.Integer,
     'topic_name': fields.String,
     'status': fields.String,
     'context': fields.String
@@ -252,6 +253,54 @@ def update_episode_status(episode_id):
 def update_location_status(location_id):
     location = Locations.query.filter(Locations.id == location_id).first()
     location.status = request.form.get('status')
+    db.session.commit()
+    return 'OK'
+
+
+@ app.route('/locations/associate', methods=['POST'])
+def associate_location():
+    episode_id = request.form.get('episode_id')
+    location_id = request.form.get('location_id')
+    context = request.form.get('context')
+    episodeLocation = EpisodesLocation(
+        episode_id=episode_id, location_id=location_id, context=context)
+    db.session.add(episodeLocation)
+    db.session.commit()
+
+    return 'OK'
+
+
+@ app.route('/locations/associate', methods=['DELETE'])
+def delete_location_association():
+    episode_id = request.form.get('episode_id')
+    location_id = request.form.get('location_id')
+    print(episode_id, location_id, flush=True)
+    location = Locations.query.filter(Locations.id == location_id).first()
+    episode = Episodes.query.filter(Episodes.id == episode_id).first()
+    episode.locations.remove(location)
+    db.session.commit()
+
+    return 'OK'
+
+
+@ app.route('/topics/associate', methods=['POST'])
+def associate_topic():
+    episode_id = request.form.get('episode_id')
+    topic_id = request.form.get('topic_id')
+    topic = Topics.query.filter(Topics.id == topic_id).first()
+    episode = Episodes.query.filter(Episodes.id == episode_id).first()
+    episode.topics.append(topic)
+    db.session.commit()
+    return 'OK'
+
+
+@ app.route('/topics/associate', methods=['DELETE'])
+def delete_topic_association():
+    episode_id = request.form.get('episode_id')
+    topic_id = request.form.get('topic_id')
+    topic = Topics.query.filter(Topics.id == topic_id).first()
+    episode = Episodes.query.filter(Episodes.id == episode_id).first()
+    episode.topics.remove(topic)
     db.session.commit()
     return 'OK'
 
