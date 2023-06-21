@@ -53,7 +53,7 @@
               ? 'font-bold'
               : ''}"
             on:click={() => {
-              setSelectedLocations([location]);
+              setSelectedLocations([location], true);
               setSelectedEpisodeById(null);
             }}
             on:keydown={() => {
