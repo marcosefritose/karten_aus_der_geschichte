@@ -4,6 +4,8 @@
   import DeleteLocation from './dialogs/DeleteLocation.svelte';
   import AddTopic from './dialogs/AddTopic.svelte';
   import DeleteTopic from './dialogs/DeleteTopic.svelte';
+  import EditIcon from './icons/EditIcon.svelte';
+  import EditEpisode from './dialogs/EditEpisode.svelte';
 
   export let episodeData;
 
@@ -13,6 +15,7 @@
   let toggleDeleteLocation = false;
   let toggleAddTopic = false;
   let toggleDeleteTopic = false;
+  let toggleEditEpisode = false;
 
   let deleteLocationAssocData = null;
   let deleteTopicAssocData = null;
@@ -36,6 +39,10 @@
 
 {#if toggleDeleteTopic}
   <DeleteTopic {episodeData} assocData={deleteTopicAssocData} bind:toggled={toggleDeleteTopic} />
+{/if}
+
+{#if toggleEditEpisode}
+  <EditEpisode {episodeData} bind:toggled={toggleEditEpisode} />
 {/if}
 
 <tr class="border-b">
@@ -100,9 +107,9 @@
                   <DeleteIcon height="h-4" width="w-4" />
                 </div>
               </div>
-              <!-- {#if assoc.context}
-                <p class="italic text-gray-500">{assoc.context}</p>
-              {/if} -->
+              {#if topic.context}
+                <p class="italic text-gray-500">{topic.context}</p>
+              {/if}
             </li>
           {/each}
           <li class="pb-2">
@@ -113,19 +120,22 @@
           </li>
         </ul>
       </div>
-      <div class="summary w-1/4">
-        <h3 class="py-2 font-medium">Beschreibung</h3>
+      <div class="topics  m-2 h-fit w-1/2 rounded-md bg-zinc-100 py-2 px-4">
+        <div class="flex w-full justify-between">
+          <h3 class="mb-2 font-medium">Zeitraum</h3>
+          <div on:click={() => (toggleEditEpisode = true)}>
+            <EditIcon height="h-4" width="w-4" />
+          </div>
+        </div>
+        <p>
+          von <span class="font-semibold">{episodeData.story_time_start}</span>
+          bis <span class="font-semibold">{episodeData.story_time_end}</span>
+        </p>
+        <p class="italic text-gray-500">{episodeData.story_time_description}</p>
+
+        <h3 class="my-2 font-medium">Beschreibung</h3>
         <p>{episodeData.summary}</p>
       </div>
-      <div class="times w-1/4">
-        <h3 class="py-2 font-medium">Zeitraum</h3>
-        <p>
-          <span>von: </span>{episodeData.story_time_start}
-        </p>
-        <p>
-          <span>bis: </span>{episodeData.story_time_end}
-        </p>
-      </div>
-    </div>
-  </td>
+    </div></td
+  >
 </tr>
