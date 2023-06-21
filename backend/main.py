@@ -30,6 +30,7 @@ db.init_app(app)
 
 episode_basic_fields = {
     'id': fields.Integer,
+    'status': fields.String,
     'key': fields.String,
     'title': fields.String,
 }
