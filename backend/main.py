@@ -114,6 +114,20 @@ class EpisodeResource(Resource):
         result = Episodes.query.get(episode_id)
         return result
 
+    @ marshal_with(episode_fields)
+    def patch(self, episode_id):
+        episode = Episodes.query.get(episode_id)
+        episode.story_time_start = int(request.form.get('story_time_start'))
+        episode.story_time_end = int(request.form.get('story_time_end'))
+        episode.story_time_description = request.form.get(
+            'story_time_description')
+        episode.summary = request.form.get('summary')
+
+        db.session.add(episode)
+        db.session.commit()
+
+        return episode
+
 
 class LocationListResource(Resource):
     @ marshal_with(location_fields)
