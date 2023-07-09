@@ -4,6 +4,7 @@ import urllib
 from flask import Flask, request,  url_for, send_from_directory, jsonify
 from flask_restful import Api, Resource, fields, marshal_with
 from flask_cors import CORS
+from sqlalchemy import and_
 from PIL import Image
 from werkzeug.utils import secure_filename
 
@@ -204,14 +205,22 @@ def search_content(search_term):
     search_term = search_term.lower()
 
     episodes = Episodes.query.filter(
-        Episodes.title.ilike('%' + search_term + '%') |
-        Episodes.subtitle.ilike('%' + search_term + '%') |
-        Episodes.key.ilike('%' + search_term + '%') |
-        Episodes.summary.ilike('%' + search_term + '%')).all()
+        and_(Episodes.status == 'active',
+             (
+                 Episodes.title.ilike('%' + search_term + '%') |
+                 Episodes.subtitle.ilike('%' + search_term + '%') |
+                 Episodes.key.ilike('%' + search_term + '%') |
+                 Episodes.summary.ilike('%' + search_term + '%'))
+             )).all()
     locations = Locations.query.filter(
-        Locations.name.ilike('%' + search_term + '%')).all()
+        Locations.name.ilike('%' + search_term + '%') &
+        Locations.status.ilike('active')
+    ).all()
+
     topics = Topics.query.filter(
-        Topics.name.ilike('%' + search_term + '%')).all()
+        Topics.name.ilike('%' + search_term + '%') &
+        Topics.status.ilike('active')
+    ).all()
 
     result = {
         'episodes': [episode.serialize() for episode in episodes],
