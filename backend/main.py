@@ -105,7 +105,7 @@ episode_fields = {
 class EpisodeListResource(Resource):
     @ marshal_with(episode_fields)
     def get(self):
-        result = Episodes.query.order_by(
+        result = Episodes.query.filter(Episodes.status == 'active').order_by(
             Episodes.published.desc()).all()
         return result
 
