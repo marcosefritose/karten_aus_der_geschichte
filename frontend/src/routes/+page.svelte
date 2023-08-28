@@ -1,41 +1,76 @@
 <script>
-  import Map from '../components/Map.svelte';
-  import Content from '../components/Content.svelte';
-
-  const confident = import.meta.env.VITE_CONFIDENT;
+  import MailchimpForm from '../components/MailchimpForm.svelte';
 </script>
 
-<main class="font-classicalHumanist">
-  <div
-    id="world-map-wrapper"
-    class="pointer-events-auto absolute bottom-0  w-screen flex-auto overflow-clip"
-  >
-    <!-- Main World Map -->
-    <Map />
+<div class="relative h-screen w-screen overflow-x-hidden">
+  <img
+    src="/logo_full.svg"
+    alt="Podmap Logo"
+    class="absolute left-1/2 top-20 z-20 w-72 -translate-x-1/2 transform overflow-auto transition duration-500 ease-in-out hover:scale-110 sm:top-16 sm:w-80"
+  />
+  <img
+    src="/rays.svg"
+    alt=""
+    class="absolute left-1/2 h-full w-fit -translate-x-1/2 transform object-none object-top sm:min-h-fit sm:min-w-fit"
+  />
 
-    <!-- Logo -->
-    <div
-      class="border-gag-primary absolute top-0 flex w-32  border-b border-r border-dashed bg-slate-400 bg-opacity-80 lg:w-40"
-    >
-      <img src="/gag_logo.png" class="object-contain" alt="" />
-    </div>
+  <div class="font-tiro flex flex-col items-center pt-[23rem]">
+    <h1 class="text-center text-7xl sm:text-8xl">podiverse</h1>
+    <h2 class="text-center text-xl">Lift your podcast to the next level.</h2>
+    <img src="/animation.svg" alt="" class="z-10" />
+    <div class="z-20 mb-20 flex max-w-6xl flex-col gap-5 px-4 lg:-mt-20 lg:flex-row">
+      <div class="text-center">
+        <h3 class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-xl">
+          Transcribe
+        </h3>
 
-    <!-- Link -->
-    {#if confident === 'true'}
-      <div
-        class="absolute right-0 top-0 p-2 text-sm md:left-0 md:bottom-0 md:right-auto md:top-auto"
-      >
-        made with <a href="/dashboard/episodes">☕</a> by
-        <a
-          href="https://me.marcose.eu"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="underline underline-offset-2">marc</a
-        >
+        <p class="w-fit px-2 py-4 font-sans">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex dolorum, omnis in eaque
+          explicabo ratione, debitis fugiat reprehenderit praesentium tempora exercitationem. Maxime
+          architecto facere veritatis doloremque repellat atque est cumque.
+        </p>
       </div>
-    {/if}
+      <div class="text-center">
+        <h3
+          class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-center text-xl"
+        >
+          Extract
+        </h3>
 
-    <!-- Side/Bottom Bar Content -->
-    <Content />
+        <p class="w-fit px-2 py-4 font-sans">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex dolorum, omnis in eaque
+          explicabo ratione, debitis fugiat reprehenderit praesentium tempora exercitationem. Maxime
+          architecto facere veritatis doloremque repellat atque est cumque.
+        </p>
+      </div>
+      <div class="text-center">
+        <h3
+          class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-center text-xl"
+        >
+          Visualize
+        </h3>
+
+        <p class="w-fit px-2 py-4 font-sans">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex dolorum, omnis in eaque
+          explicabo ratione, debitis fugiat reprehenderit praesentium tempora exercitationem. Maxime
+          architecto facere veritatis doloremque repellat atque est cumque.
+        </p>
+      </div>
+    </div>
   </div>
-</main>
+
+  <div class="mb-20 flex w-full items-center">
+    <a
+      href="/demo"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="bg-primary shadow-no-blur hover:bg-secondary z-20 mx-auto rounded-xl px-8 py-4 text-4xl text-white transition duration-500 ease-in-out hover:scale-125"
+    >
+      Demo
+    </a>
+  </div>
+
+  <div class="bg-grayish w-full">
+    <MailchimpForm />
+  </div>
+</div>

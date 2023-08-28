@@ -87,7 +87,7 @@ services:
       - web-root:/var/www/html
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email kag.marcose.eu --agree-tos --no-eff-email --force-renewal -d kag.marcose.eu
+    command: certonly --webroot --webroot-path=/var/www/html --email contact@podiverse.io --agree-tos --no-eff-email --force-renewal -v -d podiverse.io
   postgres_backend:
     image: postgres:13
     environment:

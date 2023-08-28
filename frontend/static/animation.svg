@@ -1,0 +1,13 @@
+<svg width="1682" height="642" viewBox="0 0 1682 642" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 321C38.7578 81.0297 120.634 -254.929 213.652 321C306.671 896.929 366.099 560.97 380.311 321C390.584 147.521 457.342 -73.3512 499.975 321C542.609 715.351 590.571 485.313 603.652 321C610.498 235.011 659.27 113.426 699.578 321C739.886 528.574 769.18 407.489 785.814 321C802.447 234.511 829.319 231.811 858 321" stroke="black" stroke-width="6"/>
+<path d="M857.5 319.5C862 330.5 875 364 919 341.5C947 327.182 956.1 303.6 974.5 314" stroke="black" stroke-width="6"/>
+<line x1="961.425" y1="309.084" x2="1464.42" y2="158.084" stroke="black" stroke-width="4"/>
+<line x1="965.699" y1="309.023" x2="1464.7" y2="233.023" stroke="black" stroke-width="4"/>
+<line x1="969.272" y1="309.019" x2="1465.27" y2="377.019" stroke="black" stroke-width="4"/>
+<rect x="1520" y="159" width="162" height="21" fill="black"/>
+<rect x="1520" y="212" width="162" height="21" fill="black"/>
+<rect x="1520" y="265" width="162" height="21" fill="black"/>
+<rect x="1520" y="371" width="162" height="21" fill="black"/>
+<rect x="1520" y="318" width="162" height="21" fill="black"/>
+<circle cx="970.5" cy="310.5" r="13.5" fill="black"/>
+</svg>

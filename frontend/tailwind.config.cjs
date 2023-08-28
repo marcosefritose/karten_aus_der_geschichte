@@ -7,13 +7,20 @@ module.exports = {
         classicalHumanist: ['Optima', 'Candara', 'Noto Sans', 'source-sans-pro', 'sans-serif'],
         geometricHumanist: ['Avenir', 'Avenir Next LT Pro', 'Montserrat', 'Corbel', 'URW Gothic', 'source-sans-pro', 'sans-serif'],
         transitional: ['Charter', 'Bitstream Charter', 'Sitka Text', 'Cambria', 'serif'],
-        oldStyle: ['Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', 'P052', 'serif']
-
+        oldStyle: ['Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', 'P052', 'serif'],
+        tiro: ["Tiro Bangla"]
       },
       screens: {
         '2xl': '1900px'
       },
       colors: {
+        // Podiverse
+        'primary': '#A4C3B2',
+        'secondary': '#C7ECE4',
+        'light': '#F6FFF8',
+        'grayish': '#EAF4F4',
+
+        // GAG Demo
         'gag-primary': '#d19000',
         'gag-secondary': '#ffff7f',
         'gag-light': '#FFEFD1',
@@ -39,7 +46,9 @@ module.exports = {
           '50%': { opacity: .6, transform: 'scale(1.75)' }
         }
       },
-
+      boxShadow: {
+        'no-blur': '3px 3px 0px 0px rgba(0, 0, 0, 1)', // No blur shadow
+      },
     },
   },
   safelist: ['stroke-gag-primary', 'fill-gag-primary', 'text-active', 'text-pending', 'text-hidden', 'bg-active-light', 'bg-pending-light', 'bg-hidden-light', 'fill-active-light', 'fill-hidden-light'],

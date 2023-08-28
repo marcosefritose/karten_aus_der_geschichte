@@ -1,6 +1,6 @@
 <script>
-  import DashboardEpisodeListEntry from '../../../components/DashboardEpisodeListEntry.svelte';
-  import { setEpisodes, episodes } from '../../store';
+  import DashboardEpisodeListEntry from '../../../../components/DashboardEpisodeListEntry.svelte';
+  import { setEpisodes, episodes } from '../../../store';
 
   const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
 
@@ -139,7 +139,7 @@
               <button on:click={() => toggleEpisode(episode.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
-                  src="../icons/edit.svg"
+                  src="../../icons/edit.svg"
                   alt="Edit Episode Icon"
                 />
               </button>
@@ -147,7 +147,7 @@
                 <button on:click={() => updateEpisodeStatus(episode.id, 'hidden')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/hide.svg"
+                    src="../../icons/hide.svg"
                     alt="Hide Episode Icon"
                   />
                 </button>
@@ -155,7 +155,7 @@
                 <button on:click={() => updateEpisodeStatus(episode.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/show.svg"
+                    src="../../icons/show.svg"
                     alt="Hide Episode Icon"
                   />
                 </button>
@@ -163,7 +163,7 @@
                 <button on:click={() => updateEpisodeStatus(episode.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/activate.svg"
+                    src="../../icons/activate.svg"
                     alt="Hide Episode Icon"
                   />
                 </button>

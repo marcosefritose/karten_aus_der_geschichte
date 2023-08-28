@@ -1,6 +1,6 @@
 <script>
-  import { setLocations, locations } from '../../store';
-  import DashboardLocationListEntry from '../../../components/DashboardLocationListEntry.svelte';
+  import { setLocations, locations } from '../../../store';
+  import DashboardLocationListEntry from '../../../../components/DashboardLocationListEntry.svelte';
 
   const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
 
@@ -205,21 +205,21 @@
               <button on:click={() => toggleLocation(location.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
-                  src="../icons/edit.svg"
+                  src="../../icons/edit.svg"
                   alt="Edit Location Icon"
                 />
               </button>
               <button on:click={() => deleteLocation(location.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
-                  src="../icons/delete.svg"
+                  src="../../icons/delete.svg"
                   alt="Delete Location Icon"
                 />
               </button>
               <button on:click={() => showMergeForm(location.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
-                  src="../icons/merge.svg"
+                  src="../../icons/merge.svg"
                   alt="Merge Location Icon"
                 />
               </button>
@@ -227,7 +227,7 @@
                 <button on:click={() => updateLocationStatus(location.id, 'hidden')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/hide.svg"
+                    src="../../icons/hide.svg"
                     alt="Hide Location Icon"
                   />
                 </button>
@@ -235,7 +235,7 @@
                 <button on:click={() => updateLocationStatus(location.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/show.svg"
+                    src="../../icons/show.svg"
                     alt="Hide Location Icon"
                   />
                 </button>
@@ -243,7 +243,7 @@
                 <button on:click={() => updateLocationStatus(location.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/activate.svg"
+                    src="../../icons/activate.svg"
                     alt="Hide Location Icon"
                   />
                 </button>

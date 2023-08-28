@@ -1,6 +1,6 @@
 <script>
-  import { setTopics, topics } from '../../store';
-  import DashboardTopicListEntry from '../../../components/DashboardTopicListEntry.svelte';
+  import { setTopics, topics } from '../../../store';
+  import DashboardTopicListEntry from '../../../../components/DashboardTopicListEntry.svelte';
 
   const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
 
@@ -201,21 +201,21 @@
               <button on:click={() => toggleTopic(topic.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
-                  src="../icons/edit.svg"
+                  src="../../icons/edit.svg"
                   alt="Edit Topic Icon"
                 />
               </button>
               <button on:click={() => deleteTopic(topic.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
-                  src="../icons/delete.svg"
+                  src="../../icons/delete.svg"
                   alt="Delete Topic Icon"
                 />
               </button>
               <button on:click={() => showMergeForm(topic.id)}>
                 <img
                   class="mx-2 h-6 w-6 rounded-t-md"
-                  src="../icons/merge.svg"
+                  src="../../icons/merge.svg"
                   alt="Merge Topic Icon"
                 />
               </button>
@@ -223,7 +223,7 @@
                 <button on:click={() => updateTopicStatus(topic.id, 'hidden')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/hide.svg"
+                    src="../../icons/hide.svg"
                     alt="Hide Topic Icon"
                   />
                 </button>
@@ -231,7 +231,7 @@
                 <button on:click={() => updateTopicStatus(topic.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/show.svg"
+                    src="../../icons/show.svg"
                     alt="Show Topic Icon"
                   />
                 </button>
@@ -239,7 +239,7 @@
                 <button on:click={() => updateTopicStatus(topic.id, 'active')}>
                   <img
                     class="mx-2 h-6 w-6 rounded-t-md"
-                    src="../icons/activate.svg"
+                    src="../../icons/activate.svg"
                     alt="Activate Topic Icon"
                   />
                 </button>
