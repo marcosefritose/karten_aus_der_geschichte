@@ -9,7 +9,7 @@
       target="_blank"
     >
       <div id="mc_embed_signup_scroll" class="!font-sans">
-        <h2 class="!font-tiro">Sign up for Updates!</h2>
+        <h2 class="!font-tiro">Bleib auf dem Laufenden!</h2>
         <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
         <div class="mc-field-group">
           <label for="mce-EMAIL">E-Mail <span class="asterisk">*</span></label><input

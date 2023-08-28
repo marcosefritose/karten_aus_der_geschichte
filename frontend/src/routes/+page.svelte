@@ -16,45 +16,56 @@
 
   <div class="font-tiro flex flex-col items-center pt-[23rem]">
     <h1 class="text-center text-7xl sm:text-8xl">podiverse</h1>
-    <h2 class="text-center text-xl">Lift your podcast to the next level.</h2>
-    <img src="/animation.svg" alt="" class="z-10" />
-    <div class="z-20 mb-20 flex max-w-6xl flex-col gap-5 px-4 lg:-mt-20 lg:flex-row">
-      <div class="text-center">
-        <h3 class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-xl">
-          Transcribe
-        </h3>
+    <h2 class="z-30 mt-20 px-2 text-center text-3xl sm:text-4xl">
+      Wir bringen Podcasts zum Leben und<br /> machen Schluss mit langweiligen Feeds, Charts & Suchfunktionen!
+    </h2>
+    <img
+      src="/animation.svg"
+      alt=""
+      class="absolute top-20 left-0 z-0 hidden h-full w-full object-none object-center sm:block"
+    />
+    <div class="z-20 mt-24 mb-20 max-w-6xl px-4 sm:mt-60">
+      <h1 class="mb-16 px-4 text-center text-5xl sm:text-6xl">So funktioniert's!</h1>
+      <div class="flex flex-col gap-5 lg:flex-row">
+        <div class="flex-1 text-center">
+          <h3 class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-xl">
+            Transkribieren
+          </h3>
 
-        <p class="w-fit px-2 py-4 font-sans">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex dolorum, omnis in eaque
-          explicabo ratione, debitis fugiat reprehenderit praesentium tempora exercitationem. Maxime
-          architecto facere veritatis doloremque repellat atque est cumque.
-        </p>
-      </div>
-      <div class="text-center">
-        <h3
-          class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-center text-xl"
-        >
-          Extract
-        </h3>
+          <p class="w-fit px-2 py-4 font-sans">
+            Wir hören genau hin! Mit Hilfe von KI transkribieren wir deine Episoden und machen sie
+            durchsuchbar. Damit können wir alle Informationen aus deinen Episoden nutzen und sind
+            nicht auf die manuell erstellten Beschreibungen & Tags angewiesen.
+          </p>
+        </div>
+        <div class="flex-1 text-center">
+          <h3
+            class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-center text-xl"
+          >
+            Extrahieren
+          </h3>
 
-        <p class="w-fit px-2 py-4 font-sans">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex dolorum, omnis in eaque
-          explicabo ratione, debitis fugiat reprehenderit praesentium tempora exercitationem. Maxime
-          architecto facere veritatis doloremque repellat atque est cumque.
-        </p>
-      </div>
-      <div class="text-center">
-        <h3
-          class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-center text-xl"
-        >
-          Visualize
-        </h3>
+          <p class="w-fit px-2 py-4 font-sans">
+            Du entscheidest selbst, welche Informationen für deinen Podcast wichtig sind, egal ob
+            besprochene Personen, Orte oder Themen. Wir extrahieren diese Informationen und reichern
+            sie mit weiteren relevanten Informationen an. So können wir dein gesamten Podcast
+            strukturieren und durchsuchbar machen.
+          </p>
+        </div>
+        <div class="flex-1 text-center">
+          <h3
+            class="bg-grayish shadow-no-blur mx-auto w-64 rounded rounded-2xl py-4 text-center text-xl"
+          >
+            Visualisieren
+          </h3>
 
-        <p class="w-fit px-2 py-4 font-sans">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex dolorum, omnis in eaque
-          explicabo ratione, debitis fugiat reprehenderit praesentium tempora exercitationem. Maxime
-          architecto facere veritatis doloremque repellat atque est cumque.
-        </p>
+          <p class="w-fit px-2 py-4 font-sans">
+            Mit interaktiven unseren bereitgestellten interaktiven Visualisierungen bringen wir
+            deinen Podcast zum Leben. So können deine Hörer:innen auf eine ganz neue Art und Weise
+            Folgen entdecken und erleben. Du hast selber noch eine bessere Idee? Nutze die API und
+            rücke deine Inhalte ins beste Licht!
+          </p>
+        </div>
       </div>
     </div>
   </div>
