@@ -33,9 +33,9 @@
           </h3>
 
           <p class="w-fit px-2 py-4 font-sans">
-            Wir hören genau hin! Mit Hilfe von KI transkribieren wir deine Episoden und machen sie
-            durchsuchbar. Damit können wir alle Informationen aus deinen Episoden nutzen und sind
-            nicht auf die manuell erstellten Beschreibungen & Tags angewiesen.
+            Wir hören genau hin! Mit Hilfe von KI transkribieren wir Episoden und machen sie
+            durchsuchbar. Damit können wir alle Informationen aus den Episoden nutzen und sind nicht
+            auf die manuell erstellten Beschreibungen & Tags angewiesen.
           </p>
         </div>
         <div class="flex-1 text-center">
@@ -46,10 +46,10 @@
           </h3>
 
           <p class="w-fit px-2 py-4 font-sans">
-            Du entscheidest selbst, welche Informationen für deinen Podcast wichtig sind, egal ob
+            Jeder entscheidest selbst, welche Informationen für einen Podcast wichtig sind, egal ob
             besprochene Personen, Orte oder Themen. Wir extrahieren diese Informationen und reichern
-            sie mit weiteren relevanten Informationen an. So können wir dein gesamten Podcast
-            strukturieren und durchsuchbar machen.
+            sie mit weiteren relevanten Daten an. So können wir gesamte Podcasts strukturieren und
+            durchsuchbar machen.
           </p>
         </div>
         <div class="flex-1 text-center">
@@ -60,10 +60,10 @@
           </h3>
 
           <p class="w-fit px-2 py-4 font-sans">
-            Mit interaktiven unseren bereitgestellten interaktiven Visualisierungen bringen wir
-            deinen Podcast zum Leben. So können deine Hörer:innen auf eine ganz neue Art und Weise
-            Folgen entdecken und erleben. Du hast selber noch eine bessere Idee? Nutze die API und
-            rücke deine Inhalte ins beste Licht!
+            Mit unseren bereitgestellten interaktiven Visualisierungen bringen wir deinen Podcast
+            zum Leben. So können Hörer:innen auf eine ganz neue Art und Weise Folgen entdecken und
+            erleben. Du hast selber noch eine bessere Idee? Nutze die API und rücke Inhalte ins
+            beste Licht!
           </p>
         </div>
       </div>
