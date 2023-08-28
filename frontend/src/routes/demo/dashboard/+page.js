@@ -1,12 +1,5 @@
-// import { setEpisodes, setLocations } from "../store"
+import { redirect } from '@sveltejs/kit';
 
-// export async function load({ fetch, setHeaders }) {
-//     const episodesRes = await fetch('http://flask:5000/episodes/')
-//     const episodeData = await episodesRes.json()
-
-//     const locationsRes = await fetch('http://flask:5000/locations/')
-//     const locationData = await locationsRes.json()
-
-//     setEpisodes(episodeData)
-//     setLocations(locationData)
-// }
+export function load({ page, fetch }) {
+    throw redirect(307, '/demo/dashboard/episodes');
+}
