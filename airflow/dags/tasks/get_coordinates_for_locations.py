@@ -61,10 +61,11 @@ def get_coordinates_for_locations():
                              target_fields=list(target_df.columns),
                              replace=False, replace_index=['location_id', 'longitude', 'latitude'])
 
-    print(f'Updating {len(locations_ids)} locations in database', flush=True)
-    # Update status flag "is_coordinate_integrated" for processed locations
-    postgres_sql.run(f"""
-        UPDATE locations
-        SET is_coordinate_integrated = true
-        WHERE id IN ({','.join(str(id) for id in locations_ids)})
-    """)
+    if len(locations_ids) != 0:
+        print(f'Updating {len(locations_ids)} locations in database', flush=True)
+        # Update status flag "is_coordinate_integrated" for processed locations
+        postgres_sql.run(f"""
+            UPDATE locations
+            SET is_coordinate_integrated = true
+            WHERE id IN ({','.join(str(id) for id in locations_ids)})
+        """)
