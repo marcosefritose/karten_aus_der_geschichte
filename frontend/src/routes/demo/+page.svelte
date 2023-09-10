@@ -25,7 +25,7 @@
       <div
         class="absolute right-0 top-0 p-2 text-sm md:left-0 md:bottom-0 md:right-auto md:top-auto"
       >
-        made with <a href="/dashboard/episodes">☕</a> by
+        made with <a href="/demo/dashboard/episodes">☕</a> by
         <a href="/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2"
           >podiverse</a
         >

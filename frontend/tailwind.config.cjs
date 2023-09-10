@@ -8,17 +8,21 @@ module.exports = {
         geometricHumanist: ['Avenir', 'Avenir Next LT Pro', 'Montserrat', 'Corbel', 'URW Gothic', 'source-sans-pro', 'sans-serif'],
         transitional: ['Charter', 'Bitstream Charter', 'Sitka Text', 'Cambria', 'serif'],
         oldStyle: ['Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', 'P052', 'serif'],
-        tiro: ["Tiro Bangla"]
+        space: ["Space Mono", "monospace"],
       },
       screens: {
         '2xl': '1900px'
       },
       colors: {
         // Podiverse
-        'primary': '#A4C3B2',
-        'secondary': '#C7ECE4',
-        'light': '#F6FFF8',
-        'grayish': '#EAF4F4',
+        'white': '#F9F6F6',
+        'black': '#151319',
+        'pod-primary': '#974EC3',
+        'pod-dark': '#3B3744',
+        'pod-light': '#E4DEF3',
+        'badge-blue': '#9CABE0',
+        'badge-red': '#F3ADAD',
+        'badge-green': '#9CE09F',
 
         // GAG Demo
         'gag-primary': '#d19000',
@@ -38,17 +42,28 @@ module.exports = {
         '5': '5px',
       },
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'reverse-bounce': 'reverse-bounce 1s infinite',
       },
       keyframes: {
         pulse: {
           '0%, 100%': { opacity: .9, transform: 'scale(2.5)' },
           '50%': { opacity: .6, transform: 'scale(1.75)' }
-        }
+        },
+        'reverse-bounce': {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateY(-25%)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
       },
-      boxShadow: {
-        'no-blur': '3px 3px 0px 0px rgba(0, 0, 0, 1)', // No blur shadow
-      },
+      backgroundImage: {
+        'elipse': "url('/elipse.svg')",
+      }
     },
   },
   safelist: ['stroke-gag-primary', 'fill-gag-primary', 'text-active', 'text-pending', 'text-hidden', 'bg-active-light', 'bg-pending-light', 'bg-hidden-light', 'fill-active-light', 'fill-hidden-light'],

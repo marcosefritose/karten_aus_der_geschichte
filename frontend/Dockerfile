@@ -5,7 +5,7 @@ RUN mkdir -p /home/node/app
 WORKDIR /home/node/app
 
 COPY ./package*.json ./
-RUN npm install
+RUN npm install --force
 #RUN npm ci
 #COPY . .
 #RUN npm run build
