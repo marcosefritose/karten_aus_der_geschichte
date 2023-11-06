@@ -16,7 +16,7 @@
     {
       title: 'Worum geht es überhaupt?',
       description:
-        'Themen und Inhalte eines oder mehrerer Podcasts auf in einem einzigen Graph zusammengefasst. So hast du Zusammenhänge und Referenzen immer im Blick.'
+        'Themen und Inhalte eines oder mehrerer Podcasts in einem einzigen Graph zusammengefasst. So hast du Zusammenhänge und Referenzen immer im Blick.'
     },
     {
       title: 'Wann war das doch gleich?',
