@@ -11,7 +11,7 @@
     {
       title: 'Wo hat Geschichte stattgefunden?',
       description:
-        'Alle Schauplätze der Weltgeschichte auf einem Blick. Eine interaktive Karte lässt dich alle in Podcast besprochenen geschichtsträchtigen Orte entdecken.'
+        'Entdecke alle Schauplätze der Weltgeschichte auf einen Blick. Eine interaktive Karte ermöglicht es dir, alle in den Podcasts besprochenen geschichtsträchtigen Orte zu erkunden.'
     },
     {
       title: 'Worum geht es überhaupt?',
@@ -42,7 +42,7 @@
   </div>
   <div class="h-1/3 w-full text-center">
     <p class="mx-auto max-w-lg text-lg">
-      Nimm jetzt an unserer Umfrage Teil und hilf uns dabei, deine Podcasterfahrung verbessern!
+      Nimm jetzt an unserer Umfrage teil und hilf uns dabei, deine Podcasterfahrung zu verbessern!
     </p>
     <a
       href="https://forms.gle/z7AvjnwXHsGPbtjJ8"
