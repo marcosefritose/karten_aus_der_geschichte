@@ -1,4 +1,4 @@
-import { setEpisodes, setLocations } from "../store"
+import { setEpisodes, setLocations } from "./store"
 
 export async function load({ fetch, setHeaders }) {
     const externalApiUrl = import.meta.env.VITE_FLASK_API_URL;

@@ -1,15 +1,15 @@
 <script>
   import { page } from '$app/stores';
-  import ListIcon from '../../../components/icons/ListIcon.svelte';
-  import DashboardIcon from '../../../components/icons/DashboardIcon.svelte';
-  import PinpointIcon from '../../../components/icons/PinpointIcon.svelte';
-  import TopicIcon from '../../../components/icons/TopicIcon.svelte';
-  import SettingsIcon from '../../../components/icons/SettingsIcon.svelte';
+  import ListIcon from '../../components/icons/ListIcon.svelte';
+  import DashboardIcon from '../../components/icons/DashboardIcon.svelte';
+  import PinpointIcon from '../../components/icons/PinpointIcon.svelte';
+  import TopicIcon from '../../components/icons/TopicIcon.svelte';
+  import SettingsIcon from '../../components/icons/SettingsIcon.svelte';
 </script>
 
 <div class="flex h-screen">
   <nav class="bg-gag-white flex h-screen w-72 flex-col gap-2">
-    <a href="/demo/dashboard/episodes">
+    <a href="/dashboard/episodes">
       <img src="/gag_logo.png" class="h-18 mx-auto w-44 object-contain" alt="" />
     </a>
     <!-- <a href="/dashboard">
@@ -23,10 +23,10 @@
         <span class="px-2">Overview</span>
       </div>
     </a> -->
-    <a href="/demo/dashboard/episodes">
+    <a href="/dashboard/episodes">
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
-        '/demo/dashboard/episodes'
+        '/dashboard/episodes'
           ? 'bg-gag-primary text-gag-white'
           : 'bg-gag-white'}"
       >
@@ -35,10 +35,10 @@
       </div>
     </a>
 
-    <a href="/demo/dashboard/locations">
+    <a href="/dashboard/locations">
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
-        '/demo/dashboard/locations'
+        '/dashboard/locations'
           ? 'bg-gag-primary text-gag-white'
           : 'bg-gag-white'}"
       >
@@ -46,10 +46,10 @@
         <span class="px-2">Orte</span>
       </div>
     </a>
-    <a href="/demo/dashboard/topics">
+    <a href="/dashboard/topics">
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
-        '/demo/dashboard/topics'
+        '//dashboard/topics'
           ? 'bg-gag-primary text-gag-white'
           : 'bg-gag-white'}"
       >
@@ -58,16 +58,16 @@
       </div>
     </a>
 
-    <a href="/demo" class="">
+    <a href="/" class="">
       <div class="mx-4 flex cursor-pointer items-center rounded-lg p-2">
-        <img class="h-8 w-8 rounded-t-md" src="../../../icons/map.svg" alt="Map Icon" />
+        <img class="h-8 w-8 rounded-t-md" src="../../icons/map.svg" alt="Map Icon" />
         <span class="px-2">zur Karte</span>
       </div>
     </a>
-    <a href="/demo/dashboard/settings" class="">
+    <a href="//dashboard/settings" class="">
       <div
         class="mx-4 flex cursor-pointer items-center rounded-lg p-2 {$page.url.pathname ==
-        '/demo/dashboard/settings'
+        '//dashboard/settings'
           ? 'bg-gag-primary text-gag-white'
           : 'bg-gag-white'}"
       >

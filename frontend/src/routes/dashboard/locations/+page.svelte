@@ -1,6 +1,6 @@
 <script>
-  import { setLocations, locations } from '../../../store';
-  import DashboardLocationListEntry from '../../../../components/DashboardLocationListEntry.svelte';
+  import { setLocations, locations } from '../../store';
+  import DashboardLocationListEntry from '../../../components/DashboardLocationListEntry.svelte';
 
   const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
 

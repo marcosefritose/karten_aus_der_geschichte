@@ -1,6 +1,6 @@
 <script>
-  import DashboardEpisodeListEntry from '../../../../components/DashboardEpisodeListEntry.svelte';
-  import { setEpisodes, episodes } from '../../../store';
+  import DashboardEpisodeListEntry from '../../../components/DashboardEpisodeListEntry.svelte';
+  import { setEpisodes, episodes } from '../../store';
 
   const VITE_FLASK_API_URL = import.meta.env.VITE_FLASK_API_URL;
 
