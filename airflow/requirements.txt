@@ -10,3 +10,5 @@ langchain
 pinecone-client
 sentence-transformers
 pydantic
+huggingface_hub
+aiohttp

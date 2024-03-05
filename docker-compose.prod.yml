@@ -17,6 +17,7 @@ x-airflow-common: &airflow-common
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     AIRFLOW_CONN_POSTGRES_BE: ${AIRFLOW_CONN_POSTGRES_BE}
     OPENAI_API_KEY: ${OPENAI_API_KEY}
+    HF_API_TOKEN: ${HF_API_TOKEN}
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/logs:/opt/airflow/logs
